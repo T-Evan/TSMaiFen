@@ -289,7 +289,7 @@ function dailyTask.maoXianShouCe()
             90, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
-            baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+            baseUtils.tapSleep(357,1224) -- 点击空白处关闭
 
             -- 点击宝箱（从右到左）
             baseUtils.tapSleep(570, 390)
@@ -308,7 +308,7 @@ function dailyTask.maoXianShouCe()
             90, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
-            baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+            baseUtils.tapSleep(357,1224) -- 点击空白处关闭
 
             -- 点击宝箱（从右到左）
             baseUtils.tapSleep(570, 390)
@@ -327,7 +327,7 @@ function dailyTask.maoXianShouCe()
             90, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y, 3)
-            baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+            baseUtils.tapSleep(357,1224) -- 点击空白处关闭
         else
             break
         end
@@ -361,12 +361,12 @@ function dailyTask.newMap()
                 -- 第1图红标
                 x, y = findMultiColorInRegionFuzzy(0xfe6554,
                     "1|-4|0xfc684c,4|-3|0xfd694d,4|-5|0xfc684c,4|-10|0xfc684c,4|-13|0xfe7760,3|-18|0xfecac1,5|-20|0xfc6c4d,11|-20|0xfdfaf6,13|-20|0xfdfaf6,13|-19|0xfff9f9,12|-19|0xfff9f9,12|-12|0xfd664a,21|-13|0xfc694c,19|-24|0xfedcd5,14|-26|0xfd5e45,14|-27|0xffb1a8,14|-21|0xfdf9f5",
-                    90, 0, 0, 720, 1280, { orient = 2 })
+                    85, 0, 0, 720, 1280, { orient = 2 })
                 -- 第2图红标
                 if x == -1 then
                     x, y = findMultiColorInRegionFuzzy(0xff664b,
                         "-2|-5|0xfb694c,7|-5|0xff664e,5|-6|0xfff9f9,2|-8|0xfff5ef,5|-8|0xfdf5f0,4|-12|0xfff8f7,12|-14|0xfc694c,12|-18|0xfc694c,15|-8|0xfc694c,15|3|0xfe6a4a,14|4|0xfc694c,4|1|0xfd664a",
-                        90, 0, 0, 720, 1280, { orient = 2 })
+                        85, 0, 0, 720, 1280, { orient = 2 })
                 end
 
                 if x ~= -1 then

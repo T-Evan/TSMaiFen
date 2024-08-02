@@ -76,8 +76,110 @@ function shilianTask.shilian()
         shilianTask.mijiing()
     end
 
-    if 功能开关["恶龙大通缉"] == 1 then
-        shilianTask.mijiing()
+    if 功能开关["恶龙大通缉开关"] == 1 then
+        shilianTask.elong()
+    end
+end
+
+-- 恶龙大通缉
+function shilianTask.elong()
+    -- 返回首页
+    dailyTask.homePage()
+    -- 退出组队
+    dailyTask.quitTeam()
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 650, 522, 688, 544, "试炼")
+    if res then
+        --res = baseUtils.TomatoOCRTap(tomatoOCR, 380, 112, 558, 154, "秘境之间") -- 低等级4图，区域错误；改为图色识别
+        x, y = findMultiColorInRegionFuzzy(0xb13a35,
+            "-1|6|0xc9634d,-1|18|0xfde482,-1|33|0xffec75,-1|58|0xfffe82,-22|55|0x7c2f2d,-43|49|0xe7795b,-76|17|0xae3036,-84|5|0xfed47a,54|9|0xac3333",
+            85, 0, 0, 720, 1280, { orient = 2 }) -- 恶龙大通缉
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+        end
+    else
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 233, 1205, 281, 1234, "行李") -- 尝试点击旅人切换页面，解决长时间停留首页，试炼按钮异常消失的情况（反作弊策略？）
+        return shilianTask.shilian()
+    end
+
+    -- 判断是否重复挑战（已开启过宝箱）
+    x, y = findMultiColorInRegionFuzzy(0x5f4319,
+        "4|0|0x5f4319,16|0|0x5e4318,13|-10|0xc38533,-5|-7|0xdfa33e,-5|8|0x5f4319,-5|20|0xbf7e2a,-5|28|0xf3d082,12|28|0xe4c17f,19|27|0xffe7a5,19|18|0xe19a39,6|25|0x50caff,6|21|0xaaddff,5|17|0xa390aa",
+        90, 0, 0, 720, 1280, { orient = 2 }) -- 识别开启状态宝箱
+    if x ~= -1 then
+        if 功能开关["恶龙-重复挑战"] == 0 then
+            return
+        end
+    end
+
+    --判断是否添加佣兵
+    if 功能开关["恶龙-添加佣兵"] == 1 then
+        x, y = findMultiColorInRegionFuzzy(0xc0a67b,
+            "-3|-1|0x9f7b55,-8|0|0xa7875f,-18|0|0x9f7b55,-20|0|0xead5a3,-23|-1|0xa88860,-25|-1|0xd2bb8d,-38|-1|0xbca176,-51|-1|0xd5bd8f,-60|-1|0xbda277,-60|6|0xb2946b,-42|6|0xb99d73,-31|6|0xc2a77c,-26|6|0xaa8b62,-5|5|0xdcc696",
+            90, 0, 0, 720, 1280, { orient = 2 }) -- 创建队伍
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+            baseUtils.tapSleep(370, 818) -- 点击 创建队伍 - 添加佣兵
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 310, 875, 407, 907, "创建队伍") -- 创建队伍 - 创建队伍
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 333, 974, 383, 1006, "开始")
+
+            return shilianTask.fighting()
+        end
+    end
+
+    x, y = findMultiColorInRegionFuzzy(0xffffff,
+        "6|0|0x6e89bb,8|0|0xffffff,15|0|0x6584b9,19|0|0xffffff,35|0|0xfbfbfc,51|0|0x6785b9,70|0|0xffffff,70|6|0xfefefe,49|8|0x879bc4,40|8|0x6584b9,34|8|0xffffff,20|9|0xffffff,14|9|0x6584b9,6|9|0x6e89bb",
+        90, 0, 0, 720, 1280, { orient = 2 }) -- 开始匹配
+    if x ~= -1 then
+        baseUtils.tapSleep(x, y)
+
+        res = baseUtils.TomatoOCRText(tomatoOCR, 321, 491, 397, 514, "选择职业")
+        if res then
+            if 功能开关["恶龙-职能优先输出"] then
+                baseUtils.tapSleep(280, 665) -- 输出
+            end
+            if 功能开关["恶龙-职能优先坦克"] then
+                baseUtils.tapSleep(435, 665) -- 坦克
+            end
+            res = baseUtils.TomatoOCRText(tomatoOCR, 332, 754, 387, 789, "确定")
+        end
+    end
+
+    -- 判断正在匹配中 - 循环等待300s
+    local totalWait = 150 * 1000 -- 30000 毫秒 = 30 秒
+    local elapsed = 0
+    while 1 do
+        if elapsed > totalWait then
+            x, y = findMultiColorInRegionFuzzy(0xfffefd,
+                "7|0|0xf9dcc7,15|0|0xf6c69d,40|0|0xf5bd89,52|-1|0xfffefd,53|7|0xffffff,47|7|0xfadfcc,39|7|0xf3a84d,32|7|0xfcf0e7,27|7|0xffffff,23|7|0xfefcfa,5|7|0xfffefe,6|14|0xffffff,23|14|0xfef9f6,38|14|0xffffff",
+                80, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+            if x ~= -1 then
+                -- 超时取消匹配
+                baseUtils.tapSleep(x, y)
+            end
+            break
+        end
+        logUtils.log("匹配中")
+
+        -- 判断无合适队伍，重新开始匹配
+        res = baseUtils.TomatoOCRText(tomatoOCR, 303, 607, 418, 632, "暂无合适队伍")
+        if res then
+            res = baseUtils.TomatoOCRText(tomatoOCR, 210, 727, 262, 758, "取消")
+            if res then
+                elapsed = 0
+            end
+        end
+
+        x, y = findMultiColorInRegionFuzzy(0xfffefd,
+            "7|0|0xf9dcc7,15|0|0xf6c69d,40|0|0xf5bd89,52|-1|0xfffefd,53|7|0xffffff,47|7|0xfadfcc,39|7|0xf3a84d,32|7|0xfcf0e7,27|7|0xffffff,23|7|0xfefcfa,5|7|0xfffefe,6|14|0xffffff,23|14|0xfef9f6,38|14|0xffffff",
+            80, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+        res1 = shilianTask.WaitFight()
+        if res1 == true or x == -1 then          -- 成功准备战斗 或 未匹配到
+            break
+        end
+
+        baseUtils.mSleep3(5 * 1000)
+        elapsed = elapsed + 5 * 1000
     end
 end
 
@@ -96,7 +198,7 @@ function shilianTask.mijiing()
         --res = baseUtils.TomatoOCRTap(tomatoOCR, 380, 112, 558, 154, "秘境之间") -- 低等级4图，区域错误；改为图色识别
         x, y = findMultiColorInRegionFuzzy(0xe9faff,
             "0|20|0xbdefff,0|30|0xa1e9ff,11|29|0xa3e9fe,23|29|0xa4eaff,41|29|0x3b455a,53|29|0xa5eaff,53|20|0xbdefff,53|10|0xc1dfea,60|10|0xccebf6,69|10|0xccebf6,69|24|0x638090,68|31|0x9fe9ff,62|-5|0xf1fdff",
-            80, 0, 0, 720, 1280, { orient = 2 })
+            80, 0, 0, 720, 1280, { orient = 2 }) -- 秘境之间
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
         end
@@ -261,8 +363,9 @@ end
 
 -- 等待匹配
 function shilianTask.WaitFight()
-    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 457, 607, 502, 631, "准备")
-    if res1 == true then
+    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 457, 607, 502, 631, "准备") -- 秘境准备
+    res2 = baseUtils.TomatoOCRTap(tomatoOCR, 453, 650, 505, 684, "准备") -- 恶龙准备
+    if res1 == true or res2 == true then
         local totalWait = 20 * 1000 -- 30000 毫秒 = 30 秒
         local elapsed = 0
 
@@ -319,9 +422,9 @@ function shilianTask.tili()
         end
     end
 
-    baseUtils.tapSleep(61, 1187)
+    baseUtils.tapSleep(61, 1187) -- 返回
 
-    return shilianTask.startFight()
+    return
 end
 
 -- 判断是否战斗中
@@ -343,6 +446,20 @@ function shilianTask.fighting()
         -- 战斗结束
         openStatus = shilianTask.openTreasure()
 
+        -- 兼容恶龙结算页
+        res = baseUtils.TomatoOCRText(tomatoOCR, 309, 569, 411, 607, "战斗详情")
+        if res then
+            res = baseUtils.TomatoOCRText(tomatoOCR, 333, 1049, 384, 1077, "开启")
+            if res then
+                baseUtils.tapSleep(365, 1135)
+                baseUtils.tapSleep(365, 1135)
+                baseUtils.tapSleep(365, 1135)
+                baseUtils.tapSleep(365, 1135, 3)
+            else
+                baseUtils.tapSleep(365, 1135, 3)
+            end
+        end
+
         if openStatus == 1 then
             logUtils.log("战斗胜利")
             break
@@ -351,8 +468,9 @@ function shilianTask.fighting()
         end
 
         -- 判断是否战斗失败（战斗4分钟后）
-        res, teamName = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
-        if elapsed > 240 * 1000 or teamName == "" then
+        res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
+        res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
+        if elapsed > 240 * 1000 or (teamName1 == "" and teamName2 == "") then
             shilianTask.fightFail()
             break
         end
@@ -393,6 +511,11 @@ end
 
 -- 领取宝箱
 function shilianTask.openTreasure()
+    res = baseUtils.TomatoOCRText(tomatoOCR, 300, 606, 417, 634, "宝箱尚未开启") -- 避免前置错误点击弹出宝箱尚未开启
+    if res then
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 99, 1199, 128, 1234, "回") -- 关闭确认弹窗，返回待领取页
+    end
+
     if 功能开关["秘境-不开宝箱"] ~= nil and 功能开关["秘境-不开宝箱"] == 1 then
         openStatus = 0
         res1 = baseUtils.TomatoOCRText(tomatoOCR, 313, 622, 404, 656, "通关奖励") -- 战斗结束页。宝箱提示
