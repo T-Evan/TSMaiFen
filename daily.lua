@@ -40,7 +40,7 @@ end
 
 -- 日常任务聚合
 function dailyTask.dailyTask()
-    if 功能开关["日常功能开关"] ~=nil and 功能开关["日常功能开关"] == 0 then
+    if 功能开关["日常功能开关"] ~= nil and 功能开关["日常功能开关"] == 0 then
         return
     end
 
@@ -70,7 +70,7 @@ end
 
 -- 邮件领取
 function dailyTask.youJian()
-    if 功能开关["邮件领取"] ~=nil and 功能开关["邮件领取"] == 0 then
+    if 功能开关["邮件领取"] ~= nil and 功能开关["邮件领取"] == 0 then
         return
     end
 
@@ -138,7 +138,7 @@ end
 
 -- 招式创造
 function dailyTask.zhaoShiChuangZao()
-    if 功能开关["招式创造"] ~=nil and 功能开关["招式创造"] == 0 then
+    if 功能开关["招式创造"] ~= nil and 功能开关["招式创造"] == 0 then
         return
     end
 
@@ -191,7 +191,7 @@ end
 
 -- 宝藏湖
 function dailyTask.baoZangHu()
-    if 功能开关["宝藏湖"] ~=nil and 功能开关["宝藏湖"] == 0 then
+    if 功能开关["宝藏湖"] ~= nil and 功能开关["宝藏湖"] == 0 then
         return
     end
 

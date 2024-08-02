@@ -97,7 +97,7 @@ function baseUtils.TomatoOCRText(tomatoOCR, x1, y1, x2, y2, keyWord, returnType)
     snapshot(pic_name, x1, y1, x2, y2)
 
     local ocrRes = tomatoOCR.ocrFile(pic_name, 3)
-    if returnType == "text" and ocrRes ~= "" then
+    if returnType == "text" and ocrRes ~= nil and ocrRes ~= "" then
         if keyWord == ocrRes then
             logUtils.log("o识别成功-" .. keyWord .. "|" .. ocrRes)
             return true, ocrRes

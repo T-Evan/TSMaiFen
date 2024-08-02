@@ -154,28 +154,6 @@ end
 
 -- 开始匹配
 function shilianTask.startFight()
-    resStart1 = baseUtils.TomatoOCRTap(tomatoOCR, 311, 697, 405, 725, "开始匹配") -- 图1
-    if resStart1 == false then
-        resStart2 = baseUtils.TomatoOCRTap(tomatoOCR, 309, 892, 407, 918, "开始匹配") -- 图2
-    end
-    if resStart2 == false then
-        resStart3 = baseUtils.TomatoOCRTap(tomatoOCR, 311, 1084, 405, 1116, "开始匹配") -- 图3
-    end
-
-    if resStart1 == false and resStart2 == false and resStart3 == false then
-        return
-    end
-
-    -- 判断体力用尽提示
-    res1 = baseUtils.TomatoOCRText(tomatoOCR, 242, 598, 314, 616, "体力不足")
-    if res1 then
-        if 功能开关["秘境-体力不足继续挑战"] then
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 334, 743, 385, 771, "确定")
-        else
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 64, 1200, 128, 1234, "返回")
-            shilianTask.tili()
-        end
-    end
     -- 识别剩余体力不足40时，尝试补充
     res2, availableTiLi = baseUtils.TomatoOCRText(tomatoOCR, 605, 81, 630, 100, "剩余体力") -- 20/60
     availableTiLi = tonumber(availableTiLi)
@@ -189,6 +167,56 @@ function shilianTask.startFight()
     if availableTiLi == nil or availableTiLi < 20 then -- 识别剩余体力不足20时
         if 功能开关["秘境-体力不足继续挑战"] == false then
             return
+        end
+    end
+
+    --判断是否添加佣兵
+    if 功能开关["秘境-添加佣兵"] == 1 then
+        x, y = findMultiColorInRegionFuzzy(0x9f7c55,
+            "0|4|0xb1936a,-1|9|0xc0a57a,9|13|0x9f7c56,10|7|0xbea378,10|2|0xbea378,18|2|0xd0b88a,23|2|0xa07e57,27|1|0xaa8b62,27|7|0xae8f67,26|11|0xe9d4a2,35|7|0xebd6a4,39|6|0xefdba8,43|5|0xdcc595,45|4|0xf4e0ac,49|4|0xe9d4a2,53|4|0xd1ba8c,55|4|0xeedaa7,61|3|0xf4e0ac,63|5|0xc5ab80",
+            90, 0, 0, 720, 1280, { orient = 2 }) -- 创建队伍
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+            baseUtils.tapSleep(365, 820) -- 点击 创建队伍 - 添加佣兵
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 313, 876, 407, 907, "创建队伍") -- 创建队伍 - 创建队伍
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 333, 974, 383, 1006, "开始")
+
+            -- 判断体力用尽提示
+            res1 = baseUtils.TomatoOCRText(tomatoOCR, 242, 598, 314, 616, "体力不足")
+            if res1 then
+                if 功能开关["秘境-体力不足继续挑战"] then
+                    res = baseUtils.TomatoOCRTap(tomatoOCR, 334, 743, 385, 771, "确定")
+                else
+                    res = baseUtils.TomatoOCRTap(tomatoOCR, 64, 1200, 128, 1234, "返回")
+                    shilianTask.tili()
+                end
+            end
+
+            return shilianTask.fighting()
+        end
+    end
+
+    resStart1 = baseUtils.TomatoOCRTap(tomatoOCR, 311, 697, 405, 725, "开始匹配") -- 图1
+    if resStart1 == false then
+        resStart2 = baseUtils.TomatoOCRTap(tomatoOCR, 309, 892, 407, 918, "开始匹配") -- 图2
+    end
+    if resStart2 == false then
+        resStart3 = baseUtils.TomatoOCRTap(tomatoOCR, 311, 1084, 405, 1116, "开始匹配") -- 图3
+    end
+
+    if resStart1 == false and resStart2 == false and resStart3 == false then
+        return
+    end
+
+
+    -- 判断体力用尽提示
+    res1 = baseUtils.TomatoOCRText(tomatoOCR, 242, 598, 314, 616, "体力不足")
+    if res1 then
+        if 功能开关["秘境-体力不足继续挑战"] then
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 334, 743, 385, 771, "确定")
+        else
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 64, 1200, 128, 1234, "返回")
+            shilianTask.tili()
         end
     end
 
@@ -367,10 +395,13 @@ end
 function shilianTask.openTreasure()
     if 功能开关["秘境-不开宝箱"] ~= nil and 功能开关["秘境-不开宝箱"] == 1 then
         openStatus = 0
-        res1 = baseUtils.TomatoOCRText(tomatoOCR, 267, 810, 440, 840, "开启宝箱获得奖励") -- 战斗结束页。宝箱提示
-        res2 = baseUtils.TomatoOCRText(tomatoOCR, 266, 756, 355, 782, "开启宝箱") -- 战斗结束页。宝箱提示
-        res3 = baseUtils.TomatoOCRText(tomatoOCR, 261, 455, 447, 491, "开启宝箱获得奖励") -- 结算页，宝箱提示
-        res4 = baseUtils.TomatoOCRText(tomatoOCR, 267, 459, 356, 488, "开启宝箱") -- 结算页，宝箱提示
+        res1 = baseUtils.TomatoOCRText(tomatoOCR, 313, 622, 404, 656, "通关奖励") -- 战斗结束页。宝箱提示
+        res2 = baseUtils.TomatoOCRText(tomatoOCR, 267, 755, 313, 783, "开启") -- 战斗结束页。宝箱提示
+        res3 = baseUtils.TomatoOCRText(tomatoOCR, 273, 397, 360, 425, "是否开启") -- 结算页，宝箱提示
+        res4 = baseUtils.TomatoOCRText(tomatoOCR, 265, 457, 314, 488, "开启") -- 结算页，宝箱提示
+        --x, y = findMultiColorInRegionFuzzy(0xfae2d0,
+        --    "8|0|0xfae2d0,24|0|0xffffff,28|10|0xf8d6bb,17|7|0xf8cfaf,9|7|0xffffff,0|7|0xfffefe,0|16|0xf3a84b,0|28|0xd99861,-1|35|0xe6bf6f,-7|32|0xf3d66a,-7|23|0xf5e57c,25|22|0xce8328",
+        --    80, 0, 0, 720, 1280, { orient = 2 }) -- 宝箱图片
         if res1 or res2 or res3 or res4 then
             if 功能开关["秘境-点赞队友"] ~= nil and 功能开关["秘境-点赞队友"] == 1 then
                 zan = 0
@@ -406,9 +437,12 @@ function shilianTask.openTreasure()
     -- 点赞队友
     if 功能开关["秘境-点赞队友"] ~= nil and 功能开关["秘境-点赞队友"] == 1 then
         res1 = baseUtils.TomatoOCRText(tomatoOCR, 267, 810, 440, 840, "开启宝箱获得奖励") -- 战斗结束页。宝箱提示
-        res2 = baseUtils.TomatoOCRText(tomatoOCR, 266, 756, 355, 782, "开启宝箱") -- 战斗结束页。宝箱提示
+        res2 = baseUtils.TomatoOCRText(tomatoOCR, 267, 755, 313, 783, "开启") -- 战斗结束页。宝箱提示
         res3 = baseUtils.TomatoOCRText(tomatoOCR, 261, 455, 447, 491, "开启宝箱获得奖励") -- 结算页，宝箱提示
-        res4 = baseUtils.TomatoOCRText(tomatoOCR, 267, 459, 356, 488, "开启宝箱") -- 结算页，宝箱提示
+        res4 = baseUtils.TomatoOCRText(tomatoOCR, 265, 457, 314, 488, "开启") -- 结算页，宝箱提示
+        --x, y = findMultiColorInRegionFuzzy(0xfae2d0,
+        --    "8|0|0xfae2d0,24|0|0xffffff,28|10|0xf8d6bb,17|7|0xf8cfaf,9|7|0xffffff,0|7|0xfffefe,0|16|0xf3a84b,0|28|0xd99861,-1|35|0xe6bf6f,-7|32|0xf3d66a,-7|23|0xf5e57c,25|22|0xce8328",
+        --    80, 0, 0, 720, 1280, { orient = 2 }) -- 宝箱图片
         if res1 or res2 or res3 or res4 then
             zan = 0
             while zan < 4 do

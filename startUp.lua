@@ -17,7 +17,7 @@ function startUp.startApp()
             lua_exit()
         end
         toast("启动游戏，等待15s", 2)
-        --baseUtils.mSleep3(17 * 1000)
+        baseUtils.mSleep3(17 * 1000)
         logUtils.log("启动app成功")
     else
         logUtils.log("app运行中")

@@ -278,7 +278,7 @@ MyTable = {
             },
             {
                 ["type"] = "Label",
-                ["text"] = "秘境开关：",
+                ["text"] = "秘境挑战：",
                 ["align"] = "left",
                 ["valign"] = "top",
                 ["color"] = "0,0,0",
@@ -355,7 +355,40 @@ MyTable = {
                 ["select"] = "0",     -- 选填，0，默认选中项 ID
                 ["width"] = 300,
                 ["prompt"] = true
-            }
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "恶龙大通缉：",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["color"] = "0,0,0",
+                ["width"] = -1,
+                ["nowrap"] = 1 --下个控件不换行
+            },
+            {
+                ["type"] = "Switch",
+                ["id"] = "恶龙大通缉开关",
+                ["size"] = "s",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["state"] = "off",
+                ["width"] = -1,
+                ["nowrap"] = 0
+            },
+            {
+                --必填，控件类型，多选组合
+                ["type"] = "CheckBoxGroup",
+                -- 选填，无，控件 ID  以 table 格式返回返回值时必填，否则无法获取返回值
+                ["id"] = "恶龙大通缉相关",
+                -- 必填，无 ，单选框内容
+                ["list"] = "点赞队友,重复挑战",
+                -- 选填，0，默认选中项 ID
+                ["select"] = "0",
+                ["width"] = 700,
+                ["scale"] = "0.4",
+                --选填，1，仅引擎版本支持 iOS v3.00-157 及 Android v2.3.6 及其以上版本
+                ["countperline"] = "1"
+            },
         },
         {
             {
