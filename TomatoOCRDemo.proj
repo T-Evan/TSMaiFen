@@ -1,0 +1,1 @@
+{"files":{"lua":["\\TomatoOCR.luac","\\main.lua","\\TomatoOCR.lua","\\TomatoOCRCore.lua"],"res":["\\cls.opt","\\det.opt","\\rec.opt","\\rec_cht.opt","\\rec_v3.opt"],"plugin":["\\libTomato.so","\\libc++_shared.so","\\libnative.so","\\libmyLib.so","\\libMyLib.so","\\TomatoOCR.so"]},"product":"touch"}
