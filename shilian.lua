@@ -63,7 +63,7 @@ local stagePoi = {
 
 -- 试炼
 function shilianTask.shilian()
-    if 秘境地图 == nil or 秘境关卡 == nil then
+    if 功能开关["秘境地图"] == nil or 功能开关["秘境关卡"] == nil then
         return
     end
 
@@ -190,8 +190,8 @@ function shilianTask.mijiing()
     -- 退出组队
     dailyTask.quitTeam()
 
-    selectMap = map[秘境地图 + 1]
-    selectStage = stage[秘境地图 + 1][秘境关卡 + 1]
+    selectMap = map[功能开关["秘境地图"] + 1]
+    selectStage = stage[功能开关["秘境地图"] + 1][功能开关["秘境关卡"] + 1]
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 650, 522, 688, 544, "试炼")
     if res then
@@ -221,7 +221,7 @@ function shilianTask.changeMap(selectMap, selectStage)
     baseUtils.tapSleep(74, 160) -- 点击地图列表
 
     local mapPoi = mapPoi[selectMap]
-    local mapNum = tonumber(秘境地图)
+    local mapNum = tonumber(功能开关["秘境地图"])
     if mapNum > 8 then -- 火原之后的地图，需翻页
         moveTo(150, 700, 150, 300, 30)
         baseUtils.mSleep3(1500);
@@ -335,6 +335,14 @@ function shilianTask.startFight()
             if res == false then
                 res4 = baseUtils.TomatoOCRTap(tomatoOCR, 324, 1080, 392, 1103, "匹配中") -- 图3
             end
+            if res == false then
+                x, y = findMultiColorInRegionFuzzy(0xf3a84b,
+                    "-1|15|0xf3a84b,9|16|0xf3a84b,8|1|0xf3a84b,27|4|0xf3ab59,41|4|0xfdf1ea,57|5|0xfef9f6,67|1|0xffffff,74|6|0xf3a84b,85|5|0xf3a84b,96|7|0xf3a84b,92|15|0xf3a84b,80|11|0xf3a84b",
+                    85, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+                if x ~= -1 then
+                    baseUtils.tapSleep(x, y)
+                end
+            end
             break
         end
         logUtils.log("匹配中")
@@ -351,6 +359,13 @@ function shilianTask.startFight()
         res2 = baseUtils.TomatoOCRText(tomatoOCR, 320, 692, 392, 716, "匹配中") -- 图1
         res3 = baseUtils.TomatoOCRText(tomatoOCR, 323, 886, 394, 910, "匹配中") -- 图2
         res4 = baseUtils.TomatoOCRText(tomatoOCR, 324, 1080, 392, 1103, "匹配中") -- 图3
+        res5 = false
+        x, y = findMultiColorInRegionFuzzy(0xf3a84b,
+            "-1|15|0xf3a84b,9|16|0xf3a84b,8|1|0xf3a84b,27|4|0xf3ab59,41|4|0xfdf1ea,57|5|0xfef9f6,67|1|0xffffff,74|6|0xf3a84b,85|5|0xf3a84b,96|7|0xf3a84b,92|15|0xf3a84b,80|11|0xf3a84b",
+            85, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+        if x ~= -1 then
+            res5 = true
+        end
         res1 = shilianTask.WaitFight()
         if res1 == true or (res2 == false and res3 == false and res4 == false) then -- 成功准备战斗 或 未匹配到
             break
@@ -411,7 +426,7 @@ function shilianTask.tili()
         if bugCount == nil then
             bugCount = 0
         end
-        local needCount = tonumber(补充体力次数)
+        local needCount = tonumber(功能开关["补充体力次数"])
         if needCount == nil then
             needCount = 0
         end

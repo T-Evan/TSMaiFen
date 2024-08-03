@@ -168,7 +168,7 @@ function yingdiTask.miBaoChangeMap(left, right)
     local map = {
         "暗月深林", "艾特拉火山", "鲁尔绿洲", "燃烧塔"
     }
-    selectMap = map[秘宝地图 + 1]
+    selectMap = map[功能开关["秘宝地图"] + 1]
 
     local findMap = false
 

@@ -249,7 +249,13 @@ function dailyTask.huoLiQuanKai()
         return
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1022, 177, 1048, "火力全开")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1022, 177, 1048, "火力全开") -- 进入火力全开
+    x, y = findMultiColorInRegionFuzzy(0xf4593e,
+        "0|6|0xf45f42,0|3|0xf76143,-2|3|0xf96244,-2|6|0xf45e42,-1|8|0xef5c40,0|9|0xed5b40,4|7|0xf25d42,4|4|0xfa6243,1|7|0xf15e41,0|6|0xf45f42",
+        80, 77, 871, 649, 1044, { orient = 2 })
+    if x ~= -1 then
+        baseUtils.tapSleep(x, y)  -- 领取次数累计奖励
+    end
     baseUtils.tapSleep(480, 1100) -- 点击空白处
 end
 
@@ -289,7 +295,7 @@ function dailyTask.maoXianShouCe()
             90, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
-            baseUtils.tapSleep(357,1224) -- 点击空白处关闭
+            baseUtils.tapSleep(357, 1224) -- 点击空白处关闭
 
             -- 点击宝箱（从右到左）
             baseUtils.tapSleep(570, 390)
@@ -308,7 +314,7 @@ function dailyTask.maoXianShouCe()
             90, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
-            baseUtils.tapSleep(357,1224) -- 点击空白处关闭
+            baseUtils.tapSleep(357, 1224) -- 点击空白处关闭
 
             -- 点击宝箱（从右到左）
             baseUtils.tapSleep(570, 390)
@@ -327,7 +333,7 @@ function dailyTask.maoXianShouCe()
             90, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y, 3)
-            baseUtils.tapSleep(357,1224) -- 点击空白处关闭
+            baseUtils.tapSleep(357, 1224) -- 点击空白处关闭
         else
             break
         end
@@ -361,23 +367,32 @@ function dailyTask.newMap()
                 -- 第1图红标
                 x, y = findMultiColorInRegionFuzzy(0xfe6554,
                     "1|-4|0xfc684c,4|-3|0xfd694d,4|-5|0xfc684c,4|-10|0xfc684c,4|-13|0xfe7760,3|-18|0xfecac1,5|-20|0xfc6c4d,11|-20|0xfdfaf6,13|-20|0xfdfaf6,13|-19|0xfff9f9,12|-19|0xfff9f9,12|-12|0xfd664a,21|-13|0xfc694c,19|-24|0xfedcd5,14|-26|0xfd5e45,14|-27|0xffb1a8,14|-21|0xfdf9f5",
-                    85, 0, 0, 720, 1280, { orient = 2 })
+                    80, 0, 0, 720, 1280, { orient = 2 })
                 -- 第2图红标
                 if x == -1 then
                     x, y = findMultiColorInRegionFuzzy(0xff664b,
                         "-2|-5|0xfb694c,7|-5|0xff664e,5|-6|0xfff9f9,2|-8|0xfff5ef,5|-8|0xfdf5f0,4|-12|0xfff8f7,12|-14|0xfc694c,12|-18|0xfc694c,15|-8|0xfc694c,15|3|0xfe6a4a,14|4|0xfc694c,4|1|0xfd664a",
-                        85, 0, 0, 720, 1280, { orient = 2 })
+                        80, 0, 0, 720, 1280, { orient = 2 })
                 end
 
                 if x ~= -1 then
                     baseUtils.tapSleep(x + 0, y + 145)       -- 切换下一地图
                     if x > 400 then
-                        baseUtils.tapSleep(x - 250, y + 180) -- 下行第1个
+                        baseUtils.tapSleep(x - 250, y + 220) -- 下行第1个
                     else
                         baseUtils.tapSleep(x + 230, y + 0)   -- 右侧第1个
                     end
                     res = baseUtils.TomatoOCRTap(tomatoOCR, 321, 1022, 394, 1044, "前往地图")
                     res = baseUtils.TomatoOCRTap(tomatoOCR, 330, 1027, 389, 1058, "前往")
+
+                    res = baseUtils.TomatoOCRText(tomatoOCR, 422, 622, 494, 646, "单人前往")
+                    if res then
+                        if 功能开关["队员不满足单飞"] == 1 then
+                            res = baseUtils.TomatoOCRTap(tomatoOCR, 187, 727, 284, 757, "离队前往")
+                        else
+                            res = baseUtils.TomatoOCRTap(tomatoOCR, 435, 727, 529, 759, "留在队伍")
+                        end
+                    end
                     break
                 else
                     moveTo(500, 700, 500, 200, 80)

@@ -39,6 +39,35 @@ MyTable = {
             },
             {
                 ["type"] = "Label",
+                ["text"] = "=== 配置选择(首次使用必须先保存配置)",
+                ["size"] = 16,
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["color"] = "0,150,255",
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "ComboBox", -- 必填，控件类型，下拉框
+                ["id"] = "配置选择",
+                -- 选填，无，控件ID 以 table 格式返回返回值时必填，否则无法获取返回值
+                ["list"] = "默认配置,配置1,配置2,配置3,配置4", -- 必填，无，下拉框内容
+                ["select"] = "0", -- 选填，0，默认选中项 ID
+                ["width"] = 300,
+                ["prompt"] = true
+            },
+            {
+                ["type"] = "RadioGroup",
+                -- 必填，控件类型，单选组合
+                ["id"] = "配置更新",
+                -- 选填，无，控件 ID，以 table 格式返回返回值时必填,否则无法获取返回值
+                ["list"] = "启动时保存所选配置,读取配置并启动", -- 必填，无，多选组合内容
+                ["select"] = "0", -- 选填，0，默认选中项 id
+                -- 选填，无， 单选组合选项显示图片
+                ["scale"] = 0.4, -- 选填，1，图片缩放比例
+                ["countperline"] = 1,
+            },
+            {
+                ["type"] = "Label",
                 ["text"] = "定时",
                 ["size"] = 15,
                 ["align"] = "left",
@@ -95,7 +124,6 @@ MyTable = {
                 ["size"] = 15,
                 ["align"] = "left",
                 ["color"] = "0,0,0",
-                ["nowrap"] = 1,
                 ["width"] = -1,
             }
         },
@@ -170,7 +198,7 @@ MyTable = {
                 -- 选填，无，控件 ID  以 table 格式返回返回值时必填，否则无法获取返回值
                 ["id"] = "战斗相关",
                 -- 必填，无 ，单选框内容
-                ["list"] = "自动挑战首领,自动换图",
+                ["list"] = "自动挑战首领,自动换图,队员不满足单飞",
                 -- 选填，0，默认选中项 ID
                 ["select"] = "0@1",
                 ["width"] = 700,
@@ -387,7 +415,7 @@ MyTable = {
                 ["width"] = 700,
                 ["scale"] = "0.4",
                 --选填，1，仅引擎版本支持 iOS v3.00-157 及 Android v2.3.6 及其以上版本
-                ["countperline"] = "1"
+                ["countperline"] = "2"
             },
         },
         {
@@ -566,6 +594,38 @@ MyTable = {
                 ["valign"] = "top",
                 ["size"] = 10,
                 ["width"] = 250,
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "旅团商店兑换(默认最大次数兑换)",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,150,255",
+                ["nowrap"] = 1,
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "Switch",
+                ["id"] = "旅团商店兑换开关",
+                ["size"] = "s",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["state"] = "off",
+                ["width"] = -1,
+            },
+            {
+                --必填，控件类型，多选组合
+                ["type"] = "CheckBoxGroup",
+                -- 选填，无，控件 ID  以 table 格式返回返回值时必填，否则无法获取返回值
+                ["id"] = "旅团商店选项",
+                -- 必填，无 ，单选框内容
+                ["list"] = "唤兽琴弦,全价兽粮,超级成长零食,原材料,史诗经验,优秀经验,普通经验,金币",
+                -- 选填，0，默认选中项 ID
+                ["select"] = "",
+                ["width"] = 700,
+                ["scale"] = "0.4",
+                --选填，1，仅引擎版本支持 iOS v3.00-157 及 Android v2.3.6 及其以上版本
+                ["countperline"] = "2"
             }
         },
         {
@@ -602,10 +662,12 @@ UIret, values = showUI(MyJsonString)
     ["自动升级技能"] = 0,
     ["猫猫包果木"] = 0,
     ["钻石兑换果木次数"] = 0,
+    ["秘宝地图"] = 0,
     ["能源兑换次数"] = 0,
 
     ["自动挑战首领"] = 0,
     ["自动换图"] = 0,
+    ["队员不满足单飞"] = 0,
 
     ["冒险手册领取"] = 0,
     ["邮件领取"] = 0,
@@ -621,6 +683,9 @@ UIret, values = showUI(MyJsonString)
     -- 冒险
     ["冒险功能开关"] = 0,
     ["秘境开关"] = 0,
+    ["秘境地图"] = 0,
+    ["秘境关卡"] = 0,
+    ["补充体力次数"] = 0,
     ["秘境-不开宝箱"] = 0,
     ["秘境-点赞队友"] = 0,
     ["秘境-添加佣兵"] = 0,
@@ -655,7 +720,15 @@ UIret, values = showUI(MyJsonString)
     ["旅团调查队"] = 0,
     ["旅团任务"] = 0,
     ["调查队挑战次数"] = 0,
-
+    ["旅团商店兑换开关"] = 0,
+    ["旅团商店-唤兽琴弦"] = 0,
+    ["旅团商店-全价兽粮"] = 0,
+    ["旅团商店-超级成长零食"] = 0,
+    ["旅团商店-原材料"] = 0,
+    ["旅团商店-史诗经验"] = 0,
+    ["旅团商店-优秀经验"] = 0,
+    ["旅团商店-普通经验"] = 0,
+    ["旅团商店-金币"] = 0,
 
     ["调试开关"] = 0,
 }
@@ -692,6 +765,8 @@ if UIret == 1 then
             功能开关["自动挑战首领"] = 1
         elseif 战斗相关[i] == "1" then
             功能开关["自动换图"] = 1
+        elseif 战斗相关[i] == "2" then
+            功能开关["队员不满足单飞"] = 1
         end
     end
 
@@ -750,9 +825,9 @@ if UIret == 1 then
             功能开关["秘境-体力不足继续挑战"] = 1
         end
     end
-    秘境地图 = values.秘境地图
-    秘境关卡 = values.秘境关卡
-    补充体力次数 = values.补充体力次数
+    功能开关["秘境地图"] = values.秘境地图
+    功能开关["秘境关卡"] = values.秘境关卡
+    功能开关["补充体力次数"] = values.补充体力次数
 
     if values.恶龙大通缉开关 == "on" then
         功能开关["恶龙大通缉开关"] = 1
@@ -802,7 +877,7 @@ if UIret == 1 then
             功能开关["秘宝收集"] = 1
         end
     end
-    秘宝地图 = values.秘宝地图
+    功能开关["秘宝地图"] = values.秘宝地图
 
     local 商店选项 = values.商店选项
     商店选项 = 商店选项:split("@")
@@ -841,12 +916,64 @@ if UIret == 1 then
         end
     end
 
+    if values.旅团商店兑换开关 == "on" then
+        功能开关["旅团商店兑换开关"] = 1
+    end
+    local 旅团商店选项 = values.旅团商店选项
+    旅团商店选项 = 旅团商店选项:split("@")
+    for i = 1, #旅团商店选项, 1 do
+        if 旅团商店选项[i] == "0" then
+            功能开关["旅团商店-唤兽琴弦"] = 1
+        end
+        if 旅团商店选项[i] == "1" then
+            功能开关["旅团商店-全价兽粮"] = 1
+        end
+        if 旅团商店选项[i] == "2" then
+            功能开关["旅团商店-超级成长零食"] = 1
+        end
+        if 旅团商店选项[i] == "3" then
+            功能开关["旅团商店-原材料"] = 1
+        end
+        if 旅团商店选项[i] == "4" then
+            功能开关["旅团商店-史诗经验"] = 1
+        end
+        if 旅团商店选项[i] == "5" then
+            功能开关["旅团商店-优秀经验"] = 1
+        end
+        if 旅团商店选项[i] == "6" then
+            功能开关["旅团商店-普通经验"] = 1
+        end
+        if 旅团商店选项[i] == "7" then
+            功能开关["旅团商店-金币"] = 1
+        end
+    end
+
     功能开关["付费浇树次数"] = values.付费浇灌次数
     功能开关["调查队挑战次数"] = values.调查队挑战次数
 
     if values.调试开关 == "on" then
         功能开关["调试开关"] = 1
     end
+
+    local 配置更新 = values.配置更新
+    local 配置选择 = values.配置选择
+    uiConfigFile = userPath() .. "/config/" .. "uiConfig" .. 配置选择 .. ".txt"
+    if 配置更新 == "0" then
+        -- 更新当前配置
+        local json_str = json.encode(功能开关)
+        writeFileString(uiConfigFile, json_str)
+    elseif 配置更新 == "1" then -- 默认配置不需要从文件加载
+        -- 读取当前配置并启动
+        uiConfig = readFileString(uiConfigFile)
+        local success, decodedText = pcall(function() return json.decode(uiConfig) end)
+        if not success then
+            dialog("配置加载错误")
+            lua_exit()
+        else
+            功能开关 = decodedText
+        end
+    end
+
     --local json_str = json.encode(功能开关)
     --dialog(json_str)
 else
