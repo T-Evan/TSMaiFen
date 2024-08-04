@@ -24,8 +24,8 @@ function dailyTask.homePage()
         res2 = baseUtils.TomatoOCRTap(tomatoOCR, 279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 100)
         res3 = baseUtils.TomatoOCRTap(tomatoOCR, 266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
         res4 = baseUtils.TomatoOCRTap(tomatoOCR, 296, 1207, 424, 1232, "点击空白处关闭", 30, 100)
-
-        if res1 == false and res2 == false and res3 == false and res4 == false then
+        res5 = baseUtils.TomatoOCRTap(tomatoOCR, 268, 869, 359, 888, "点击空白处", 30, 100)
+        if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false then
             -- 判断战败页
             shilianTask.fightFail()
         end
@@ -49,12 +49,6 @@ function dailyTask.dailyTask()
     dailyTask.newMap()
 
     -- 活动
-    -- 摸鱼时间到
-    dailyTask.huoDongMoYu()
-    -- 火力全开
-    dailyTask.huoLiQuanKai()
-    -- 宝藏湖
-    dailyTask.baoZangHu()
 
     -- 领取相关
     -- 邮件领取
@@ -65,7 +59,60 @@ function dailyTask.dailyTask()
     dailyTask.qiShouLeYuan()
 
     -- 冒险手册
+end
+
+function dailyTask.dailyTaskEnd()
+    if 功能开关["日常功能开关"] ~= nil and 功能开关["日常功能开关"] == 0 then
+        return
+    end
+
+    -- 日常相关
+
+    -- 活动
+    -- 摸鱼时间到
+    dailyTask.huoDongMoYu()
+    -- 火力全开
+    dailyTask.huoLiQuanKai()
+    -- 宝藏湖
+    dailyTask.baoZangHu()
+    -- 登录好礼
+    dailyTask.dengLuHaoLi()
+
+    -- 冒险手册
     dailyTask.maoXianShouCe()
+end
+
+function dailyTask.dengLuHaoLi()
+    if 功能开关["登录好礼"] == 0 then
+        return
+    end
+
+    -- 返回首页
+    dailyTask.homePage()
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
+    --判断是否在营地页面
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    if res == false then
+        return
+    end
+
+    x, y = findMultiColorInRegionFuzzy(0xccb580,
+        "26|34|0xf8d693,26|42|0xac8b5e,56|31|0xf9d49a,69|26|0xf9d899,80|-2|0xf8e093,81|12|0xf1e0a1,79|27|0xf8d995,72|39|0xf8d495,57|68|0xae6d2b,90|77|0xad6a22,109|69|0xe8decc,108|63|0xeae1cf,121|64|0xeee6d5,126|73|0xdac6b1",
+        80, 0, 0, 720, 1280, { orient = 2 }) -- 登录好礼
+    if x == -1 then
+        return
+    end
+    baseUtils.tapSleep(x, y)
+
+    x, y = findMultiColorInRegionFuzzy(0xfae4d3,
+        "8|0|0xfae4d4,17|0|0xf2a94a,28|0|0xfdf3ec,34|0|0xf8d7bd,48|0|0xf2a94a,51|8|0xf2a94a,43|8|0xf2a94a,33|8|0xf4be89,20|8|0xffffff,-4|8|0xf2a94a,-15|8|0xf2a94a,-18|0|0xf2a94a,-21|-8|0xf1a849,37|12|0xf2a94a",
+        80, 0, 0, 720, 1280, { orient = 2 }) -- 领取按钮
+    if x ~= -1 then
+        baseUtils.tapSleep(x, y)
+        baseUtils.tapSleep(355, 1005) -- 点击空白处关闭
+        baseUtils.tapSleep(350, 1145) -- 点击空白处关闭
+    end
 end
 
 -- 邮件领取
@@ -85,12 +132,20 @@ function dailyTask.youJian()
 
     baseUtils.tapSleep(300, 740, 4) -- 邮件
     res = baseUtils.TomatoOCRTap(tomatoOCR, 463, 1030, 510, 1061, "领取")
-    baseUtils.tapSleep(350, 1170)   -- 点击空白处
+    if res == false then
+        return
+    end
+    baseUtils.tapSleep(125, 1080) -- 点击空白处
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 85, 1186, 141, 1222, "返回")
 end
 
 -- 骑兽乐园
 function dailyTask.qiShouLeYuan()
     if 功能开关["骑兽乐园"] ~= nil and 功能开关["骑兽乐园"] == 0 then
+        return
+    end
+
+    if 任务记录["日常-骑兽乐园-完成"] == 1 then
         return
     end
 
@@ -112,7 +167,7 @@ function dailyTask.qiShouLeYuan()
     res = baseUtils.TomatoOCRTap(tomatoOCR, 512, 1136, 611, 1162, "骑兽乐园")
     if res then
         baseUtils.tapSleep(188, 321, 5) -- 点击门票（固定位置）
-        baseUtils.tapSleep(350, 540)    -- 点击空白处关闭
+        baseUtils.tapSleep(550, 1080)   -- 点击空白处关闭
 
         -- 兑换门票
         local needCount = tonumber(功能开关["钻石兑换门票次数"])
@@ -120,9 +175,9 @@ function dailyTask.qiShouLeYuan()
             needCount = 0
         end
         if needCount > 0 then
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 570, 261, 645, 285, "兑换门票")
             local count = 0
             while count < 5 do
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 570, 261, 645, 285, "兑换门票")
                 res, buyCount = baseUtils.TomatoOCRText(tomatoOCR, 377, 944, 389, 959, "已购买次数") -- 1/9
                 buyCount = tonumber(buyCount)
                 if buyCount == nil or buyCount >= needCount then
@@ -130,15 +185,21 @@ function dailyTask.qiShouLeYuan()
                     break
                 end
                 res = baseUtils.TomatoOCRTap(tomatoOCR, 318, 876, 398, 898, "购买道具")
+                baseUtils.tapSleep(550, 1080) -- 点击空白处关闭
                 count = count + 1
             end
         end
+        任务记录["日常-骑兽乐园-完成"] = 1
     end
 end
 
 -- 招式创造
 function dailyTask.zhaoShiChuangZao()
     if 功能开关["招式创造"] ~= nil and 功能开关["招式创造"] == 0 then
+        return
+    end
+
+    if 任务记录["日常-招式创造-完成"] == 1 then
         return
     end
 
@@ -164,7 +225,8 @@ function dailyTask.zhaoShiChuangZao()
             80, 0, 0, 720, 1280, { orient = 2 })
         if x ~= -1 then
             baseUtils.tapSleep(x, y, 5)
-            baseUtils.tapSleep(190, 565) -- 点击空白处关闭
+            baseUtils.tapSleep(185, 1024) -- 点击空白处关闭
+            任务记录["日常-招式创造-完成"] = 1
         end
     end
 
@@ -174,9 +236,9 @@ function dailyTask.zhaoShiChuangZao()
         needCount = 0
     end
     if needCount > 0 then
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 568, 260, 645, 285, "兑换卢恩")
         local count = 0
         while count < 5 do
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 568, 260, 645, 285, "兑换卢恩")
             res, buyCount = baseUtils.TomatoOCRText(tomatoOCR, 375, 944, 387, 960, "已购买次数") -- 1/9
             buyCount = tonumber(buyCount)
             if buyCount == nil or buyCount >= needCount then
@@ -184,6 +246,10 @@ function dailyTask.zhaoShiChuangZao()
                 break
             end
             res = baseUtils.TomatoOCRTap(tomatoOCR, 318, 876, 398, 898, "购买道具")
+            if res then
+                baseUtils.tapSleep(185, 1024) -- 点击空白处关闭
+                任务记录["日常-招式创造-完成"] = 1
+            end
             count = count + 1
         end
     end
@@ -205,6 +271,9 @@ function dailyTask.baoZangHu()
     end
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 20, 937, 84, 960, "宝藏湖")
+    if res == false then
+        return
+    end
 
     --res, cili = baseUtils.TomatoOCRText(tomatoOCR, 612, 82, 658, 102, "可用磁力")
     --dialog(cili)
@@ -276,12 +345,12 @@ function dailyTask.maoXianShouCe()
     --主线领取
     res = baseUtils.TomatoOCRTap(tomatoOCR, 156, 1101, 206, 1129, "主线")
     while 1 do
-        x, y = findMultiColorInRegionFuzzy(0xfffefe,
-            "6|0|0xfdf6f0,13|0|0xfadfcb,22|0|0xfffffe,32|0|0xfefaf7,39|0|0xf6c091,39|7|0xf3a84b,36|7|0xffffff,25|7|0xfceade,16|7|0xffffff,7|7|0xfceee5,-1|7|0xf9dbc5,0|12|0xf5bb85,11|12|0xfbe7d9,16|12|0xfcede2,22|11|0xffffff,32|11|0xfefaf7",
-            90, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
+        x, y = findMultiColorInRegionFuzzy(0xf3a84b,
+            "15|0|0xf3a84b,34|0|0xf3a84b,48|0|0xf3a84b,56|0|0xf3a84b,65|0|0xf3a84b,65|8|0xf3a84b,65|15|0xf3a84b,45|24|0xf3a84b,25|24|0xf3a84b,3|24|0xf3a84b,30|15|0xf3a84b,38|15|0xf4b36f,59|12|0xf3a84b,77|14|0xf3a84b",
+            80, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
-            baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+            baseUtils.tapSleep(320, 1180) -- 点击空白处关闭
         else
             break
         end
@@ -333,7 +402,8 @@ function dailyTask.maoXianShouCe()
             90, 0, 0, 720, 1280, { orient = 2 }) -- 识别黄色领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y, 3)
-            baseUtils.tapSleep(357, 1224) -- 点击空白处关闭
+            baseUtils.tapSleep(360, 1070) -- 点击空白处关闭
+            baseUtils.tapSleep(360, 1070) -- 点击空白处关闭（再次点击，避免成就升级页）
         else
             break
         end

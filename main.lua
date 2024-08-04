@@ -16,6 +16,9 @@ startUp = require("startUp")
     ["旅团-浇树-完成"] = 0,
     ["旅团-调查队-完成"] = 0,
     ["旅人-猫猫果木-完成"] = 0,
+    ["日常-招式创造-完成"] = 0,
+    ["日常-骑兽乐园-完成"] = 0,
+    ["试炼-恶龙-完成次数"] = 0,
 }
 
 function main(...)
@@ -36,7 +39,7 @@ function main(...)
         90, 0, 0, 720, 1280, { orient = 2 })
     dialog(x, y)]]
 
-    runThread("__thread__child1") -- 没有用？
+    --runThread("__thread__child1") -- 没有用？
 
     -- 处理休息时间
     local needRunMinute = tonumber(功能开关["定时运行"]) -- 分钟
@@ -55,20 +58,26 @@ function main(...)
         -- 启动app
         startUp.startApp()
 
-        -- 试炼
-        shilianTask.shilian()
+        -- 营地活动（优先领取）
+        yingdiTask.yingdiTask()
 
-        -- 日常
+        -- 日常（优先领取）
         dailyTask.dailyTask()
 
         -- 旅人相关
         lvrenTask.lvrenTask()
 
-        -- 营地活动
-        yingdiTask.yingdiTask()
+        -- 试炼
+        shilianTask.shilian()
 
         -- 旅团相关
         lvtuanTask.lvtuanTask()
+
+        -- 营地活动（最后领取）
+        yingdiTask.yingdiTaskEnd()
+
+        -- 日常（最后领取）
+        dailyTask.dailyTaskEnd()
 
         -- 定时休息
         current_time = os.time()

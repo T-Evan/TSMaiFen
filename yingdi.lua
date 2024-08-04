@@ -12,9 +12,6 @@ function yingdiTask.yingdiTask()
     -- 秘宝
     yingdiTask.yingDiMiBao()
 
-    -- 纸翼大作战
-    yingdiTask.zhiFeiJi()
-
     -- 月签到
     yingdiTask.yueqiandao()
 
@@ -23,6 +20,15 @@ function yingdiTask.yingdiTask()
 
     -- 月卡
     yingdiTask.yueKa()
+end
+
+function yingdiTask.yingdiTaskEnd()
+    if 功能开关["营地功能开关"] == 0 then
+        return
+    end
+
+    -- 纸翼大作战
+    yingdiTask.zhiFeiJi()
 
     -- 星辰同行
     yingdiTask.xingChenTongXing()
@@ -39,12 +45,11 @@ function yingdiTask.yueKa()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     if res == false then
         return
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     res = baseUtils.TomatoOCRTap(tomatoOCR, 393, 1202, 439, 1229, "月卡")
     if res == true then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 333, 1054, 385, 1086, "领取")
@@ -65,12 +70,11 @@ function yingdiTask.riLiBao()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     if res == false then
         return
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     res = baseUtils.TomatoOCRTap(tomatoOCR, 286, 1202, 340, 1229, "礼包")
     if res == true then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 148, 671, 198, 700, "免费")
@@ -123,14 +127,16 @@ function yingdiTask.zhiFeiJi()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     if res == false then
         return
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 113, 759, 217, 814, "纸翼")
-    if res == true then
+    x, y = findMultiColorInRegionFuzzy(0xfcf7ab,
+        "-5|12|0xfbf39d,3|14|0xfbf29b,15|15|0xfbf29a,63|9|0xb39767,63|27|0xfbee8a,16|62|0xefcbb7,34|62|0xe9b594,58|62|0xeab797,80|69|0xe39858,86|75|0xe39858,98|71|0xecc1a6,111|61|0xe3985a,119|61|0xe3985a,128|62|0xe39858",
+        80, 0, 0, 720, 1280, { orient = 2 }) -- 纸飞机
+    if x ~= -1 then
+        baseUtils.tapSleep(x, y)
         res = baseUtils.TomatoOCRTap(tomatoOCR, 566, 228, 604, 250, "任务")
         res = baseUtils.TomatoOCRTap(tomatoOCR, 496, 304, 547, 332, "领取")
         baseUtils.tapSleep(345, 1058) -- 点击空白处关闭
@@ -155,8 +161,11 @@ function yingdiTask.yueqiandao()
     end
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 180, 1038, 284, 1097, "签到")
-    if res == true then
+    x, y = findMultiColorInRegionFuzzy(0xedc5a4,
+        "-2|15|0xefc5a5,-29|15|0xecbf9b,-28|36|0xeae6de,4|36|0xf1e6dc,33|35|0xe8b58b,57|35|0x823e23,57|73|0xb8b8b8,26|70|0x823a1e,-1|60|0xedcdbd,-15|75|0x888883,-8|100|0xbcb0aa,5|96|0x474038,39|96|0x2a251f,68|96|0x9c9b97",
+        80, 0, 0, 720, 1280, { orient = 2 })
+    if x ~= -1 then
+        baseUtils.tapSleep(x, y)
         res = baseUtils.TomatoOCRTap(tomatoOCR, 310, 977, 408, 1009, "点击签到")
         baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
     end
@@ -304,20 +313,30 @@ function yingdiTask.yingDiMiBao()
     findMap = yingdiTask.miBaoChangeMap()
 
     if findMap then
-        baseUtils.tapSleep(580, 880) -- 拉满10次
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 331, 1119, 386, 1147, "寻宝")
-        if res then
-            -- 判断能源是否用尽
-            res = baseUtils.TomatoOCRText(tomatoOCR, 316, 343, 404, 370, "补充能源")
-            if res then
-                return
+        while 1 do
+            res, availableNengLiang = baseUtils.TomatoOCRText(tomatoOCR, 607, 80, 660, 104, "剩余能量") -- 210
+            availableNengLiang = tonumber(availableNengLiang)
+            if availableNengLiang == nil or availableNengLiang < 50 then -- 识别剩余体力不足100时，退出寻宝循环
+                break
             end
 
-            baseUtils.tapSleep(620, 90)
-            baseUtils.tapSleep(620, 90)
-            baseUtils.tapSleep(620, 90)
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 586, 77, 631, 105, "跳过")
-            baseUtils.tapSleep(360, 1100, 1) -- 点击空白处关闭
+            if availableNengLiang >= 100 then
+                baseUtils.tapSleep(580, 880) -- 拉满10次
+            end
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 331, 1119, 386, 1147, "寻宝")
+            if res then
+                -- 判断能源是否用尽
+                res = baseUtils.TomatoOCRText(tomatoOCR, 316, 343, 404, 370, "补充能源")
+                if res then
+                    return
+                end
+
+                baseUtils.tapSleep(620, 90)
+                baseUtils.tapSleep(620, 90)
+                baseUtils.tapSleep(620, 90)
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 586, 77, 631, 105, "跳过")
+                baseUtils.tapSleep(360, 1100, 1) -- 点击空白处关闭
+            end
         end
     end
 end
