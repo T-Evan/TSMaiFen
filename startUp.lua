@@ -34,6 +34,7 @@ function startUp.startApp()
     res1 = baseUtils.TomatoOCRText(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 公告
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
     res3 = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
+    res4 = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
     --x, y = findMultiColorInRegionFuzzy(0xffffff,
     --    "2|1|0xffffff,2|2|0xffffff,2|4|0xffffff,1|5|0x87b58b,-1|4|0x9fbea2,-5|5|0xffffff,-7|5|0x93bb8c,-7|13|0xffffff,-9|17|0xfefffe,-10|17|0xfefffe,-11|18|0xeaefea,17|18|0xffffff,21|22|0xc4c0b6,21|21|0xffffff,22|8|0xfdfefd",
     --    90, 308, 0, 718, 128, { orient = 2 })
@@ -45,10 +46,10 @@ function startUp.startApp()
     res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
     res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
 
-    if res1 == false and res2 == false and res3 == false and res5 == false and res6 == false and res7 == false then -- 在登录页面
+    if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false then -- 在登录页面
         baseUtils.mSleep3(5000)
         return startUp.startApp()
-    elseif res3 then -- 已在游戏中
+    elseif res3 or res4 then -- 已在游戏中
         toast("已进入游戏，返回首页", 1)
         baseUtils.mSleep3(1000)
         return dailyTask.homePage()

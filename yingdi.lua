@@ -54,9 +54,12 @@ function yingdiTask.yueKa()
     if res == true then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 333, 1054, 385, 1086, "领取")
         if res then
-            baseUtils.tapSleep(115, 11358) -- 点击空白处关闭
+            baseUtils.tapSleep(60, 1135) -- 点击空白处关闭
         end
+        -- 支付页兜底
+        baseUtils.tapSleep(665, 142)
     end
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 91, 1184, 126, 1222, "回") -- 返回
 end
 
 -- 日礼包
@@ -78,8 +81,12 @@ function yingdiTask.riLiBao()
     res = baseUtils.TomatoOCRTap(tomatoOCR, 286, 1202, 340, 1229, "礼包")
     if res == true then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 148, 671, 198, 700, "免费")
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 335, 694, 380, 719, "购买")
-        baseUtils.tapSleep(345, 1058) -- 点击空白处关闭
+        if res then
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 335, 694, 380, 719, "购买")
+            if res then
+                baseUtils.tapSleep(345, 1058) -- 点击空白处关闭
+            end
+        end
     end
 end
 
@@ -113,6 +120,9 @@ function yingdiTask.xingChenTongXing()
 
         res = baseUtils.TomatoOCRTap(tomatoOCR, 94, 1186, 125, 1217, "回") -- 返回活动首页
         res = baseUtils.TomatoOCRTap(tomatoOCR, 232, 1093, 283, 1124, "领取") -- 一键领取
+        if res then
+            baseUtils.tapSleep(232, 1093) -- 点击空白处
+        end
     end
 end
 

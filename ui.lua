@@ -246,6 +246,23 @@ MyTable = {
             },
             {
                 ["type"] = "Label",
+                ["text"] = "讲述故事次数",
+                ["nowrap"] = 1, --下个控件不换行
+                ["width"] = -1
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "讲述故事次数",
+                ["prompt"] = "讲述故事次数",
+                ["kbtype"] = "number",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["size"] = 10,
+                ["width"] = 250,
+            },
+            {
+                ["type"] = "Label",
                 ["text"] = "钻石兑换门票次数",
                 ["nowrap"] = 1, --下个控件不换行
                 ["width"] = -1
@@ -254,6 +271,23 @@ MyTable = {
                 ["type"] = "Edit",
                 ["id"] = "钻石兑换门票次数",
                 ["prompt"] = "钻石兑换门票次数",
+                ["kbtype"] = "number",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["size"] = 10,
+                ["width"] = 250,
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "骑兽探索次数",
+                ["nowrap"] = 1, --下个控件不换行
+                ["width"] = -1
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "骑兽探索次数",
+                ["prompt"] = "骑兽探索次数",
                 ["kbtype"] = "number",
                 ["color"] = "0,0,0",
                 ["align"] = "center",
@@ -694,7 +728,9 @@ UIret, values = showUI(MyJsonString)
     ["冒险手册领取"] = 0,
     ["邮件领取"] = 0,
     ["招式创造"] = 0,
+    ["招式创造-讲述次数"] = 0,
     ["骑兽乐园"] = 0,
+    ["骑兽乐园-探索次数"] = 0,
     ["钻石兑换卢恩次数"] = 0,
     ["钻石兑换门票次数"] = 0,
 
@@ -813,6 +849,8 @@ if UIret == 1 then
     end
     功能开关["钻石兑换卢恩次数"] = values.钻石兑换卢恩次数
     功能开关["钻石兑换门票次数"] = values.钻石兑换门票次数
+    功能开关["招式创造-讲述次数"] = values.讲述故事次数
+    功能开关["骑兽乐园-探索次数"] = values.骑兽探索次数
 
     local 活动相关 = values.活动相关
     活动相关 = 活动相关:split("@")

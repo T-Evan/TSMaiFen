@@ -2,6 +2,7 @@ local dailyTask = {}
 
 -- 返回首页
 function dailyTask.homePage()
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 292, 1203, 425, 1239, "点击空白处关闭")
     -- 判断是否已在首页
     res = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
     if res then
@@ -17,17 +18,19 @@ function dailyTask.homePage()
     res4 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
     res5 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
     --res6 = baseUtils.TomatoOCRTap(tomatoOCR, 213, 604, 266, 635, "拒绝") -- 避免错误时机匹配成功（存在多次拒绝导致的匹配惩罚）
-    res6 = shilianTask.WaitFight()
-    res7 = dailyTask.quitTeam()
-    if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false then
+    if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false then
         res1 = baseUtils.TomatoOCRTap(tomatoOCR, 289, 1067, 430, 1094, "点击空白处关闭")
-        res2 = baseUtils.TomatoOCRTap(tomatoOCR, 279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 100)
+        res2 = baseUtils.TomatoOCRTap(tomatoOCR, 279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 20)
         res3 = baseUtils.TomatoOCRTap(tomatoOCR, 266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
-        res4 = baseUtils.TomatoOCRTap(tomatoOCR, 296, 1207, 424, 1232, "点击空白处关闭", 30, 100)
+        res4 = baseUtils.TomatoOCRTap(tomatoOCR, 292, 1203, 425, 1239, "点击空白处关闭")
         res5 = baseUtils.TomatoOCRTap(tomatoOCR, 268, 869, 359, 888, "点击空白处", 30, 100)
         if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false then
-            -- 判断战败页
-            shilianTask.fightFail()
+            res6 = shilianTask.WaitFight()
+            res7 = dailyTask.quitTeam()
+            if res6 == false and res7 == false then
+                -- 判断战败页
+                shilianTask.fightFail()
+            end
         end
     end
 
@@ -166,7 +169,7 @@ function dailyTask.qiShouLeYuan()
     baseUtils.tapSleep(200, 545, 4) -- 芙芙小铺
     res = baseUtils.TomatoOCRTap(tomatoOCR, 512, 1136, 611, 1162, "骑兽乐园")
     if res then
-        baseUtils.tapSleep(188, 321, 5) -- 点击门票（固定位置）
+        baseUtils.tapSleep(188, 321, 4) -- 点击门票（固定位置）
         baseUtils.tapSleep(550, 1080)   -- 点击空白处关闭
 
         -- 兑换门票
@@ -190,6 +193,25 @@ function dailyTask.qiShouLeYuan()
             end
         end
         任务记录["日常-骑兽乐园-完成"] = 1
+    end
+
+    -- 骑兽探索
+    local needCount = tonumber(功能开关["骑兽乐园-探索次数"])
+    if needCount == nil then
+        needCount = 0
+    end
+    if needCount > 0 then
+        attempt = 0
+        while attempt < needCount do
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 204, 917, 245, 940, "探索")
+            baseUtils.mSleep3(2000)
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 597, 28, 642, 53, "跳过") -- 跳过动画
+            baseUtils.mSleep3(2000)
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 597, 28, 642, 53, "跳过") -- 跳过动画
+            baseUtils.tapSleep(120, 1110, 3) -- 点击空白处
+            baseUtils.tapSleep(120, 1110) -- 点击空白处
+            attempt = attempt + 1
+        end
     end
 end
 
@@ -252,6 +274,28 @@ function dailyTask.zhaoShiChuangZao()
             end
             count = count + 1
         end
+    end
+
+    -- 讲述故事
+    local needCount = tonumber(功能开关["招式创造-讲述次数"])
+    if needCount == nil then
+        needCount = 0
+    end
+    if needCount > 0 then
+        attempt = 0
+        while attempt < needCount do
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 319, 1062, 398, 1083, "自动讲述")
+            baseUtils.mSleep3(2000)
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 359, 969, 399, 992, "收取") -- 一键收取
+            baseUtils.tapSleep(170, 1090) -- 点击空白处
+            attempt = attempt + 1
+        end
+    end
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 69, 1198, 124, 1234, "返回") -- 返回营地
+    res = baseUtils.TomatoOCRText(tomatoOCR, 468, 625, 504, 645, "收取") -- 返回营地时，一键收取提示
+    if res then
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 454, 728, 509, 758, "确定") -- 返回营地时，一键收取提示
     end
 end
 
