@@ -9,6 +9,9 @@ function lvtuanTask.lvtuanTask()
     -- 旅团签到
     lvtuanTask.lvTuanWater()
 
+    -- 旅团许愿墙
+    lvtuanTask.lvTuanXuYuan()
+
     -- 旅团任务
     lvtuanTask.lvTuanRenWu()
 
@@ -225,6 +228,37 @@ function lvtuanTask.lvTuanRenWu()
             baseUtils.tapSleep(410, 390)
             baseUtils.tapSleep(330, 390)
             baseUtils.tapSleep(250, 390)
+        else
+            break
+        end
+    end
+end
+
+-- 旅团许愿墙
+function lvtuanTask.lvTuanXuYuan()
+    if 功能开关["旅团许愿墙"] == 0 or 任务记录["旅团-许愿墙-完成"] == 1 then
+        return
+    end
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 647, 592, 689, 614, "旅团")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 637, 830, 699, 855, "许愿墙")
+    if res == false then
+        return
+    end
+    for i = 1, 15 do
+        x, y = findMultiColorInRegionFuzzy(0xbacaed,
+            "4|0|0x7da2e2,8|1|0xbfceee,14|1|0xbdcded,34|1|0x7da2e2,31|2|0xabc0ea,31|14|0xb0c3ea,21|14|0xc1cfee,8|14|0x7da2e2,1|14|0xffffff,-14|14|0x7da2e2,14|18|0x7da2e2,28|18|0x7da2e2,23|8|0xffffff,2|8|0xeff2fa",
+            80, 0, 0, 720, 1280, { orient = 2 }) -- 捐献按钮
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)             -- 点击捐献
+            --点击最大
+            baseUtils.tapSleep(504, 659)
+            baseUtils.tapSleep(504, 718)
+            baseUtils.tapSleep(504, 781)
+            -- 点击捐赠
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 328, 822, 389, 854, "捐赠")
+            --res = baseUtils.TomatoOCRTap(tomatoOCR, 97, 1200, 129, 1231, "回") -- 返回许愿墙首页
+            baseUtils.tapSleep(365, 1214) -- 点击空白处
         else
             break
         end

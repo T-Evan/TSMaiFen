@@ -46,10 +46,13 @@ function startUp.startApp()
     res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
     res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
 
+    res8 = baseUtils.TomatoOCRText(tomatoOCR, 457, 607, 502, 631, "准备") -- 秘境准备
+    res9 = baseUtils.TomatoOCRText(tomatoOCR, 453, 650, 505, 684, "准备") -- 恶龙准备
+
     if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false then -- 在登录页面
         baseUtils.mSleep3(5000)
         return startUp.startApp()
-    elseif res3 or res4 then -- 已在游戏中
+    elseif res3 or res4 or res8 or res9 then -- 已在游戏中
         toast("已进入游戏，返回首页", 1)
         baseUtils.mSleep3(1000)
         return dailyTask.homePage()

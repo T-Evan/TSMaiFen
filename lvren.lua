@@ -31,7 +31,12 @@ function lvrenTask.updateEquip()
         return
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 446, 413, 528, 438, "一键强化")
+    x, y = findMultiColorInRegionFuzzy(0xfff9cf,
+        "11|0|0xffffe5,18|0|0xffffec,24|0|0xffffbd,26|5|0xffff9c,26|9|0xfffd8d,32|10|0xffffea,35|12|0xffebcb,35|20|0xffffee,20|23|0xffde63,10|23|0xe6a744,3|27|0xfff782,1|15|0xffffee,-8|15|0xffebc9,-13|15|0xfff792,9|39|0xfffae8,23|40|0xfffae7",
+        80, 0, 0, 720, 1280, { orient = 2 }) -- 一键强化按钮
+    if x ~= -1 then
+        baseUtils.tapSleep(x, y)
+    end
 end
 
 -- 自动升级技能

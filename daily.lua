@@ -209,8 +209,8 @@ function dailyTask.qiShouLeYuan()
             res = baseUtils.TomatoOCRTap(tomatoOCR, 597, 28, 642, 53, "跳过") -- 跳过动画
             baseUtils.mSleep3(2000)
             res = baseUtils.TomatoOCRTap(tomatoOCR, 597, 28, 642, 53, "跳过") -- 跳过动画
-            baseUtils.tapSleep(120, 1110, 3) -- 点击空白处
-            baseUtils.tapSleep(120, 1110) -- 点击空白处
+            baseUtils.tapSleep(90,980, 3) -- 点击空白处
+            baseUtils.tapSleep(90,980) -- 点击空白处
             attempt = attempt + 1
         end
     end

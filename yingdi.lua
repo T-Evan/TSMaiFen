@@ -12,6 +12,9 @@ function yingdiTask.yingdiTask()
     -- 秘宝
     yingdiTask.yingDiMiBao()
 
+    -- 露营打卡点
+    yingdiTask.luYingDaKa()
+
     -- 月签到
     yingdiTask.yueqiandao()
 
@@ -152,6 +155,71 @@ function yingdiTask.zhiFeiJi()
         baseUtils.tapSleep(345, 1058) -- 点击空白处关闭
         res = baseUtils.TomatoOCRTap(tomatoOCR, 94, 1186, 125, 1217, "回") -- 返回纸飞机首页
         res = baseUtils.TomatoOCRTap(tomatoOCR, 359, 1056, 409, 1087, "领取") -- 一键领取
+    else
+        -- 下翻第二屏，继续识别
+        moveTo(680, 804, 680, 451, 120)
+        moveTo(680, 804, 680, 451, 120)
+        baseUtils.mSleep3(5000)
+        x, y = findMultiColorInRegionFuzzy(0xfcf7ab,
+            "-5|12|0xfbf39d,3|14|0xfbf29b,15|15|0xfbf29a,63|9|0xb39767,63|27|0xfbee8a,16|62|0xefcbb7,34|62|0xe9b594,58|62|0xeab797,80|69|0xe39858,86|75|0xe39858,98|71|0xecc1a6,111|61|0xe3985a,119|61|0xe3985a,128|62|0xe39858",
+            80, 0, 0, 720, 1280, { orient = 2 }) -- 纸飞机
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 566, 228, 604, 250, "任务")
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 496, 304, 547, 332, "领取")
+            baseUtils.tapSleep(345, 1058) -- 点击空白处关闭
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 94, 1186, 125, 1217, "回") -- 返回纸飞机首页
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 359, 1056, 409, 1087, "领取") -- 一键领取
+        end
+    end
+end
+
+function yingdiTask.luYingDaKa()
+    if 功能开关["露营打卡点"] == 0 then
+        return
+    end
+
+    -- 返回首页
+    dailyTask.homePage()
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
+    --判断是否在营地页面
+    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    if res == false then
+        return
+    end
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    x, y = findMultiColorInRegionFuzzy(0xc8b27f,
+        "12|17|0xb19264,-14|17|0xfad498,54|13|0xfce2a4,65|-3|0xfbe1a6,65|24|0x884f24,91|18|0xfad498,91|-10|0xfce7ac,109|-10|0xfce7ac,116|21|0xfad295,116|-10|0xfce7ac,156|-9|0xfceaad,156|22|0xfad194,145|3|0xf0dda2,163|3|0xf0dda2,-10|60|0xc47a38,13|60|0xc47a38,46|60|0xd4ab8b,66|59|0xc47a37,92|55|0xe5d3be",
+        80, 0, 0, 720, 1280, { orient = 2 }) -- 露营打卡点
+    if x ~= -1 then
+        baseUtils.tapSleep(x, y)
+        x, y = findMultiColorInRegionFuzzy(0xf3a84b,
+            "40|0|0xf9d7be,78|0|0xf3a84b,78|4|0xf3a84b,71|4|0xf3a84b,56|4|0xf4ae62,37|4|0xf3a84b,23|4|0xf8d2b3,12|6|0xf3a84b,12|17|0xf3a84b,34|17|0xfef7f3,47|17|0xfbe5d6,63|17|0xf3a84b,85|17|0xf3a84b,0|12|0xf3a84b",
+            80, 0, 0, 720, 1280, { orient = 2 }) -- 领取按钮
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+            baseUtils.tapSleep(35, 1054) -- 点击空白处关闭
+        end
+    else
+        -- 下翻第二屏，继续识别
+        moveTo(680, 804, 680, 451, 120)
+        moveTo(680, 804, 680, 451, 120)
+        baseUtils.mSleep3(5000)
+        x, y = findMultiColorInRegionFuzzy(0xc8b27f,
+            "12|17|0xb19264,-14|17|0xfad498,54|13|0xfce2a4,65|-3|0xfbe1a6,65|24|0x884f24,91|18|0xfad498,91|-10|0xfce7ac,109|-10|0xfce7ac,116|21|0xfad295,116|-10|0xfce7ac,156|-9|0xfceaad,156|22|0xfad194,145|3|0xf0dda2,163|3|0xf0dda2,-10|60|0xc47a38,13|60|0xc47a38,46|60|0xd4ab8b,66|59|0xc47a37,92|55|0xe5d3be",
+            80, 0, 0, 720, 1280, { orient = 2 }) -- 露营打卡点
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+            x, y = findMultiColorInRegionFuzzy(0xf3a84b,
+                "40|0|0xf9d7be,78|0|0xf3a84b,78|4|0xf3a84b,71|4|0xf3a84b,56|4|0xf4ae62,37|4|0xf3a84b,23|4|0xf8d2b3,12|6|0xf3a84b,12|17|0xf3a84b,34|17|0xfef7f3,47|17|0xfbe5d6,63|17|0xf3a84b,85|17|0xf3a84b,0|12|0xf3a84b",
+                80, 0, 0, 720, 1280, { orient = 2 }) -- 领取按钮
+            if x ~= -1 then
+                baseUtils.tapSleep(x, y)
+                baseUtils.tapSleep(35, 1054) -- 点击空白处关闭
+            end
+        end
     end
 end
 
@@ -177,7 +245,20 @@ function yingdiTask.yueqiandao()
     if x ~= -1 then
         baseUtils.tapSleep(x, y)
         res = baseUtils.TomatoOCRTap(tomatoOCR, 310, 977, 408, 1009, "点击签到")
-        baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+        baseUtils.tapSleep(36, 1123) -- 点击空白处关闭
+    else
+        -- 下翻第二屏，继续识别
+        moveTo(680, 804, 680, 451, 120)
+        moveTo(680, 804, 680, 451, 120)
+        baseUtils.mSleep3(5000)
+        x, y = findMultiColorInRegionFuzzy(0xedc5a4,
+            "-2|15|0xefc5a5,-29|15|0xecbf9b,-28|36|0xeae6de,4|36|0xf1e6dc,33|35|0xe8b58b,57|35|0x823e23,57|73|0xb8b8b8,26|70|0x823a1e,-1|60|0xedcdbd,-15|75|0x888883,-8|100|0xbcb0aa,5|96|0x474038,39|96|0x2a251f,68|96|0x9c9b97",
+            80, 0, 0, 720, 1280, { orient = 2 })
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 310, 977, 408, 1009, "点击签到")
+            baseUtils.tapSleep(36, 1123) -- 点击空白处关闭
+        end
     end
 end
 
@@ -289,7 +370,7 @@ function yingdiTask.yingDiMiBao()
     -- 领取秘宝能量
     x, y = findMultiColorInRegionFuzzy(0xffffff,
         "3|5|0x84dbfe,-1|7|0x8ae5ff,7|2|0x7ccafe,5|12|0xe0fcff,0|12|0xf0fefe,-2|24|0xffffff,4|24|0xffffff,9|24|0xb8b9bb,15|24|0xc2c3c5,19|29|0x606167,6|28|0x5b5f69,-4|29|0x5b5f69,-9|29|0x6a6e76,-13|18|0x595b61",
-        90, 0, 0, 720, 1280, { orient = 2 })
+        80, 0, 0, 720, 1280, { orient = 2 })
     if x ~= -1 then
         baseUtils.tapSleep(x, y)
         baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
