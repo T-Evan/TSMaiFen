@@ -443,7 +443,8 @@ function shilianTask.tili()
 
     baseUtils.tapSleep(690, 90) -- 点击补充体力加号
 
-    while 1 do
+    attempt = 0
+    while attempt < 3 do
         res, count = baseUtils.TomatoOCRText(tomatoOCR, 500, 817, 515, 834, "0")
         local bugCount = tonumber(count)
         if bugCount == nil then
@@ -458,6 +459,7 @@ function shilianTask.tili()
         else
             break
         end
+        attempt = attempt + 1
     end
 
     baseUtils.tapSleep(61, 1187) -- 返回
@@ -470,16 +472,13 @@ function shilianTask.fighting()
     local totalWait = 300 * 1000 -- 30000 毫秒 = 30 秒
     local elapsed = 0
 
+    local teamShoutDone = 0
     while 1 do
         if elapsed >= totalWait then
             shilianTask.quitTeam() -- 退出队伍
             logUtils.log("战斗超时,退出组队")
             break
         end
-
-        res1 = baseUtils.TomatoOCRText(tomatoOCR, 642, 461, 702, 483, "麦克风")
-        res2 = baseUtils.TomatoOCRText(tomatoOCR, 649, 394, 692, 417, "语音")
-        res3 = baseUtils.TomatoOCRText(tomatoOCR, 651, 319, 691, 342, "队伍")
 
         -- 战斗结束
         openStatus = shilianTask.openTreasure()
@@ -496,13 +495,29 @@ function shilianTask.fighting()
             else
                 baseUtils.tapSleep(365, 1135, 3)
             end
+            logUtils.log("战斗胜利")
+            break
         end
+
+        x, y = findMultiColorInRegionFuzzy(0xbfc2c5,
+            "1|5|0xe2ddd2,7|6|0xdfdcd2,17|7|0xe2dfd4,16|10|0xe3dfd4,15|20|0xe2ddd2,1|16|0xe0dcd4,-3|15|0xe3ded3,-7|19|0xe3e0d7,-2|29|0xe8e2d4,0|39|0xc5c1b7,10|40|0xf3eddd,15|40|0xf3eddd,16|35|0xebe5d6,16|30|0xf3eddd",
+            75, 0, 0, 720, 1280, { orient = 2 })
 
         if openStatus == 1 then
             logUtils.log("战斗胜利")
             break
-        elseif res1 or res2 or res3 then
+        elseif x ~= -1 then
+            if teamShoutDone == 0 then
+                teamShoutDone = shilianTask.teamShout()
+            end
             logUtils.log("战斗中")
+        else
+            x, y = findMultiColorInRegionFuzzy(0xbfc2c5,
+                "1|5|0xe2ddd2,7|6|0xdfdcd2,17|7|0xe2dfd4,16|10|0xe3dfd4,15|20|0xe2ddd2,1|16|0xe0dcd4,-3|15|0xe3ded3,-7|19|0xe3e0d7,-2|29|0xe8e2d4,0|39|0xc5c1b7,10|40|0xf3eddd,15|40|0xf3eddd,16|35|0xebe5d6,16|30|0xf3eddd",
+                75, 0, 0, 720, 1280, { orient = 2 }) -- 再次识别战斗中，避免误判
+            if x ~= -1 then
+                break
+            end
         end
 
         -- 判断是否战斗失败（战斗4分钟后）
@@ -541,10 +556,26 @@ end
 
 -- 队伍喊话
 function shilianTask.teamShout()
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 19, 1104, 94, 1128, "点击输入")
-    if res then
-
+    if 功能开关["喊话内容"] == "" then
+        return 0
     end
+
+    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 19, 1104, 94, 1128, "点击输入")
+    if res1 == false then
+        res2 = baseUtils.TomatoOCRTap(tomatoOCR, 19, 1102, 90, 1127, "点击输入")
+    end
+    if res1 or res2 then
+        --延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
+        baseUtils.mSleep3(1000);
+        --在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
+        inputText(功能开关["喊话内容"])
+        baseUtils.tapSleep(360, 104) -- 点击空白处确认输入
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 555, 1156, 603, 1188, "发送")
+        if res then
+            return 1
+        end
+    end
+    return 0
 end
 
 -- 领取宝箱
@@ -570,7 +601,7 @@ function shilianTask.openTreasure()
                 while zan < 4 do
                     x, y = findMultiColorInRegionFuzzy(0xffffff,
                         "0|1|0xffffff,0|4|0xfefefe,-1|12|0xffffff,5|9|0xfefefe,5|6|0xffffff,5|3|0x82a6e2,-8|2|0x7da3e3,-7|5|0xffffff,-8|8|0xffffff,-8|13|0x94afe3,2|16|0x7ea2e3,8|12|0x7aa3e2,9|7|0x80a5e4",
-                        80, 0, 0, 720, 1280, { orient = 2 })
+                        75, 0, 0, 720, 1280, { orient = 2 })
                     if x ~= -1 then
                         baseUtils.tapSleep(x, y) -- 战斗结束页点赞队友
                     end
@@ -598,14 +629,15 @@ function shilianTask.openTreasure()
 
     -- 点赞队友
     if 功能开关["秘境-点赞队友"] ~= nil and 功能开关["秘境-点赞队友"] == 1 then
-        res1 = baseUtils.TomatoOCRText(tomatoOCR, 267, 810, 440, 840, "开启宝箱获得奖励") -- 战斗结束页。宝箱提示
+        res1 = baseUtils.TomatoOCRText(tomatoOCR, 313, 622, 404, 656, "通关奖励") -- 战斗结束页。宝箱提示
+        res5 = baseUtils.TomatoOCRText(tomatoOCR, 312, 563, 404, 596, "通关奖励") -- 战斗结束页。宝箱提示
         res2 = baseUtils.TomatoOCRText(tomatoOCR, 267, 755, 313, 783, "开启") -- 战斗结束页。宝箱提示
-        res3 = baseUtils.TomatoOCRText(tomatoOCR, 261, 455, 447, 491, "开启宝箱获得奖励") -- 结算页，宝箱提示
+        res3 = baseUtils.TomatoOCRText(tomatoOCR, 273, 397, 360, 425, "是否开启") -- 结算页，宝箱提示
         res4 = baseUtils.TomatoOCRText(tomatoOCR, 265, 457, 314, 488, "开启") -- 结算页，宝箱提示
         --x, y = findMultiColorInRegionFuzzy(0xfae2d0,
         --    "8|0|0xfae2d0,24|0|0xffffff,28|10|0xf8d6bb,17|7|0xf8cfaf,9|7|0xffffff,0|7|0xfffefe,0|16|0xf3a84b,0|28|0xd99861,-1|35|0xe6bf6f,-7|32|0xf3d66a,-7|23|0xf5e57c,25|22|0xce8328",
         --    80, 0, 0, 720, 1280, { orient = 2 }) -- 宝箱图片
-        if res1 or res2 or res3 or res4 then
+        if res1 or res2 or res3 or res4 or res5 then
             zan = 0
             while zan < 4 do
                 x, y = findMultiColorInRegionFuzzy(0xffffff,
@@ -624,6 +656,11 @@ function shilianTask.openTreasure()
 
     local openStatus = 0
     while attempts < maxAttempts do
+        res = baseUtils.TomatoOCRText(tomatoOCR, 300, 606, 417, 634, "宝箱尚未开启") -- 避免前置错误点击弹出宝箱尚未开启
+        if res then
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 99, 1199, 128, 1234, "回") -- 关闭确认弹窗，返回待领取页
+        end
+
         attempts = attempts + 1
         -- 战斗结束页
         res = baseUtils.TomatoOCRTap(tomatoOCR, 219, 1103, 254, 1120, "开启") -- 战斗页，宝箱1
@@ -676,13 +713,13 @@ function shilianTask.openTreasure()
     end
 
     -- 开启宝箱后，返回
-    if openStatus == 1 then
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 96, 1199, 130, 1232, "回") -- 返回
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 330, 726, 387, 759, "确定") -- 确定返回
-        if res == false then
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 331, 727, 388, 761, "确定") -- 确定返回
-        end
+    --if openStatus == 1 then
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 96, 1199, 130, 1232, "回") -- 返回
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 330, 726, 387, 759, "确定") -- 确定返回
+    if res == false then
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 331, 727, 388, 761, "确定") -- 确定返回
     end
+    --end
     return openStatus
 end
 

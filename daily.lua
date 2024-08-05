@@ -3,6 +3,8 @@ local dailyTask = {}
 -- 返回首页
 function dailyTask.homePage()
     res = baseUtils.TomatoOCRTap(tomatoOCR, 292, 1203, 425, 1239, "点击空白处关闭")
+    res6 = shilianTask.WaitFight()
+
     -- 判断是否已在首页
     res = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
     if res then
@@ -25,9 +27,8 @@ function dailyTask.homePage()
         res4 = baseUtils.TomatoOCRTap(tomatoOCR, 292, 1203, 425, 1239, "点击空白处关闭")
         res5 = baseUtils.TomatoOCRTap(tomatoOCR, 268, 869, 359, 888, "点击空白处", 30, 100)
         if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false then
-            res6 = shilianTask.WaitFight()
             res7 = dailyTask.quitTeam()
-            if res6 == false and res7 == false then
+            if res7 == false then
                 -- 判断战败页
                 shilianTask.fightFail()
             end

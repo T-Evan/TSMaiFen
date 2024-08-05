@@ -420,6 +420,23 @@ MyTable = {
             },
             {
                 ["type"] = "Label",
+                ["text"] = "队伍喊话：",
+                ["nowrap"] = 1, --下个控件不换行
+                ["width"] = -1
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "喊话内容",
+                ["prompt"] = "喊话内容",
+                ["kbtype"] = "ascii",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["size"] = 10,
+                ["width"] = 250,
+            },
+            {
+                ["type"] = "Label",
                 ["text"] = "恶龙大通缉：",
                 ["align"] = "left",
                 ["valign"] = "top",
@@ -749,6 +766,7 @@ UIret, values = showUI(MyJsonString)
     ["秘境-点赞队友"] = 0,
     ["秘境-添加佣兵"] = 0,
     ["秘境-体力不足继续挑战"] = 0,
+    ["喊话内容"] = "",
 
     ["恶龙大通缉开关"] = 0,
     ["恶龙-添加佣兵"] = 0,
@@ -894,6 +912,7 @@ if UIret == 1 then
     功能开关["秘境地图"] = values.秘境地图
     功能开关["秘境关卡"] = values.秘境关卡
     功能开关["补充体力次数"] = values.补充体力次数
+    功能开关["喊话内容"] = values.喊话内容
 
     if values.恶龙大通缉开关 == "on" then
         功能开关["恶龙大通缉开关"] = 1

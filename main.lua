@@ -34,11 +34,8 @@ function main(...)
     -- local kill_tid = thread.create(killdialog,error_callback)
     -- thread.waitAllThreadExit()
     -- debug
-    --[[   x, y = findMultiColorInRegionFuzzy(0x7e4731,
-        "11|0|0x7e462e,19|0|0x86563e,29|0|0xa96a48,44|0|0x703d2b,63|0|0xbf7e58,73|0|0xca855a,73|-14|0xb57446,57|-14|0xca975c,42|-14|0xb58058,28|-14|0xb27953,10|-14|0xcd8a5d,2|-14|0xc7845a,-7|-13|0x85553e,86|-10|0xca8961,86|-1|0xbb7854,83|2|0xca845d",
-        90, 0, 0, 720, 1280, { orient = 2 })
-    dialog(x, y)]]
-
+    --shilianTask.teamShout()
+    --lua_exit()
     --runThread("__thread__child1") -- 没有用？
 
     -- 处理休息时间
