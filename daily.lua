@@ -3,6 +3,7 @@ local dailyTask = {}
 -- 返回首页
 function dailyTask.homePage()
     res = baseUtils.TomatoOCRTap(tomatoOCR, 292, 1203, 425, 1239, "点击空白处关闭")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 288, 1199, 430, 1241, "点击空白处关闭")
     res6 = shilianTask.WaitFight()
 
     -- 判断是否已在首页
@@ -137,10 +138,12 @@ function dailyTask.youJian()
     baseUtils.tapSleep(300, 740, 4) -- 邮件
     res = baseUtils.TomatoOCRTap(tomatoOCR, 463, 1030, 510, 1061, "领取")
     if res == false then
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 85, 1186, 141, 1222, "返回")
         return
     end
     baseUtils.tapSleep(125, 1080) -- 点击空白处
     res = baseUtils.TomatoOCRTap(tomatoOCR, 85, 1186, 141, 1222, "返回")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1187, 140, 1219, "返回")
 end
 
 -- 骑兽乐园
@@ -209,8 +212,8 @@ function dailyTask.qiShouLeYuan()
             res = baseUtils.TomatoOCRTap(tomatoOCR, 597, 28, 642, 53, "跳过") -- 跳过动画
             baseUtils.mSleep3(2000)
             res = baseUtils.TomatoOCRTap(tomatoOCR, 597, 28, 642, 53, "跳过") -- 跳过动画
-            baseUtils.tapSleep(90,980, 3) -- 点击空白处
-            baseUtils.tapSleep(90,980) -- 点击空白处
+            baseUtils.tapSleep(90, 980, 3) -- 点击空白处
+            baseUtils.tapSleep(90, 980) -- 点击空白处
             attempt = attempt + 1
         end
     end

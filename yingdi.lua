@@ -39,7 +39,7 @@ end
 
 -- 月卡
 function yingdiTask.yueKa()
-    if 功能开关["月卡"] == 0 then
+    if 功能开关["月卡"] == 0 or 任务记录["月卡"] == 1 then
         return
     end
 
@@ -57,6 +57,7 @@ function yingdiTask.yueKa()
     if res == true then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 333, 1054, 385, 1086, "领取")
         if res then
+            任务记录["月卡"] = 1
             baseUtils.tapSleep(60, 1135) -- 点击空白处关闭
         end
         -- 支付页兜底
@@ -67,7 +68,7 @@ end
 
 -- 日礼包
 function yingdiTask.riLiBao()
-    if 功能开关["日礼包"] == 0 then
+    if 功能开关["日礼包"] == 0 or 任务记录["日礼包"] == 1 then
         return
     end
 
@@ -87,6 +88,7 @@ function yingdiTask.riLiBao()
         if res then
             res = baseUtils.TomatoOCRTap(tomatoOCR, 335, 694, 380, 719, "购买")
             if res then
+                任务记录["日礼包"] = 1
                 baseUtils.tapSleep(345, 1058) -- 点击空白处关闭
             end
         end
@@ -175,7 +177,7 @@ function yingdiTask.zhiFeiJi()
 end
 
 function yingdiTask.luYingDaKa()
-    if 功能开关["露营打卡点"] == 0 then
+    if 功能开关["露营打卡点"] == 0 or 任务记录["露营打卡点"] == 1 then
         return
     end
 
@@ -200,6 +202,7 @@ function yingdiTask.luYingDaKa()
             80, 0, 0, 720, 1280, { orient = 2 }) -- 领取按钮
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
+            任务记录["露营打卡点"] = 1
             baseUtils.tapSleep(35, 1054) -- 点击空白处关闭
         end
     else
@@ -217,6 +220,7 @@ function yingdiTask.luYingDaKa()
                 80, 0, 0, 720, 1280, { orient = 2 }) -- 领取按钮
             if x ~= -1 then
                 baseUtils.tapSleep(x, y)
+                任务记录["露营打卡点"] = 1
                 baseUtils.tapSleep(35, 1054) -- 点击空白处关闭
             end
         end
@@ -224,7 +228,7 @@ function yingdiTask.luYingDaKa()
 end
 
 function yingdiTask.yueqiandao()
-    if 功能开关["月签到"] == 0 then
+    if 功能开关["月签到"] == 0 or 任务记录["月签到"] == 1 then
         return
     end
 
@@ -245,6 +249,7 @@ function yingdiTask.yueqiandao()
     if x ~= -1 then
         baseUtils.tapSleep(x, y)
         res = baseUtils.TomatoOCRTap(tomatoOCR, 310, 977, 408, 1009, "点击签到")
+        任务记录["月签到"] = 1
         baseUtils.tapSleep(36, 1123) -- 点击空白处关闭
     else
         -- 下翻第二屏，继续识别
@@ -257,6 +262,7 @@ function yingdiTask.yueqiandao()
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
             res = baseUtils.TomatoOCRTap(tomatoOCR, 310, 977, 408, 1009, "点击签到")
+            任务记录["月签到"] = 1
             baseUtils.tapSleep(36, 1123) -- 点击空白处关闭
         end
     end

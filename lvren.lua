@@ -40,6 +40,7 @@ function lvrenTask.updateEquip()
 end
 
 -- 自动升级技能
+-- 优先升级同一技能至下一阶段（30倍数）
 function lvrenTask.updateSkill()
     if 功能开关["自动升级技能"] ~= nil and 功能开关["自动升级技能"] == 0 then
         return
@@ -52,14 +53,73 @@ function lvrenTask.updateSkill()
         return
     end
 
-    x, y = findMultiColorInRegionFuzzy(0x83b853,
-        "6|9|0xfefefa,11|9|0x81b852,11|15|0x83b953,11|21|0x84bc54,7|20|0x82b852,5|20|0x85bd5a,0|20|0x7eb54d,-6|20|0x82b853,-6|15|0x83b953,4|15|0xfbfdf9,4|12|0xfdfdf7",
-        80, 0, 0, 720, 1280, { orient = 2 })
-    if x ~= -1 then
-        baseUtils.tapSleep(x, y, 3)
+    if 功能开关["优先升级同一技能"] == 0 then
+        x, y = findMultiColorInRegionFuzzy(0x83b853,
+            "6|9|0xfefefa,11|9|0x81b852,11|15|0x83b953,11|21|0x84bc54,7|20|0x82b852,5|20|0x85bd5a,0|20|0x7eb54d,-6|20|0x82b853,-6|15|0x83b953,4|15|0xfbfdf9,4|12|0xfdfdf7",
+            80, 0, 0, 720, 1280, { orient = 2 })
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y, 3)
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 505, 916, 548, 944, "最大", 2, 2)
+            baseUtils.tapSleep(365, 985) -- 点击升级按钮
+        end
+    end
+
+    if 功能开关["优先升级同一技能"] == 1 then
+        local skills = {
+            { x = 356, y = 827 }, -- 核心技能
+            { x = 225, y = 735 }, -- 1技能 主动
+            { x = 360, y = 674 }, -- 2技能
+            { x = 490, y = 737 }, -- 3技能
+            { x = 142, y = 935 }, -- b1技能 被动
+            { x = 244, y = 1001 }, -- b2技能
+            { x = 358, y = 1026 }, -- b3技能
+            { x = 474, y = 1001 }, -- b4技能
+            { x = 570, y = 936 } -- b5技能
+        }
+
+        local skillLevels = {}
+        local skillLevelMap = {}
+
+        for _, skill in ipairs(skills) do
+            baseUtils.tapSleep(skill.x, skill.y)
+            -- 识别当前等级
+            res, skillLevel = baseUtils.TomatoOCRText(tomatoOCR, 391, 524, 423, 542, "技能等级")
+            skillLevel = tonumber(skillLevel)
+            if skillLevel == nil then
+                skillLevel = 0
+            end
+            table.insert(skillLevels, skillLevel)
+            skillLevelMap[skillLevel] = skill
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 85, 1188, 141, 1219, "返回") -- 返回继续查找
+        end
+
+        cloestLevel = lvrenTask.closestToNextMultipleOf30(skillLevels)
+        baseUtils.tapSleep(skillLevelMap[cloestLevel].x, skillLevelMap[cloestLevel].y)
+
+        -- 匹配哪个最接近30
         res = baseUtils.TomatoOCRTap(tomatoOCR, 505, 916, 548, 944, "最大", 2, 2)
         baseUtils.tapSleep(365, 985) -- 点击升级按钮
     end
+end
+
+function lvrenTask.closestToNextMultipleOf30(numbers)
+    local closestNumber
+    local minDifference = math.huge -- 初始化最小差距为极大值
+
+    for _, number in ipairs(numbers) do
+        -- 找到比 `number` 大的最近的30的倍数
+        local nextMultiple = math.ceil(number / 30) * 30
+        -- 计算差距
+        local difference = nextMultiple - number
+
+        -- 更新最接近的数字
+        if difference < minDifference then
+            minDifference = difference
+            closestNumber = number
+        end
+    end
+
+    return closestNumber
 end
 
 -- 猫猫包

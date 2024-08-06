@@ -19,6 +19,10 @@ startUp = require("startUp")
     ["日常-招式创造-完成"] = 0,
     ["日常-骑兽乐园-完成"] = 0,
     ["试炼-恶龙-完成次数"] = 0,
+    ["月签到"] = 0,
+    ["月卡"] = 0,
+    ["日礼包"] = 0,
+    ["露营打卡点"] = 0,
 }
 
 function main(...)
@@ -34,8 +38,8 @@ function main(...)
     -- local kill_tid = thread.create(killdialog,error_callback)
     -- thread.waitAllThreadExit()
     -- debug
-    --shilianTask.teamShout()
-    --lua_exit()
+    lvrenTask.updateSkill()
+    lua_exit()
     --runThread("__thread__child1") -- 没有用？
 
     -- 处理休息时间

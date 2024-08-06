@@ -108,7 +108,7 @@ function baseUtils.TomatoOCRText(tomatoOCR, x1, y1, x2, y2, keyWord, returnType)
     elseif returnType == "json" then
         return true, ocrRes
     else
-        logUtils.log("o识别失败-异常-" .. keyWord .. "|" .. ocrRes)
+        logUtils.log("o识别失败-异常-" .. keyWord)
         return false, ocrRes
     end
 end
