@@ -376,7 +376,7 @@ function yingdiTask.yingDiMiBao()
     -- 领取秘宝能量
     x, y = findMultiColorInRegionFuzzy(0xffffff,
         "3|5|0x84dbfe,-1|7|0x8ae5ff,7|2|0x7ccafe,5|12|0xe0fcff,0|12|0xf0fefe,-2|24|0xffffff,4|24|0xffffff,9|24|0xb8b9bb,15|24|0xc2c3c5,19|29|0x606167,6|28|0x5b5f69,-4|29|0x5b5f69,-9|29|0x6a6e76,-13|18|0x595b61",
-        80, 0, 0, 720, 1280, { orient = 2 })
+        70, 0, 0, 720, 1280, { orient = 2 })
     if x ~= -1 then
         baseUtils.tapSleep(x, y)
         baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
@@ -428,11 +428,10 @@ function yingdiTask.yingDiMiBao()
                     return
                 end
 
-                baseUtils.tapSleep(620, 90)
-                baseUtils.tapSleep(620, 90)
-                baseUtils.tapSleep(620, 90)
                 res = baseUtils.TomatoOCRTap(tomatoOCR, 586, 77, 631, 105, "跳过")
-                baseUtils.tapSleep(360, 1100, 1) -- 点击空白处关闭
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 586, 77, 631, 105, "跳过")
+                baseUtils.tapSleep(47, 1005, 1) -- 点击空白处关闭
+                baseUtils.tapSleep(47, 1005, 1) -- 点击空白处关闭
             end
         end
     end

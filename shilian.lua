@@ -245,15 +245,18 @@ function shilianTask.changeMap(selectMap, selectStage)
     local stagePoi = stagePoi[selectStage]
     res = baseUtils.TomatoOCRTap(tomatoOCR, stagePoi[1], stagePoi[2], stagePoi[3], stagePoi[4], selectStage)
     if res == false then
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 303, 342, 468, 371, selectMap)     -- 兼容默认识别第一图
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 303, 342, 468, 371, selectStage)     -- 兼容默认识别第一图
         if res == false then
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 304, 375, 468, 403, selectMap) -- 兼容默认识别第一图
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 304, 375, 468, 403, selectStage) -- 兼容默认识别第一图
         end
         if res == false then
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 302, 535, 470, 568, selectMap) -- 兼容默认识别第二图
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 302, 535, 470, 568, selectStage) -- 兼容默认识别第二图
         end
         if res == false then
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 303, 731, 469, 759, selectMap) -- 兼容默认识别第三图
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 287, 559, 501, 600, selectStage) -- 兼容默认识别第二图
+        end
+        if res == false then
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 303, 731, 469, 759, selectStage) -- 兼容默认识别第三图
         end
     end
 
@@ -818,7 +821,7 @@ function shilianTask.openTreasure()
         if openStatus == 0 then
             x, y = findMultiColorInRegionFuzzy(0xf3a84b,
                 "41|0|0xf3a84b,35|12|0xf3a84b,21|12|0xf3a84b,12|12|0xf3a84b,6|12|0xf3a84b,3|26|0xf3a84b,49|7|0xf7c8a1,62|7|0xf9d7be,56|0|0xf9d7bd,67|0|0xf9dac3,85|0|0xf3a84b,105|0|0xf3a84b,117|1|0xf3a84b,128|26|0xf3a84b",
-                80, 0, 0, 720, 1280, { orient = 2 })
+                90, 0, 0, 720, 1280, { orient = 2 }) -- 开启
             if x ~= -1 then
                 baseUtils.tapSleep(x, y)
                 baseUtils.mSleep3(3500);
