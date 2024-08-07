@@ -71,13 +71,13 @@ function startUp.logIn()
 
     -- 跳过启动动画
     if res1 or res2 then
+        baseUtils.tapSleep(340, 930,1)
+        baseUtils.tapSleep(340, 930,1)
         baseUtils.tapSleep(340, 930)
-        baseUtils.tapSleep(340, 930)
-        baseUtils.tapSleep(340, 930)
-        baseUtils.mSleep3(10 * 1000)
+        baseUtils.mSleep3(5 * 1000)
 
         local loopCount = 0
-        while loopCount < 2 do -- 循环2次
+        while loopCount < 3 do -- 循环2次
             loopCount = loopCount + 1
             -- 领取离线奖励
             res = baseUtils.TomatoOCRTap(tomatoOCR, 268, 869, 359, 888, "点击空白处", 30, 100)
@@ -95,6 +95,243 @@ function startUp.logIn()
     res = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
     if res == false then
         return startUp.startApp()
+    end
+end
+
+--复制文件
+function startUp.copyfile(path, to)
+    os.execute("cp -rf " .. path .. " " .. to);
+end
+
+function startUp.multiAccount()
+    local ts = require("ts")
+
+    oldPath = "/data/data/com.xd.cfbmf/shared_prefs/"
+    if 功能开关["账号1保存"] == 1 then
+        newPath = userPath() .. "/log/" .. "/accountConfig1/"
+        ts.hlfs.removeDir(newPath)           -- 删除文件夹
+        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
+        flag = ts.hlfs.copyDir(oldPath, newPath)
+        --复制文件夹及里面所有文件
+        if flag then
+            dialog("已保存账号1登录信息！请重启软件")
+        else
+            dialog("保存失败！请联系作者")
+        end
+        lua_exit()
+    end
+
+    if 功能开关["账号2保存"] == 1 then
+        newPath = userPath() .. "/log/" .. "/accountConfig2/"
+        ts.hlfs.removeDir(newPath)           -- 删除文件夹
+        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
+        flag = ts.hlfs.copyDir(oldPath, newPath)
+        --复制文件夹及里面所有文件
+        if flag then
+            dialog("已保存账号2登录信息！请重启软件")
+        else
+            dialog("保存失败！请联系作者")
+        end
+        lua_exit()
+    end
+
+    if 功能开关["账号3保存"] == 1 then
+        newPath = userPath() .. "/log/" .. "/accountConfig3/"
+        ts.hlfs.removeDir(newPath)           -- 删除文件夹
+        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
+        flag = ts.hlfs.copyDir(oldPath, newPath)
+        --复制文件夹及里面所有文件
+        if flag then
+            dialog("已保存账号3登录信息！请重启软件")
+        else
+            dialog("保存失败！请联系作者")
+        end
+        lua_exit()
+    end
+
+    if 功能开关["账号4保存"] == 1 then
+        newPath = userPath() .. "/log/" .. "/accountConfig4/"
+        ts.hlfs.removeDir(newPath)           -- 删除文件夹
+        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
+        flag = ts.hlfs.copyDir(oldPath, newPath)
+        --复制文件夹及里面所有文件
+        if flag then
+            dialog("已保存账号4登录信息！请重启软件")
+        else
+            dialog("保存失败！请联系作者")
+        end
+        lua_exit()
+    end
+
+    if 功能开关["账号5保存"] == 1 then
+        newPath = userPath() .. "/log/" .. "/accountConfig5/"
+        ts.hlfs.removeDir(newPath)           -- 删除文件夹
+        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
+        flag = ts.hlfs.copyDir(oldPath, newPath)
+        --复制文件夹及里面所有文件
+        if flag then
+            dialog("已保存账号5登录信息！请重启软件")
+        else
+            dialog("保存失败！请联系作者")
+        end
+        lua_exit()
+    end
+
+    --指定账号启动
+    if 功能开关["选择启动账号"] ~= "0" then
+        if 功能开关["选择启动账号"] == "1" then
+            startUp.loadAccount("accountConfig1")
+        end
+
+        if 功能开关["选择启动账号"] == "2" then
+            startUp.loadAccount("accountConfig2")
+        end
+
+        if 功能开关["选择启动账号"] == "3" then
+            startUp.loadAccount("accountConfig3")
+        end
+
+        if 功能开关["选择启动账号"] == "4" then
+            startUp.loadAccount("accountConfig4")
+        end
+
+        if 功能开关["选择启动账号"] == "5" then
+            startUp.loadAccount("accountConfig5")
+        end
+    end
+end
+
+function startUp.loadAccount(accountName)
+    closeApp("com.xd.cfbmf")             -- 重启应用让配置生效
+    oldPath = "/data/data/com.xd.cfbmf/shared_prefs/"
+    ts.hlfs.removeDir(oldPath)           -- 删除文件夹
+    creatflag = ts.hlfs.makeDir(oldPath) --新建文件夹
+    newPath = userPath() .. "/log/" .. "/" .. accountName .. "/"
+    flag = ts.hlfs.copyDir(newPath, oldPath)
+    switchApp("com.xd.cfbmf")
+end
+
+-- 复制用户信息数据切换账号
+function startUp.switchAccount()
+    if 任务记录["当前任务账号"] ~= "0" then
+        tmpAccount = tonumber(任务记录["当前任务账号"]) + 1 -- 从下一账号开始判断
+        for i = tmpAccount, 5 do
+            dialog("判断" .. "账号" .. i .. "开关" .. 功能开关["账号" .. i .. "开关"])
+            if 功能开关["账号" .. i .. "开关"] == 1 then
+                startUp.loadAccount("accountConfig" .. i)
+                任务记录["当前任务账号"] = i
+                return
+            end
+        end
+
+        -- 循环一遍后，重新执行
+        for i = 1, 5 do
+            if 功能开关["账号" .. i .. "开关"] == 1 then
+                startUp.loadAccount("accountConfig" .. i)
+                任务记录["当前任务账号"] = i
+                return
+            end
+        end
+    end
+end
+
+-- taptap模拟操作切换账号（已废弃）
+function startUp.switchAccountOld()
+    --  切换taptap登录
+    closeApp("com.taptap")
+    startFlag = switchApp("com.taptap")
+    if startFlag == 0 then
+        dialog("未安装taptap，无法执行切号功能！", 3)
+        lua_exit()
+    end
+    toast("切换账号中，请勿操作！", 2)
+    baseUtils.mSleep3(5 * 1000)
+    logUtils.log("启动taptap成功")
+
+    -- 点击头像
+    baseUtils.tapSleep(657, 97)
+    -- 点击菜单
+    baseUtils.tapSleep(666, 94)
+    -- 下滑寻找"设置"
+    moveTo(597, 1013, 603, 714, 100)
+    baseUtils.mSleep3(2000)
+    moveTo(597, 1013, 603, 714, 80)
+    baseUtils.mSleep3(2000)
+    -- 点击设置
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 240, 802, 303, 838, "设置")
+    if res then
+        -- 下滑寻找"切换和添加账号"
+        moveTo(597, 1013, 603, 714, 100)
+        baseUtils.mSleep3(2000)
+        moveTo(597, 1013, 603, 714, 100)
+        baseUtils.mSleep3(2000)
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 257, 1019, 460, 1067, "切换和添加账号")
+        if res then
+            res, phone0 = baseUtils.TomatoOCRText(tomatoOCR, 301, 398, 348, 420, "当前账号") -- 当前账号栏
+            if phone0 == 功能开关["账号1"] then
+                nextPhone = 功能开关["账号2"]
+            elseif phone0 == 功能开关["账号2"] then
+                nextPhone = 功能开关["账号3"]
+            elseif phone0 == 功能开关["账号3"] then
+                nextPhone = 功能开关["账号4"]
+            elseif phone0 == 功能开关["账号4"] then
+                nextPhone = 功能开关["账号1"]
+            else
+                dialog("当前登录账号未匹配到，请检查配置文件！", 3)
+            end
+
+            res = baseUtils.TomatoOCRText(tomatoOCR, 301, 398, 348, 420, nextPhone) -- 当前账号栏
+            if res then
+                toast("已登录下一账号")
+            else
+                res, phone1 = baseUtils.TomatoOCRTap(tomatoOCR, 270, 581, 326, 605, nextPhone) -- 账号1栏
+                res, phone2 = baseUtils.TomatoOCRTap(tomatoOCR, 271, 724, 326, 751, nextPhone) -- 账号2栏
+                res, phone3 = baseUtils.TomatoOCRTap(tomatoOCR, 271, 868, 323, 894, nextPhone) -- 账号3栏
+            end
+        end
+    else
+        toast("taptap切换账号失败，请联系作者", 3)
+        return
+    end
+
+    -- 切换麦芬重新登录
+    toast("切换账号中，请勿操作！", 2)
+    closeApp("com.xd.cfbmf")
+    startFlag = switchApp("com.xd.cfbmf")
+    if startFlag == 0 then
+        dialog("请先打开 出发吧麦芬 游戏主界面，再运行该脚本！", 3)
+        lua_exit()
+    end
+    toast("启动游戏，等待10s", 2)
+    baseUtils.mSleep3(8 * 1000)
+    logUtils.log("启动app成功")
+
+    -- 关闭公告
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
+    -- 识别是否进入首页
+    for i = 1, 4 do
+        res = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
+        if res then
+            -- 退出麦芬登录
+            baseUtils.tapSleep(663, 173) -- 点击用户中心
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 318, 671, 399, 697, "退出登录")
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 468, 764, 501, 796, "认") -- 确认退出
+            -- 重新登录
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 327, 817, 391, 858, "同意") -- 同意隐私政策
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 384, 991, 437, 1019, "登录") -- 点击taptap登录
+            if res then
+                baseUtils.tapSleep(361, 555) -- 点击一键登录
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 371, 734, 433, 771, "继续") -- 同意授权隐私政策
+                if res then
+                    toast("登录成功", 3)
+                    baseUtils.mSleep3(5000)
+                    break -- 确认登录
+                end
+            end
+        end
+        baseUtils.mSleep3(5000)
     end
 end
 

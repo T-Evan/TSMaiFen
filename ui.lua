@@ -68,6 +68,259 @@ MyTable = {
             },
             {
                 ["type"] = "Label",
+                ["text"] = "多账号配置（首次使用先保存当前账号）",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,150,255",
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "选择启动账号（从该账号开始挂机）",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,150,255",
+            },
+            {
+                ["type"] = "ComboBox", -- 必填，控件类型，下拉框
+                ["id"] = "选择启动账号",
+                -- 选填，无，控件ID 以 table 格式返回返回值时必填，否则无法获取返回值
+                ["list"] = "默认(不切换),账号1,账号2,账号3,账号4,账号5", -- 必填，无，下拉框内容
+                ["select"] = "0", -- 选填，0，默认选中项 ID
+                ["width"] = 300,
+                ["prompt"] = true
+            },
+            {
+                ["type"] = "Switch",
+                ["id"] = "账号1开关",
+                ["size"] = "s",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["state"] = "off",
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "账号1",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,0,0",
+                ["nowrap"] = 1,
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "账号1",
+                ["prompt"] = "备注",
+                ["kbtype"] = "ascii",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["text"] = "",
+                ["size"] = 10,
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                --必填，控件类型，多选组合
+                ["type"] = "CheckBoxGroup",
+                -- 选填，无，控件 ID  以 table 格式返回返回值时必填，否则无法获取返回值
+                ["id"] = "账号1配置",
+                -- 必填，无 ，单选框内容
+                ["list"] = "保存",
+                -- 选填，0，默认选中项 ID
+                ["select"] = "",
+                ["width"] = -1,
+                ["scale"] = "0.4",
+                --选填，1，仅引擎版本支持 iOS v3.00-157 及 Android v2.3.6 及其以上版本
+                ["countperline"] = "2"
+            },
+            {
+                ["type"] = "Switch",
+                ["id"] = "账号2开关",
+                ["size"] = "s",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["state"] = "off",
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "账号2",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,0,0",
+                ["nowrap"] = 1,
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "账号2",
+                ["prompt"] = "备注",
+                ["kbtype"] = "ascii",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["text"] = "",
+                ["size"] = 10,
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                --必填，控件类型，多选组合
+                ["type"] = "CheckBoxGroup",
+                -- 选填，无，控件 ID  以 table 格式返回返回值时必填，否则无法获取返回值
+                ["id"] = "账号2配置",
+                -- 必填，无 ，单选框内容
+                ["list"] = "保存",
+                -- 选填，0，默认选中项 ID
+                ["select"] = "",
+                ["width"] = -1,
+                ["scale"] = "0.4",
+                --选填，1，仅引擎版本支持 iOS v3.00-157 及 Android v2.3.6 及其以上版本
+                ["countperline"] = "2"
+            },
+            {
+                ["type"] = "Switch",
+                ["id"] = "账号3开关",
+                ["size"] = "s",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["state"] = "off",
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "账号3",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,0,0",
+                ["nowrap"] = 1,
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "账号3",
+                ["prompt"] = "备注",
+                ["kbtype"] = "ascii",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["text"] = "",
+                ["size"] = 10,
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                --必填，控件类型，多选组合
+                ["type"] = "CheckBoxGroup",
+                -- 选填，无，控件 ID  以 table 格式返回返回值时必填，否则无法获取返回值
+                ["id"] = "账号3配置",
+                -- 必填，无 ，单选框内容
+                ["list"] = "保存",
+                -- 选填，0，默认选中项 ID
+                ["select"] = "",
+                ["width"] = -1,
+                ["scale"] = "0.4",
+                --选填，1，仅引擎版本支持 iOS v3.00-157 及 Android v2.3.6 及其以上版本
+                ["countperline"] = "2"
+            },
+            {
+                ["type"] = "Switch",
+                ["id"] = "账号4开关",
+                ["size"] = "s",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["state"] = "off",
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "账号4",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,0,0",
+                ["nowrap"] = 1,
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "账号4",
+                ["prompt"] = "备注",
+                ["kbtype"] = "ascii",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["text"] = "",
+                ["size"] = 10,
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                --必填，控件类型，多选组合
+                ["type"] = "CheckBoxGroup",
+                -- 选填，无，控件 ID  以 table 格式返回返回值时必填，否则无法获取返回值
+                ["id"] = "账号4配置",
+                -- 必填，无 ，单选框内容
+                ["list"] = "保存",
+                -- 选填，0，默认选中项 ID
+                ["select"] = "",
+                ["width"] = -1,
+                ["scale"] = "0.4",
+                --选填，1，仅引擎版本支持 iOS v3.00-157 及 Android v2.3.6 及其以上版本
+                ["countperline"] = "2"
+            },
+            {
+                ["type"] = "Switch",
+                ["id"] = "账号5开关",
+                ["size"] = "s",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["state"] = "off",
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "账号5",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,0,0",
+                ["nowrap"] = 1,
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "账号5",
+                ["prompt"] = "备注",
+                ["kbtype"] = "ascii",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["text"] = "",
+                ["size"] = 10,
+                ["width"] = -1,
+                ["nowrap"] = 1
+            },
+            {
+                --必填，控件类型，多选组合
+                ["type"] = "CheckBoxGroup",
+                -- 选填，无，控件 ID  以 table 格式返回返回值时必填，否则无法获取返回值
+                ["id"] = "账号5配置",
+                -- 必填，无 ，单选框内容
+                ["list"] = "保存",
+                -- 选填，0，默认选中项 ID
+                ["select"] = "",
+                ["width"] = -1,
+                ["scale"] = "0.4",
+                --选填，1，仅引擎版本支持 iOS v3.00-157 及 Android v2.3.6 及其以上版本
+                ["countperline"] = "2"
+            },
+            {
+                ["type"] = "Label",
                 ["text"] = "定时",
                 ["size"] = 15,
                 ["align"] = "left",
@@ -125,7 +378,38 @@ MyTable = {
                 ["align"] = "left",
                 ["color"] = "0,0,0",
                 ["width"] = -1,
-            }
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "运行",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,0,0",
+                ["nowrap"] = 1,
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "Edit",
+                ["id"] = "定时切号",
+                ["prompt"] = "",
+                ["kbtype"] = "number",
+                ["color"] = "0,0,0",
+                ["align"] = "center",
+                ["valign"] = "top",
+                ["text"] = "60",
+                ["size"] = 10,
+                ["width"] = -1,
+                ["nowrap"] = 1,
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "分钟后切换下一账号",
+                ["size"] = 15,
+                ["align"] = "left",
+                ["color"] = "0,0,0",
+                ["nowrap"] = 1,
+                ["width"] = -1,
+            },
         },
         {
             {
@@ -882,10 +1166,78 @@ UIret, values = showUI(MyJsonString)
     ["旅团商店-金币"] = 0,
 
     ["调试开关"] = 0,
+
+    ["账号1开关"] = 0,
+    ["账号1保存"] = 0,
+    ["账号2开关"] = 0,
+    ["账号2保存"] = 0,
+    ["账号3开关"] = 0,
+    ["账号3保存"] = 0,
+    ["账号4开关"] = 0,
+    ["账号4保存"] = 0,
+    ["账号5开关"] = 0,
+    ["账号5保存"] = 0,
 }
 if UIret == 1 then
     功能开关["定时运行"] = values.定时运行
     功能开关["定时休息"] = values.定时休息
+    功能开关["定时切号"] = values.定时切号
+
+    功能开关["选择启动账号"] = values.选择启动账号
+    if values.账号1开关 == "on" then
+        功能开关["账号1开关"] = 1
+    end
+    local 账号1配置 = values.账号1配置
+    账号1配置 = 账号1配置:split("@")
+    for i = 1, #账号1配置, 1 do
+        if 账号1配置[i] == "0" then
+            功能开关["账号1保存"] = 1
+        end
+    end
+
+    if values.账号2开关 == "on" then
+        功能开关["账号2开关"] = 1
+    end
+    local 账号2配置 = values.账号2配置
+    账号2配置 = 账号2配置:split("@")
+    for i = 1, #账号2配置, 1 do
+        if 账号2配置[i] == "0" then
+            功能开关["账号2保存"] = 1
+        end
+    end
+
+    if values.账号3开关 == "on" then
+        功能开关["账号3开关"] = 1
+    end
+    local 账号3配置 = values.账号3配置
+    账号3配置 = 账号3配置:split("@")
+    for i = 1, #账号3配置, 1 do
+        if 账号3配置[i] == "0" then
+            功能开关["账号3保存"] = 1
+        end
+    end
+
+    if values.账号4开关 == "on" then
+        功能开关["账号4开关"] = 1
+    end
+    local 账号4配置 = values.账号4配置
+    账号4配置 = 账号4配置:split("@")
+    for i = 1, #账号4配置, 1 do
+        if 账号4配置[i] == "0" then
+            功能开关["账号4保存"] = 1
+        end
+    end
+
+    if values.账号5开关 == "on" then
+        功能开关["账号5开关"] = 1
+    end
+    local 账号5配置 = values.账号5配置
+    账号5配置 = 账号5配置:split("@")
+    for i = 1, #账号5配置, 1 do
+        if 账号5配置[i] == "0" then
+            功能开关["账号5保存"] = 1
+        end
+    end
 
     if values.日常功能开关 == "on" then
         功能开关["日常功能开关"] = 1

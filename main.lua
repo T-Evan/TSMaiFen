@@ -12,6 +12,8 @@ yingdiTask = require("yingdi")
 startUp = require("startUp")
 
 任务记录 = {
+    ["当前任务账号"] = 功能开关["选择启动账号"],
+
     ["仓鼠百货-完成"] = 0,
     ["旅团-浇树-完成"] = 0,
     ["旅团-调查队-完成"] = 0,
@@ -38,8 +40,7 @@ function main(...)
     -- local kill_tid = thread.create(killdialog,error_callback)
     -- thread.waitAllThreadExit()
     -- debug
-    --lvrenTask.updateSkill()
-    --lua_exit()
+    -- lua_exit()
     --runThread("__thread__child1") -- 没有用？
 
     -- 处理休息时间
@@ -52,8 +53,17 @@ function main(...)
         needWaitMinute = 0
     end
 
+    local needSwitchMinute = tonumber(功能开关["定时切号"]) -- 分钟
+    if needSwitchMinute == nil then
+        needSwitchMinute = 0
+    end
+
     local totalWait = needRunMinute * 60
+    local totalSwitchMinute = needSwitchMinute * 60
     start_time = os.time()
+
+    --多账号处理
+    startUp.multiAccount()
 
     while true do
         -- 启动app
@@ -87,6 +97,12 @@ function main(...)
             closeApp("com.xd.cfbmf")
             toast("休息" .. needWaitMinute .. "分钟")
             mSleep(needWaitMinute * 60 * 1000)
+            start_time = os.time()
+        end
+
+        if totalSwitchMinute ~= 0 and current_time - start_time >= totalSwitchMinute then
+            toast("运行" .. totalSwitchMinute .. "分钟，准备切换账号")
+            startUp.switchAccount()
             start_time = os.time()
         end
     end
