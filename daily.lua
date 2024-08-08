@@ -2,13 +2,13 @@ local dailyTask = {}
 
 -- 返回首页
 function dailyTask.homePage()
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 292, 1203, 425, 1239, "点击空白处关闭")
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 288, 1199, 430, 1241, "点击空白处关闭")
+    startUp.noticeCancel()
     res6 = shilianTask.WaitFight()
 
     -- 判断是否已在首页
-    res = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
-    if res then
+    res1 = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
+    res2 = baseUtils.TomatoOCRText(tomatoOCR, 627, 381, 710, 403, "新手试炼")
+    if res1 or res2 then
         logUtils.log("已返回首页")
         return
     end
@@ -17,11 +17,12 @@ function dailyTask.homePage()
     shilianTask.openTreasure()
     res1 = baseUtils.TomatoOCRTap(tomatoOCR, 67, 1187, 120, 1218, "返回")
     res2 = baseUtils.TomatoOCRTap(tomatoOCR, 70, 1200, 123, 1231, "返回")
+    res6 = baseUtils.TomatoOCRTap(tomatoOCR, 87, 1187, 138, 1219, "返回") -- 邮件页返回按钮
     res3 = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
     res4 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
     res5 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
     --res6 = baseUtils.TomatoOCRTap(tomatoOCR, 213, 604, 266, 635, "拒绝") -- 避免错误时机匹配成功（存在多次拒绝导致的匹配惩罚）
-    if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false then
+    if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false then
         res1 = baseUtils.TomatoOCRTap(tomatoOCR, 289, 1067, 430, 1094, "点击空白处关闭")
         res2 = baseUtils.TomatoOCRTap(tomatoOCR, 279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 20)
         res3 = baseUtils.TomatoOCRTap(tomatoOCR, 266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
@@ -78,6 +79,8 @@ function dailyTask.dailyTaskEnd()
     dailyTask.huoDongMoYu()
     -- 火力全开
     dailyTask.huoLiQuanKai()
+    -- BBQ派对
+    dailyTask.BBQParty()
     -- 宝藏湖
     dailyTask.baoZangHu()
     -- 登录好礼
@@ -141,9 +144,11 @@ function dailyTask.youJian()
         res = baseUtils.TomatoOCRTap(tomatoOCR, 85, 1186, 141, 1222, "返回")
         return
     end
-    baseUtils.tapSleep(125, 1080) -- 点击空白处
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 85, 1186, 141, 1222, "返回")
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1187, 140, 1219, "返回")
+    baseUtils.mSleep3(2000)
+    baseUtils.tapSleep(120, 1030) -- 点击空白处
+    baseUtils.tapSleep(110, 1204) -- 点击返回
+    --res = baseUtils.TomatoOCRTap(tomatoOCR, 85, 1186, 141, 1222, "返回")
+    --res = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1187, 140, 1219, "返回")
 end
 
 -- 骑兽乐园
@@ -351,6 +356,40 @@ function dailyTask.baoZangHu()
     end
 end
 
+-- BBQ派对
+function dailyTask.BBQParty()
+    if 功能开关["BBQ派对"] ~= nil and 功能开关["BBQ派对"] == 0 then
+        return
+    end
+
+    dailyTask.homePage()
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
+    --判断是否在营地页面
+    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    if res == false then
+        return
+    end
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 96, 1024, 176, 1046, "BBQ派对") -- 进入BBQ派对
+    if res == false then
+        return
+    end
+
+    while true do
+        res, availableCount = baseUtils.TomatoOCRText(tomatoOCR, 615, 81, 653, 102, "烤刷数量") -- 1/9
+        availableCount = tonumber(availableCount)
+        if availableCount == nil or availableCount == 0 then
+            res = baseUtils.TomatoOCRText(tomatoOCR, 96, 1200, 129, 1232, "回") -- 返回
+            break
+        end
+
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 433, 1093, 533, 11236, "连续烧烤")
+        baseUtils.mSleep3(5000)
+        baseUtils.tapSleep(360, 1220) -- 点击空白处
+    end
+end
+
 -- 火力全开
 function dailyTask.huoLiQuanKai()
     if 功能开关["火力全开"] ~= nil and 功能开关["火力全开"] == 0 then
@@ -367,6 +406,9 @@ function dailyTask.huoLiQuanKai()
     end
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1022, 177, 1048, "火力全开") -- 进入火力全开
+    if res == false then
+        return
+    end
     x, y = findMultiColorInRegionFuzzy(0xf4593e,
         "0|6|0xf45f42,0|3|0xf76143,-2|3|0xf96244,-2|6|0xf45e42,-1|8|0xef5c40,0|9|0xed5b40,4|7|0xf25d42,4|4|0xfa6243,1|7|0xf15e41,0|6|0xf45f42",
         80, 77, 871, 649, 1044, { orient = 2 })

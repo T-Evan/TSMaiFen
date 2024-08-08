@@ -35,6 +35,7 @@ function startUp.startApp()
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
     res3 = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
     res4 = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
+    res10 = baseUtils.TomatoOCRText(tomatoOCR, 627, 381, 710, 403, "新手试炼")
     --x, y = findMultiColorInRegionFuzzy(0xffffff,
     --    "2|1|0xffffff,2|2|0xffffff,2|4|0xffffff,1|5|0x87b58b,-1|4|0x9fbea2,-5|5|0xffffff,-7|5|0x93bb8c,-7|13|0xffffff,-9|17|0xfefffe,-10|17|0xfefffe,-11|18|0xeaefea,17|18|0xffffff,21|22|0xc4c0b6,21|21|0xffffff,22|8|0xfdfefd",
     --    90, 308, 0, 718, 128, { orient = 2 })
@@ -52,7 +53,7 @@ function startUp.startApp()
     if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false then -- 在登录页面
         baseUtils.mSleep3(5000)
         return startUp.startApp()
-    elseif res3 or res4 or res8 or res9 then -- 已在游戏中
+    elseif res3 or res4 or res8 or res9 or res10 then -- 已在游戏中
         toast("已进入游戏，返回首页", 1)
         baseUtils.mSleep3(1000)
         return dailyTask.homePage()
@@ -67,12 +68,14 @@ function startUp.logIn()
     -- 开始冒险
     res = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 关闭公告
     res1 = baseUtils.TomatoOCRTap(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
+    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
+    res2 = baseUtils.TomatoOCRTap(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
     res2 = baseUtils.TomatoOCRTap(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
 
     -- 跳过启动动画
     if res1 or res2 then
-        baseUtils.tapSleep(340, 930,1)
-        baseUtils.tapSleep(340, 930,1)
+        baseUtils.tapSleep(340, 930, 1)
+        baseUtils.tapSleep(340, 930, 1)
         baseUtils.tapSleep(340, 930)
         baseUtils.mSleep3(5 * 1000)
 
@@ -216,7 +219,6 @@ function startUp.switchAccount()
     if 任务记录["当前任务账号"] ~= "0" then
         tmpAccount = tonumber(任务记录["当前任务账号"]) + 1 -- 从下一账号开始判断
         for i = tmpAccount, 5 do
-            dialog("判断" .. "账号" .. i .. "开关" .. 功能开关["账号" .. i .. "开关"])
             if 功能开关["账号" .. i .. "开关"] == 1 then
                 startUp.loadAccount("accountConfig" .. i)
                 任务记录["当前任务账号"] = i
@@ -232,6 +234,17 @@ function startUp.switchAccount()
                 return
             end
         end
+    end
+end
+
+-- 升级成功/战斗胜利页确认
+function startUp.noticeCancel()
+    res1 = baseUtils.TomatoOCRText(tomatoOCR, 213, 521, 272, 584, "战") -- 战斗胜利
+    res2 = baseUtils.TomatoOCRText(tomatoOCR, 448, 500, 503, 560, "利") -- 战斗胜利
+    res3 = baseUtils.TomatoOCRText(tomatoOCR, 229, 436, 286, 497, "升") --升级成功
+    if res1 or res2 or res3 then
+        baseUtils.tapSleep(55, 1242) -- 点击空白处
+        baseUtils.tapSleep(685, 1240) -- 点击空白处
     end
 end
 

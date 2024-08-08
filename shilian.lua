@@ -207,7 +207,7 @@ function shilianTask.mijiing()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 650, 522, 688, 544, "试炼")
     if res then
-        --res = baseUtils.TomatoOCRTap(tomatoOCR, 380, 112, 558, 154, "秘境之间") -- 低等级4图，区域错误；改为图色识别
+        --res = baseUtils.TomatoOCRTap(tomatoOCR, 380, 112, 558, 154, "秘境之间") -- 低等级只有4张试炼图，区域识别错误；改为全局图色识别
         x, y = findMultiColorInRegionFuzzy(0xe9faff,
             "0|20|0xbdefff,0|30|0xa1e9ff,11|29|0xa3e9fe,23|29|0xa4eaff,41|29|0x3b455a,53|29|0xa5eaff,53|20|0xbdefff,53|10|0xc1dfea,60|10|0xccebf6,69|10|0xccebf6,69|24|0x638090,68|31|0x9fe9ff,62|-5|0xf1fdff",
             80, 0, 0, 720, 1280, { orient = 2 }) -- 秘境之间
@@ -219,12 +219,14 @@ function shilianTask.mijiing()
         return shilianTask.shilian()
     end
 
+    startUp.noticeCancel() -- 偶现异常处理
     shilianTask.openTreasure()
 
     res = shilianTask.changeMap(selectMap, selectStage)
     if res == false then
         return
     end
+    startUp.noticeCancel() -- 偶现异常处理
     res = shilianTask.startFight()
 end
 

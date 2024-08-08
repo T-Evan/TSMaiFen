@@ -301,8 +301,9 @@ function lvtuanTask.lvTuanWater()
             -- 付费浇灌
             if buyCount - 1 < needCount then
                 baseUtils.tapSleep(360, 1100, 3)
-                baseUtils.tapSleep(464, 755, 3)
-                baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+                baseUtils.tapSleep(465, 750, 3)
+                baseUtils.tapSleep(465, 750,1)
+                baseUtils.tapSleep(355, 1220) -- 点击空白处关闭
             end
         end
     end

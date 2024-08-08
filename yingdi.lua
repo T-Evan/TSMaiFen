@@ -282,7 +282,7 @@ function yingdiTask.miBaoChangeMap(left, right)
     if left == 0 and right == 1 then
         moveTo(420, 200, 420, 600, 80)
         baseUtils.mSleep3(1500);
-        moveTo(420, 400, 150, 400, 800)
+        moveTo(525, 1070, 180, 1070, 100)
         baseUtils.mSleep3(1500);
     end
 
@@ -290,7 +290,7 @@ function yingdiTask.miBaoChangeMap(left, right)
     if left == 1 and right == 1 then
         moveTo(420, 200, 420, 600, 80)
         baseUtils.mSleep3(1500);
-        moveTo(150, 400, 420, 400, 100)
+        moveTo(180, 1070, 525, 1070, 100)
         baseUtils.mSleep3(1500);
     end
 
@@ -380,6 +380,31 @@ function yingdiTask.yingDiMiBao()
     if x ~= -1 then
         baseUtils.tapSleep(x, y)
         baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+    else
+        -- 先找右侧
+        moveTo(525, 1070, 180, 1070, 100)
+        baseUtils.mSleep3(3000);
+
+        -- 领取秘宝能量
+        x, y = findMultiColorInRegionFuzzy(0xffffff,
+            "3|5|0x84dbfe,-1|7|0x8ae5ff,7|2|0x7ccafe,5|12|0xe0fcff,0|12|0xf0fefe,-2|24|0xffffff,4|24|0xffffff,9|24|0xb8b9bb,15|24|0xc2c3c5,19|29|0x606167,6|28|0x5b5f69,-4|29|0x5b5f69,-9|29|0x6a6e76,-13|18|0x595b61",
+            70, 0, 0, 720, 1280, { orient = 2 })
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+            baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+        else
+            -- 再找左侧
+            moveTo(180, 1070, 525, 1070, 100)
+            baseUtils.mSleep3(3000);
+
+            x, y = findMultiColorInRegionFuzzy(0xffffff,
+                "3|5|0x84dbfe,-1|7|0x8ae5ff,7|2|0x7ccafe,5|12|0xe0fcff,0|12|0xf0fefe,-2|24|0xffffff,4|24|0xffffff,9|24|0xb8b9bb,15|24|0xc2c3c5,19|29|0x606167,6|28|0x5b5f69,-4|29|0x5b5f69,-9|29|0x6a6e76,-13|18|0x595b61",
+                70, 0, 0, 720, 1280, { orient = 2 })
+            if x ~= -1 then
+                baseUtils.tapSleep(x, y)
+                baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
+            end
+        end
     end
 
     -- 购买秘宝能量
@@ -410,28 +435,41 @@ function yingdiTask.yingDiMiBao()
     findMap = yingdiTask.miBaoChangeMap()
 
     if findMap then
-        while 1 do
+        for i = 1, 4 do
             res, availableNengLiang = baseUtils.TomatoOCRText(tomatoOCR, 607, 80, 660, 104, "剩余能量") -- 210
             availableNengLiang = tonumber(availableNengLiang)
             if availableNengLiang == nil or availableNengLiang < 50 then -- 识别剩余体力不足100时，退出寻宝循环
                 break
+                -- 返回秘宝首页，避免寻宝页卡死
             end
 
             if availableNengLiang >= 100 then
                 baseUtils.tapSleep(580, 880) -- 拉满10次
             end
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 331, 1119, 386, 1147, "寻宝")
-            if res then
+            res1 = baseUtils.TomatoOCRTap(tomatoOCR, 420, 1117, 470, 1145, "寻宝") -- 能力足够多次10连时，右侧寻宝多次按钮
+            res2 = baseUtils.TomatoOCRTap(tomatoOCR, 228, 1118, 280, 1145, "寻宝") -- 能力足够多次10连时，左侧单次寻宝按钮
+            res3 = baseUtils.TomatoOCRTap(tomatoOCR, 331, 1119, 386, 1147, "寻宝") -- 能量不足10次时，只展示单次寻宝按钮
+            if res1 or res2 or res3 then
                 -- 判断能源是否用尽
                 res = baseUtils.TomatoOCRText(tomatoOCR, 316, 343, 404, 370, "补充能源")
                 if res then
                     return
                 end
 
-                res = baseUtils.TomatoOCRTap(tomatoOCR, 586, 77, 631, 105, "跳过")
-                res = baseUtils.TomatoOCRTap(tomatoOCR, 586, 77, 631, 105, "跳过")
-                baseUtils.tapSleep(47, 1005, 1) -- 点击空白处关闭
-                baseUtils.tapSleep(47, 1005, 1) -- 点击空白处关闭
+                while true do
+                    res = baseUtils.TomatoOCRText(tomatoOCR, 93, 1184, 127, 1220, "回") -- 寻宝页，返回按钮
+                    if res then -- 识别到返回按钮，确认寻宝结束，退出
+                        baseUtils.tapSleep(65, 1120, 1) -- 点击空白处关闭
+                        baseUtils.tapSleep(65, 1120, 1) -- 点击空白处关闭
+                        break
+                    end
+
+                    res = baseUtils.TomatoOCRTap(tomatoOCR, 586, 77, 631, 105, "跳过")
+                    res = baseUtils.TomatoOCRTap(tomatoOCR, 586, 77, 631, 105, "跳过")
+                    res = baseUtils.TomatoOCRTap(tomatoOCR, 585, 76, 630, 106, "跳过")
+                    baseUtils.tapSleep(65, 1120, 1) -- 点击空白处关闭
+                    baseUtils.tapSleep(65, 1120, 1) -- 点击空白处关闭
+                end
             end
         end
     end
