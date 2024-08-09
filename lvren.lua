@@ -24,6 +24,8 @@ function lvrenTask.updateEquip()
         return
     end
 
+    baseUtils.toast("旅人 - 强化装备 - 开始")
+
     dailyTask.homePage()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 233, 1205, 281, 1234, "行李")
@@ -46,6 +48,8 @@ function lvrenTask.updateSkill()
         return
     end
 
+    baseUtils.toast("旅人 - 升级技能 - 开始")
+
     dailyTask.homePage()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 434, 1205, 484, 1234, "旅人")
@@ -66,15 +70,15 @@ function lvrenTask.updateSkill()
 
     if 功能开关["优先升级同一技能"] == 1 then
         local skills = {
-            { x = 356, y = 827 }, -- 核心技能
-            { x = 225, y = 735 }, -- 1技能 主动
-            { x = 360, y = 674 }, -- 2技能
-            { x = 490, y = 737 }, -- 3技能
-            { x = 142, y = 935 }, -- b1技能 被动
+            { x = 356, y = 827 },  -- 核心技能
+            { x = 225, y = 735 },  -- 1技能 主动
+            { x = 360, y = 674 },  -- 2技能
+            { x = 490, y = 737 },  -- 3技能
+            { x = 142, y = 935 },  -- b1技能 被动
             { x = 244, y = 1001 }, -- b2技能
             { x = 358, y = 1026 }, -- b3技能
             { x = 474, y = 1001 }, -- b4技能
-            { x = 570, y = 936 } -- b5技能
+            { x = 570, y = 936 }   -- b5技能
         }
 
         local skillLevels = {}
@@ -125,12 +129,19 @@ end
 -- 猫猫包
 function lvrenTask.maomaobao()
     if 功能开关["猫猫包果木"] ~= nil then
-        if 功能开关["猫猫包果木"] == 0 or 任务记录["旅人-猫猫果木-完成"] == 1 then
+        if 功能开关["猫猫包果木"] == 0 then
+            baseUtils.toast("旅人 - 猫猫包 - 未开启")
+            return
+        end
+        if 任务记录["旅人-猫猫果木-完成"] == 1 then
+            baseUtils.toast("旅人 - 猫猫包 - 已完成")
             return
         end
     else
         return
     end
+
+    baseUtils.toast("旅人 - 猫猫包 - 开始")
 
     dailyTask.homePage()
 

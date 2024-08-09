@@ -28,6 +28,8 @@ function lvtuanTask.lvTuanShop()
         return
     end
 
+    baseUtils.toast("旅团 - 商店兑换 - 开始")
+
     dailyTask.homePage()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 647, 592, 689, 614, "旅团")
@@ -147,12 +149,19 @@ end
 -- 调查队
 function lvtuanTask.lvTuanDiaoCha()
     if 功能开关["旅团调查队"] ~= nil then
-        if 功能开关["旅团调查队"] == 0 or 任务记录["旅团-调查队-完成"] == 1 then
+        if 功能开关["旅团调查队"] == 0 then
+            baseUtils.toast("旅团 - 调查队 - 未开启")
+            return
+        end
+        if 任务记录["旅团-调查队-完成"] == 1 then
+            baseUtils.toast("旅团 - 调查队 - 已完成")
             return
         end
     else
         return
     end
+
+    baseUtils.toast("旅团 - 调查队 - 开始")
 
     local loopCount = 0
     local needCount = tonumber(功能开关["调查队挑战次数"])
@@ -205,6 +214,8 @@ function lvtuanTask.lvTuanRenWu()
         return
     end
 
+    baseUtils.toast("旅团 - 旅团任务领取 - 开始")
+
     dailyTask.homePage()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 647, 592, 689, 614, "旅团")
@@ -240,6 +251,8 @@ function lvtuanTask.lvTuanXuYuan()
         return
     end
 
+    baseUtils.toast("旅团 - 许愿墙 - 开始")
+
     res = baseUtils.TomatoOCRTap(tomatoOCR, 647, 592, 689, 614, "旅团")
     res = baseUtils.TomatoOCRTap(tomatoOCR, 637, 830, 699, 855, "许愿墙")
     if res == false then
@@ -270,6 +283,8 @@ function lvtuanTask.lvTuanWater()
     if 功能开关["旅团浇树"] == 0 or 任务记录["旅团-浇树-完成"] == 1 then
         return
     end
+
+    baseUtils.toast("旅团 - 浇树 - 开始")
 
     dailyTask.homePage()
 
@@ -302,7 +317,7 @@ function lvtuanTask.lvTuanWater()
             if buyCount - 1 < needCount then
                 baseUtils.tapSleep(360, 1100, 3)
                 baseUtils.tapSleep(465, 750, 3)
-                baseUtils.tapSleep(465, 750,1)
+                baseUtils.tapSleep(465, 750, 1)
                 baseUtils.tapSleep(355, 1220) -- 点击空白处关闭
             end
         end

@@ -220,9 +220,11 @@ function startUp.noticeCancel()
     res1 = baseUtils.TomatoOCRText(tomatoOCR, 213, 521, 272, 584, "战") -- 战斗胜利
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 448, 500, 503, 560, "利") -- 战斗胜利
     res3 = baseUtils.TomatoOCRText(tomatoOCR, 229, 436, 286, 497, "升") --升级成功
-    if res1 or res2 or res3 then
+    res4 = baseUtils.TomatoOCRText(tomatoOCR, 301,1202,419,1229, "点击空白处关闭") --战斗失败
+    if res1 or res2 or res3 or res4 then
         baseUtils.tapSleep(55, 1242) -- 点击空白处
         baseUtils.tapSleep(685, 1240) -- 点击空白处
+        baseUtils.toast("发现弹窗 - 弹窗确认")
     end
 end
 

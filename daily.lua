@@ -95,6 +95,8 @@ function dailyTask.dengLuHaoLi()
         return
     end
 
+    baseUtils.toast("日常 - 登录好礼 - 开始")
+
     -- 返回首页
     dailyTask.homePage()
 
@@ -129,6 +131,8 @@ function dailyTask.youJian()
         return
     end
 
+    baseUtils.toast("日常 - 邮件领取 - 开始")
+
     dailyTask.homePage()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
@@ -158,8 +162,11 @@ function dailyTask.qiShouLeYuan()
     end
 
     if 任务记录["日常-骑兽乐园-完成"] == 1 then
+        baseUtils.toast("日常 - 骑兽乐园 - 已完成")
         return
     end
+
+    baseUtils.toast("日常 - 骑兽乐园 - 开始")
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
@@ -231,8 +238,11 @@ function dailyTask.zhaoShiChuangZao()
     end
 
     if 任务记录["日常-招式创造-完成"] == 1 then
+        baseUtils.toast("日常 - 招式创造 - 已完成")
         return
     end
+
+    baseUtils.toast("日常 - 招式创造 - 开始")
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
@@ -314,6 +324,8 @@ function dailyTask.baoZangHu()
         return
     end
 
+    baseUtils.toast("日常 - 宝藏湖 - 开始")
+
     dailyTask.homePage()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
@@ -362,6 +374,8 @@ function dailyTask.BBQParty()
         return
     end
 
+    baseUtils.toast("日常 - BBQ派对 - 开始")
+
     dailyTask.homePage()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
@@ -396,6 +410,8 @@ function dailyTask.huoLiQuanKai()
         return
     end
 
+    baseUtils.toast("日常 - 火力全开 - 开始")
+
     dailyTask.homePage()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
@@ -423,6 +439,8 @@ function dailyTask.maoXianShouCe()
     if 功能开关["冒险手册领取"] ~= nil and 功能开关["冒险手册领取"] == 0 then
         return
     end
+
+    baseUtils.toast("日常 - 冒险手册领取 - 开始")
 
     dailyTask.homePage()
 
@@ -502,9 +520,9 @@ end
 
 -- 新关卡挑战
 function dailyTask.newMap()
-    dailyTask.homePage()
-
     if 功能开关["自动挑战首领"] ~= nil and 功能开关["自动挑战首领"] == 1 then
+        baseUtils.toast("日常 - 挑战首领 - 开始")
+        dailyTask.homePage()
         res = baseUtils.TomatoOCRTap(tomatoOCR, 633, 766, 694, 788, "挑战首领")
         if res then
             baseUtils.mSleep3(10 * 1000) -- 等待动画
@@ -512,6 +530,8 @@ function dailyTask.newMap()
     end
 
     if 功能开关["自动换图"] ~= nil and 功能开关["自动换图"] == 1 then
+        baseUtils.toast("日常 - 切换地图 - 开始")
+        dailyTask.homePage()
         res1 = baseUtils.TomatoOCRText(tomatoOCR, 589, 215, 680, 230, "新关卡已解锁")
         res2 = baseUtils.TomatoOCRText(tomatoOCR, 589, 215, 680, 230, "新地图已解锁")
         if res1 or res2 then
@@ -570,6 +590,8 @@ function dailyTask.huoDongMoYu()
         return
     end
 
+    baseUtils.toast("日常 - 摸鱼时间到 - 开始")
+
     local totalCount = 3
     local count = 0
     while count < totalCount do
@@ -627,21 +649,39 @@ function dailyTask.quitTeam()
     res1 = baseUtils.TomatoOCRTap(tomatoOCR, 635, 628, 705, 653, "正在组队")
     res2 = baseUtils.TomatoOCRTap(tomatoOCR, 631, 558, 699, 581, "正在组队")
     res3 = baseUtils.TomatoOCRTap(tomatoOCR, 632, 570, 684, 598, "匹配中")
-    if res or res2 then
+    if res1 or res2 or res3 then
+        -- 超时取消匹配
+        x, y = findMultiColorInRegionFuzzy(0xfffefd,
+            "7|0|0xf9dcc7,15|0|0xf6c69d,40|0|0xf5bd89,52|-1|0xfffefd,53|7|0xffffff,47|7|0xfadfcc,39|7|0xf3a84d,32|7|0xfcf0e7,27|7|0xffffff,23|7|0xfefcfa,5|7|0xfffefe,6|14|0xffffff,23|14|0xfef9f6,38|14|0xffffff",
+            75, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+        if x ~= -1 then
+            baseUtils.tapSleep(x, y)
+            baseUtils.toast("取消匹配")
+            return true
+        end
+        x2, y2 = findMultiColorInRegionFuzzy(0xf3a84b,
+            "14|0|0xf3aa55,47|-1|0xfffdfc,67|-1|0xfae1cf,85|-1|0xf3a84b,98|-1|0xf3a84b,105|-1|0xf3a84b,92|13|0xf3a84b,86|13|0xf3a84b,77|13|0xf3a84b,56|10|0xffffff,17|10|0xffffff,17|21|0xf3a84b,-3|19|0xf3a84b,-8|11|0xf3a94d",
+            75, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+        if x2 ~= -1 then
+            baseUtils.tapSleep(x, y)
+            baseUtils.toast("取消匹配")
+            return true
+        end
+        x3, y3 = findMultiColorInRegionFuzzy(0xf3a84b,
+            "13|0|0xf3a84b,24|0|0xffffff,36|0|0xf3a84b,53|0|0xf3a84b,64|0|0xfffffe,67|0|0xfef7f2,78|0|0xfef9f6,95|0|0xf3a84b,112|0|0xf3a84b,110|10|0xf9c078,101|10|0xf3a84b,90|10|0xf3a84b,68|10|0xf3a84b,57|10|0xfdf3ec,39|10|0xf6c295",
+            80, 0, 0, 720, 1280, { orient = 2 })
+        if x3 ~= -1 then
+            baseUtils.tapSleep(x, y)
+            baseUtils.toast("取消匹配")
+            return true
+        end
+
         res = baseUtils.TomatoOCRTap(tomatoOCR, 501, 191, 581, 217, "离开队伍")
         res = baseUtils.TomatoOCRTap(tomatoOCR, 329, 726, 391, 761, "确定")
-        return true
-    end
-    if res3 then
-        -- 超时取消匹配
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 320, 692, 392, 716, "匹配中") -- 图1
-        if res == false then
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 323, 886, 394, 910, "匹配中") -- 图2
+        if res then
+            baseUtils.toast("退出组队")
+            return true
         end
-        if res == false then
-            res4 = baseUtils.TomatoOCRTap(tomatoOCR, 324, 1080, 392, 1103, "匹配中") -- 图3
-        end
-        return true
     end
     return false
 end

@@ -43,6 +43,8 @@ function yingdiTask.yueKa()
         return
     end
 
+    baseUtils.toast("营地任务 - 月卡 - 开始")
+
     -- 返回首页
     dailyTask.homePage()
 
@@ -72,6 +74,8 @@ function yingdiTask.riLiBao()
         return
     end
 
+    baseUtils.toast("营地任务 - 日礼包 - 开始")
+
     -- 返回首页
     dailyTask.homePage()
 
@@ -100,6 +104,8 @@ function yingdiTask.xingChenTongXing()
     if 功能开关["星辰同行"] == 0 then
         return
     end
+
+    baseUtils.toast("营地任务 - 星辰同行 - 开始")
 
     -- 返回首页
     dailyTask.homePage()
@@ -136,6 +142,8 @@ function yingdiTask.zhiFeiJi()
     if 功能开关["纸飞机"] == 0 then
         return
     end
+
+    baseUtils.toast("营地任务 - 纸飞机 - 开始")
 
     -- 返回首页
     dailyTask.homePage()
@@ -180,6 +188,8 @@ function yingdiTask.luYingDaKa()
     if 功能开关["露营打卡点"] == 0 or 任务记录["露营打卡点"] == 1 then
         return
     end
+
+    baseUtils.toast("营地任务 - 露营打卡点 - 开始")
 
     -- 返回首页
     dailyTask.homePage()
@@ -231,6 +241,8 @@ function yingdiTask.yueqiandao()
     if 功能开关["月签到"] == 0 or 任务记录["月签到"] == 1 then
         return
     end
+
+    baseUtils.toast("营地任务 - 月签到 - 开始")
 
     -- 返回首页
     dailyTask.homePage()
@@ -361,6 +373,8 @@ function yingdiTask.yingDiMiBao()
         return
     end
 
+    baseUtils.toast("营地任务 - 秘宝收集 - 开始")
+
     -- 返回首页
     dailyTask.homePage()
 
@@ -484,6 +498,8 @@ function yingdiTask.yingDiShop()
     if 任务记录["仓鼠百货-完成"] == 1 then
         return
     end
+
+    baseUtils.toast("营地任务 - 仓鼠百货 - 开始")
 
     -- 返回首页
     dailyTask.homePage()

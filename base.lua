@@ -177,10 +177,10 @@ function baseUtils.loadRes()
         --    file = userPath() .. "/res/rec_v3.opt",
         --    url = "http://backupformyself.oss-cn-hongkong.aliyuncs.com/TSRes/rec_v3.opt"
         --},
-         {
-             file = userPath() .. "/res/rec.opt",
-             url = "http://trs-res.oss-cn-beijing.aliyuncs.com/rec.opt"
-         },
+        {
+            file = userPath() .. "/res/rec.opt",
+            url = "http://trs-res.oss-cn-beijing.aliyuncs.com/rec.opt"
+        },
         --{
         --    file = userPath() .. "/res/rec_korean.opt",
         --    url = "http://backupformyself.oss-cn-hongkong.aliyuncs.com/TSRes/rec_korean.opt"
@@ -242,6 +242,12 @@ function baseUtils.mSleep3(t1, t2)
     else
         mSleep(math.random(t1, t2))
     end
+end
+
+function baseUtils.toast(content, tim)
+    tim = tim or 1
+    toast(content, tim)
+    baseUtils.mSleep3(tim * 1000 + 1500) -- 多等待1s，等弹窗消失
 end
 
 --查找文件
