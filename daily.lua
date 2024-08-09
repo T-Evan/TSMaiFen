@@ -85,6 +85,8 @@ function dailyTask.dailyTaskEnd()
     dailyTask.baoZangHu()
     -- 登录好礼
     dailyTask.dengLuHaoLi()
+    -- 限时特惠
+    dailyTask.XianShiTeHui()
 
     -- 冒险手册
     dailyTask.maoXianShouCe()
@@ -368,6 +370,35 @@ function dailyTask.baoZangHu()
     end
 end
 
+-- 限时特惠
+function dailyTask.XianShiTeHui()
+    if 功能开关["限时特惠"] ~= nil and 功能开关["限时特惠"] == 0 then
+        return
+    end
+
+    baseUtils.toast("日常 - 限时特惠 - 开始")
+
+    dailyTask.homePage()
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
+    --判断是否在营地页面
+    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    if res == false then
+        return
+    end
+
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 96, 1024, 176, 1046, "限时特惠") -- 进入BBQ派对
+    if res == false then
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 96, 938, 178, 960, "限时特惠") -- 进入BBQ派对
+        if res == false then
+            return
+        end
+    end
+
+    baseUtils.tapSleep(595, 150)      -- 点击特惠宝箱
+    baseUtils.tapSleep(350,1125)     -- 点击空白处
+end
+
 -- BBQ派对
 function dailyTask.BBQParty()
     if 功能开关["BBQ派对"] ~= nil and 功能开关["BBQ派对"] == 0 then
@@ -387,7 +418,10 @@ function dailyTask.BBQParty()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 96, 1024, 176, 1046, "BBQ派对") -- 进入BBQ派对
     if res == false then
-        return
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 96, 938, 178, 960, "BBQ派对") -- 进入BBQ派对
+        if res == false then
+            return
+        end
     end
 
     while true do
@@ -423,7 +457,10 @@ function dailyTask.huoLiQuanKai()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1022, 177, 1048, "火力全开") -- 进入火力全开
     if res == false then
-        return
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 96, 938, 178, 960, "火力全开") -- 进入火力全开
+        if res == false then
+            return
+        end
     end
     x, y = findMultiColorInRegionFuzzy(0xf4593e,
         "0|6|0xf45f42,0|3|0xf76143,-2|3|0xf96244,-2|6|0xf45e42,-1|8|0xef5c40,0|9|0xed5b40,4|7|0xf25d42,4|4|0xfa6243,1|7|0xf15e41,0|6|0xf45f42",
@@ -579,6 +616,29 @@ function dailyTask.newMap()
                     baseUtils.mSleep3(3500);
                 end
                 count = count + 1
+            end
+        end
+    end
+
+    if 功能开关["单飞后寻找结伴"] ~= nil and 功能开关["单飞后寻找结伴"] == 1 then
+        baseUtils.toast("日常 - 寻找结伴 - 开始")
+        dailyTask.homePage()
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 646, 451, 689, 474, "结伴", 10, -10)
+        if res then
+            res = baseUtils.TomatoOCRText(tomatoOCR, 517, 283, 554, 304, "佣兵")
+            if res == false then
+                baseUtils.toast("日常 - 寻找结伴 - 已有结伴")
+            else
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 408, 1037, 509, 1068, "寻找队伍")
+                x, y = findMultiColorInRegionFuzzy(0x7da2e2,
+                    "28|0|0xb2c4eb,37|0|0xcdd8f1,49|0|0x7da2e2,65|0|0x7da2e2,65|10|0x7da2e2,39|10|0xedf1fa,32|10|0xa1b9e8,25|10|0xe5eaf8,22|10|0xecf0f9,15|10|0x7da2e2,4|9|0x7da2e2,-2|9|0x7da2e2,7|17|0x7da2e2,27|17|0x7da2e2",
+                    80, 0, 0, 720, 1280, { orient = 2 }) -- 加入按钮
+                if x ~= -1 then
+                    baseUtils.tapSleep(x, y)
+                    baseUtils.toast("日常 - 寻找结伴 - 加入队伍")
+                    baseUtils.mSleep3(4 * 1000) -- 等待动画
+                    res = baseUtils.TomatoOCRTap(tomatoOCR, 359, 741, 391, 775, "确认跟随")
+                end
             end
         end
     end
