@@ -153,13 +153,13 @@ end
 
 function startUp.saveAccount(accountName)
     oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
-    newPath1 = userPath() .. "/log/" .. "/accountConfig" .. accountName .. "_shared_prefs/"
+    newPath1 = userPath() .. "/log/" .. "accountConfig" .. accountName .. "_shared_prefs/"
     ts.hlfs.removeDir(newPath1)           -- 删除文件夹
     creatflag = ts.hlfs.makeDir(newPath1) --新建文件夹
     flag1 = ts.hlfs.copyDir(oldPath1, newPath1)
 
     oldPath2 = "/data/data/com.xd.cfbmf/app_webview/"
-    newPath2 = userPath() .. "/log/" .. "/accountConfig" .. accountName .. "_app_webview/"
+    newPath2 = userPath() .. "/log/" .. "accountConfig" .. accountName .. "_app_webview/"
     ts.hlfs.removeDir(newPath2)           -- 删除文件夹
     creatflag = ts.hlfs.makeDir(newPath2) --新建文件夹
     flag2 = ts.hlfs.copyDir(oldPath2, newPath2)
@@ -178,16 +178,19 @@ function startUp.loadAccount(accountName)
     closeApp("com.xd.cfbmf") -- 重启应用让配置生效
 
     oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
-    ts.hlfs.removeDir(oldPath1)           -- 删除文件夹
-    creatflag = ts.hlfs.makeDir(oldPath1) --新建文件夹
-    newPath1 = userPath() .. "/log/" .. "/" .. accountName .. "_shared_prefs/"
-    flag = ts.hlfs.copyDir(newPath1, oldPath1)
+    --ts.hlfs.removeDir(oldPath1)           -- 删除文件夹
+    --creatflag = ts.hlfs.makeDir(oldPath1) --新建文件夹
+    newPath1 = userPath() .. "/log/"  .. accountName .. "_shared_prefs/"
+    --flag = ts.hlfs.copyDir(newPath1, oldPath1)
+    os.execute("cp -rf " .. newPath1 .. " " .. oldPath1);
 
     oldPath2 = "/data/data/com.xd.cfbmf/app_webview/"
-    ts.hlfs.removeDir(oldPath2)           -- 删除文件夹
-    creatflag = ts.hlfs.makeDir(oldPath2) --新建文件夹
-    newPath2 = userPath() .. "/log/" .. "/" .. accountName .. "_app_webview/"
-    flag = ts.hlfs.copyDir(newPath2, oldPath2)
+    --ts.hlfs.removeDir(oldPath2)           -- 删除文件夹
+    --creatflag = ts.hlfs.makeDir(oldPath2) --新建文件夹
+    newPath2 = userPath() .. "/log/"  .. accountName .. "_app_webview/"
+    --flag = ts.hlfs.copyDir(newPath2, oldPath2)
+    os.execute("cp -rf " .. newPath2 .. " " .. oldPath2);
+
 
     switchApp("com.xd.cfbmf")
 end
@@ -220,7 +223,7 @@ function startUp.noticeCancel()
     res1 = baseUtils.TomatoOCRText(tomatoOCR, 213, 521, 272, 584, "战") -- 战斗胜利
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 448, 500, 503, 560, "利") -- 战斗胜利
     res3 = baseUtils.TomatoOCRText(tomatoOCR, 229, 436, 286, 497, "升") --升级成功
-    res4 = baseUtils.TomatoOCRText(tomatoOCR, 301,1202,419,1229, "点击空白处关闭") --战斗失败
+    res4 = baseUtils.TomatoOCRText(tomatoOCR, 301, 1202, 419, 1229, "点击空白处关闭") --战斗失败
     if res1 or res2 or res3 or res4 then
         baseUtils.tapSleep(55, 1242) -- 点击空白处
         baseUtils.tapSleep(685, 1240) -- 点击空白处
