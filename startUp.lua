@@ -68,8 +68,6 @@ function startUp.logIn()
     -- 开始冒险
     res = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 关闭公告
     res1 = baseUtils.TomatoOCRTap(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
-    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
-    res2 = baseUtils.TomatoOCRTap(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
     res2 = baseUtils.TomatoOCRTap(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
 
     -- 跳过启动动画
@@ -109,75 +107,24 @@ end
 function startUp.multiAccount()
     local ts = require("ts")
 
-    oldPath = "/data/data/com.xd.cfbmf/shared_prefs/"
     if 功能开关["账号1保存"] == 1 then
-        newPath = userPath() .. "/log/" .. "/accountConfig1/"
-        ts.hlfs.removeDir(newPath)           -- 删除文件夹
-        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
-        flag = ts.hlfs.copyDir(oldPath, newPath)
-        --复制文件夹及里面所有文件
-        if flag then
-            dialog("已保存账号1登录信息！请重启软件")
-        else
-            dialog("保存失败！请联系作者")
-        end
-        lua_exit()
+        flag = startUp.saveAccount("1")
     end
 
     if 功能开关["账号2保存"] == 1 then
-        newPath = userPath() .. "/log/" .. "/accountConfig2/"
-        ts.hlfs.removeDir(newPath)           -- 删除文件夹
-        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
-        flag = ts.hlfs.copyDir(oldPath, newPath)
-        --复制文件夹及里面所有文件
-        if flag then
-            dialog("已保存账号2登录信息！请重启软件")
-        else
-            dialog("保存失败！请联系作者")
-        end
-        lua_exit()
+        flag = startUp.saveAccount("2")
     end
 
     if 功能开关["账号3保存"] == 1 then
-        newPath = userPath() .. "/log/" .. "/accountConfig3/"
-        ts.hlfs.removeDir(newPath)           -- 删除文件夹
-        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
-        flag = ts.hlfs.copyDir(oldPath, newPath)
-        --复制文件夹及里面所有文件
-        if flag then
-            dialog("已保存账号3登录信息！请重启软件")
-        else
-            dialog("保存失败！请联系作者")
-        end
-        lua_exit()
+        flag = startUp.saveAccount("3")
     end
 
     if 功能开关["账号4保存"] == 1 then
-        newPath = userPath() .. "/log/" .. "/accountConfig4/"
-        ts.hlfs.removeDir(newPath)           -- 删除文件夹
-        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
-        flag = ts.hlfs.copyDir(oldPath, newPath)
-        --复制文件夹及里面所有文件
-        if flag then
-            dialog("已保存账号4登录信息！请重启软件")
-        else
-            dialog("保存失败！请联系作者")
-        end
-        lua_exit()
+        flag = startUp.saveAccount("4")
     end
 
     if 功能开关["账号5保存"] == 1 then
-        newPath = userPath() .. "/log/" .. "/accountConfig5/"
-        ts.hlfs.removeDir(newPath)           -- 删除文件夹
-        creatflag = ts.hlfs.makeDir(newPath) --新建文件夹
-        flag = ts.hlfs.copyDir(oldPath, newPath)
-        --复制文件夹及里面所有文件
-        if flag then
-            dialog("已保存账号5登录信息！请重启软件")
-        else
-            dialog("保存失败！请联系作者")
-        end
-        lua_exit()
+        flag = startUp.saveAccount("5")
     end
 
     --指定账号启动
@@ -204,13 +151,44 @@ function startUp.multiAccount()
     end
 end
 
+function startUp.saveAccount(accountName)
+    oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
+    newPath1 = userPath() .. "/log/" .. "/accountConfig" .. accountName .. "_shared_prefs/"
+    ts.hlfs.removeDir(newPath1)           -- 删除文件夹
+    creatflag = ts.hlfs.makeDir(newPath1) --新建文件夹
+    flag1 = ts.hlfs.copyDir(oldPath1, newPath1)
+
+    oldPath2 = "/data/data/com.xd.cfbmf/app_webview/"
+    newPath2 = userPath() .. "/log/" .. "/accountConfig" .. accountName .. "_app_webview/"
+    ts.hlfs.removeDir(newPath2)           -- 删除文件夹
+    creatflag = ts.hlfs.makeDir(newPath2) --新建文件夹
+    flag2 = ts.hlfs.copyDir(oldPath2, newPath2)
+
+    --复制文件夹及里面所有文件
+    if flag1 and flag2 then
+        dialog("已保存账号" .. accountName .. "登录信息！请重启软件")
+    else
+        dialog("保存失败！请联系作者")
+    end
+    lua_exit()
+    return true
+end
+
 function startUp.loadAccount(accountName)
-    closeApp("com.xd.cfbmf")             -- 重启应用让配置生效
-    oldPath = "/data/data/com.xd.cfbmf/shared_prefs/"
-    ts.hlfs.removeDir(oldPath)           -- 删除文件夹
-    creatflag = ts.hlfs.makeDir(oldPath) --新建文件夹
-    newPath = userPath() .. "/log/" .. "/" .. accountName .. "/"
-    flag = ts.hlfs.copyDir(newPath, oldPath)
+    closeApp("com.xd.cfbmf") -- 重启应用让配置生效
+
+    oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
+    ts.hlfs.removeDir(oldPath1)           -- 删除文件夹
+    creatflag = ts.hlfs.makeDir(oldPath1) --新建文件夹
+    newPath1 = userPath() .. "/log/" .. "/" .. accountName .. "_shared_prefs/"
+    flag = ts.hlfs.copyDir(newPath1, oldPath1)
+
+    oldPath2 = "/data/data/com.xd.cfbmf/app_webview/"
+    ts.hlfs.removeDir(oldPath2)           -- 删除文件夹
+    creatflag = ts.hlfs.makeDir(oldPath2) --新建文件夹
+    newPath2 = userPath() .. "/log/" .. "/" .. accountName .. "_app_webview/"
+    flag = ts.hlfs.copyDir(newPath2, oldPath2)
+
     switchApp("com.xd.cfbmf")
 end
 

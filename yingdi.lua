@@ -86,7 +86,7 @@ function yingdiTask.riLiBao()
     if res == true then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 148, 671, 198, 700, "免费")
         if res then
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 335, 694, 380, 719, "购买")
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 339, 743, 379, 764, "免费")
             if res then
                 任务记录["日礼包"] = 1
                 baseUtils.tapSleep(345, 1058) -- 点击空白处关闭
@@ -194,7 +194,7 @@ function yingdiTask.luYingDaKa()
     res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     x, y = findMultiColorInRegionFuzzy(0xc8b27f,
         "12|17|0xb19264,-14|17|0xfad498,54|13|0xfce2a4,65|-3|0xfbe1a6,65|24|0x884f24,91|18|0xfad498,91|-10|0xfce7ac,109|-10|0xfce7ac,116|21|0xfad295,116|-10|0xfce7ac,156|-9|0xfceaad,156|22|0xfad194,145|3|0xf0dda2,163|3|0xf0dda2,-10|60|0xc47a38,13|60|0xc47a38,46|60|0xd4ab8b,66|59|0xc47a37,92|55|0xe5d3be",
-        80, 0, 0, 720, 1280, { orient = 2 }) -- 露营打卡点
+        70, 0, 0, 720, 1280, { orient = 2 }) -- 露营打卡点
     if x ~= -1 then
         baseUtils.tapSleep(x, y)
         x, y = findMultiColorInRegionFuzzy(0xf3a84b,
@@ -212,12 +212,12 @@ function yingdiTask.luYingDaKa()
         baseUtils.mSleep3(5000)
         x, y = findMultiColorInRegionFuzzy(0xc8b27f,
             "12|17|0xb19264,-14|17|0xfad498,54|13|0xfce2a4,65|-3|0xfbe1a6,65|24|0x884f24,91|18|0xfad498,91|-10|0xfce7ac,109|-10|0xfce7ac,116|21|0xfad295,116|-10|0xfce7ac,156|-9|0xfceaad,156|22|0xfad194,145|3|0xf0dda2,163|3|0xf0dda2,-10|60|0xc47a38,13|60|0xc47a38,46|60|0xd4ab8b,66|59|0xc47a37,92|55|0xe5d3be",
-            80, 0, 0, 720, 1280, { orient = 2 }) -- 露营打卡点
+            70, 0, 0, 720, 1280, { orient = 2 }) -- 露营打卡点
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
             x, y = findMultiColorInRegionFuzzy(0xf3a84b,
                 "40|0|0xf9d7be,78|0|0xf3a84b,78|4|0xf3a84b,71|4|0xf3a84b,56|4|0xf4ae62,37|4|0xf3a84b,23|4|0xf8d2b3,12|6|0xf3a84b,12|17|0xf3a84b,34|17|0xfef7f3,47|17|0xfbe5d6,63|17|0xf3a84b,85|17|0xf3a84b,0|12|0xf3a84b",
-                80, 0, 0, 720, 1280, { orient = 2 }) -- 领取按钮
+                70, 0, 0, 720, 1280, { orient = 2 }) -- 领取按钮
             if x ~= -1 then
                 baseUtils.tapSleep(x, y)
                 任务记录["露营打卡点"] = 1
