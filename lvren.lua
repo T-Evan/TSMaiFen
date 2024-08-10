@@ -129,7 +129,9 @@ end
 -- 猫猫包
 function lvrenTask.maomaobao()
     if 功能开关["猫猫包果木"] ~= nil and 功能开关["猫猫包果木"] == 0 then
-        return
+        if 功能开关["猫猫包自动升温"] == 0 then
+            return
+        end
     end
 
     if 任务记录["旅人-猫猫果木-完成"] == 1 then
@@ -148,35 +150,67 @@ function lvrenTask.maomaobao()
         return
     end
 
-    -- 点击果木
-    x, y = findMultiColorInRegionFuzzy(0x95664b,
-        "0|2|0x8c5b3f,1|3|0xba906e,6|9|0xba8b6d,0|9|0xcca781,-11|13|0xb26e49,-4|16|0xbc8966,-6|16|0xa26242,-7|17|0x55392d,-10|17|0x815137,-3|23|0x714f37,2|20|0x724d3a,10|16|0x724c39,6|18|0x724c39",
-        90, 0, 0, 720, 1280, { orient = 2 })
-    if x ~= -1 then
-        baseUtils.tapSleep(x + 0, y, 3)
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 265, 863, 452, 893, "点击空白处可领取奖励", 30, 100)
-    end
 
-    -- 快捷兑换
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 557, 188, 639, 214, "快速兑换")
-    local needCount = tonumber(功能开关["钻石兑换果木次数"])
-    if needCount == nil then
-        needCount = 0
-    end
+    if 功能开关["猫猫包果木"] == 1 then
+        -- 点击果木
+        x, y = findMultiColorInRegionFuzzy(0x95664b,
+            "0|2|0x8c5b3f,1|3|0xba906e,6|9|0xba8b6d,0|9|0xcca781,-11|13|0xb26e49,-4|16|0xbc8966,-6|16|0xa26242,-7|17|0x55392d,-10|17|0x815137,-3|23|0x714f37,2|20|0x724d3a,10|16|0x724c39,6|18|0x724c39",
+            90, 0, 0, 720, 1280, { orient = 2 })
+        if x ~= -1 then
+            baseUtils.tapSleep(x + 0, y, 3)
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 265, 863, 452, 893, "点击空白处可领取奖励", 30, 100)
+        end
 
-    if res then
-        while 1 do
-            -- 钻石兑换果木
-            res, buyCount = baseUtils.TomatoOCRText(tomatoOCR, 378, 895, 389, 910, needCount) -- 1/9
-            buyCount = tonumber(buyCount)
-            if buyCount == nil or buyCount >= needCount then
-                break
+        -- 快捷兑换
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 557, 188, 639, 214, "快速兑换")
+        local needCount = tonumber(功能开关["钻石兑换果木次数"])
+        if needCount == nil then
+            needCount = 0
+        end
+
+        if res then
+            while 1 do
+                -- 钻石兑换果木
+                res, buyCount = baseUtils.TomatoOCRText(tomatoOCR, 378, 895, 389, 910, needCount) -- 1/9
+                buyCount = tonumber(buyCount)
+                if buyCount == nil or buyCount >= needCount then
+                    break
+                end
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 338, 832, 379, 854, "购买")
+                baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
             end
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 338, 832, 379, 854, "购买")
-            baseUtils.tapSleep(360, 1100) -- 点击空白处关闭
         end
     end
 
+    if 功能开关["猫猫包自动升温"] == 1 then
+        for i = 1, 10 do
+            res, availableGuoMu = baseUtils.TomatoOCRText(tomatoOCR, 607, 80, 662, 102, "剩余果木")
+            availableGuoMu = tonumber(availableGuoMu)
+            if availableGuoMu == nil or availableGuoMu <= 100 then
+                break
+            end
+
+            res = baseUtils.TomatoOCRText(tomatoOCR, 320, 1006, 399, 1033, "自动升温")
+            if res == false then
+                -- 开启自动升温
+                baseUtils.tapSleep(515, 1030)
+            end
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 320, 1006, 399, 1033, "自动升温")
+            if res then
+                for i = 1, 5 do
+                    res = baseUtils.TomatoOCRTap(tomatoOCR, 326, 1017, 389, 1047, "出炉")
+                    if res then
+                        baseUtils.tapSleep(136, 1051) -- 点击空白处
+                        baseUtils.tapSleep(136, 1051) -- 点击空白处
+                        baseUtils.tapSleep(136, 1051) -- 点击空白处
+                        baseUtils.tapSleep(136, 1051) -- 点击空白处
+                        break
+                    end
+                    baseUtils.mSleep3(3000)
+                end
+            end
+        end
+    end
     任务记录["旅人-猫猫果木-完成"] = 1
 end
 

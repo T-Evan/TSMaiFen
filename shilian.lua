@@ -766,8 +766,8 @@ function shilianTask.teamShout()
         return 1
     end
 
-    res = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
-    if res then
+    if (isColor(659, 367, 0xe2e1d1, 80) and isColor(662, 368, 0xe2dfd1, 80) and isColor(668, 368, 0xa1a099, 80) and isColor(664, 370, 0xe2dfd1, 80) and isColor(653, 370, 0xe2dece, 80) and isColor(656, 372, 0xe4e1d4, 80) and isColor(662, 372, 0xe2dfd1, 80) and isColor(674, 372, 0xe2ded1, 80) and isColor(678, 372, 0xe2ded1, 80) and isColor(679, 367, 0x7d8084, 80) and isColor(681, 373, 0xe1dfcf, 80) and isColor(679, 376, 0x797c81, 80) and isColor(676, 378, 0xe2e0d2, 80) and isColor(672, 386, 0xf3eddd, 80) and isColor(675, 386, 0xf3eddd, 80) and isColor(682, 385, 0xf3eddd, 80) and isColor(678, 389, 0xf3eddd, 80) and isColor(678, 392, 0xf3eddd, 80) and isColor(678, 399, 0xf3eddd, 80) and isColor(675, 399, 0xf3eddd, 80)) then
+        -- 识别冒险手册
         -- 避免世界频道发言
         return 1
     end

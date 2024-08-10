@@ -33,9 +33,15 @@ function startUp.startApp()
     -- 识别是否进入首页
     res1 = baseUtils.TomatoOCRText(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 公告
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
+
     res3 = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
-    res4 = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
-    res10 = baseUtils.TomatoOCRText(tomatoOCR, 627, 381, 710, 403, "新手试炼")
+    if (isColor(659, 367, 0xe2e1d1, 80) and isColor(662, 368, 0xe2dfd1, 80) and isColor(668, 368, 0xa1a099, 80) and isColor(664, 370, 0xe2dfd1, 80) and isColor(653, 370, 0xe2dece, 80) and isColor(656, 372, 0xe4e1d4, 80) and isColor(662, 372, 0xe2dfd1, 80) and isColor(674, 372, 0xe2ded1, 80) and isColor(678, 372, 0xe2ded1, 80) and isColor(679, 367, 0x7d8084, 80) and isColor(681, 373, 0xe1dfcf, 80) and isColor(679, 376, 0x797c81, 80) and isColor(676, 378, 0xe2e0d2, 80) and isColor(672, 386, 0xf3eddd, 80) and isColor(675, 386, 0xf3eddd, 80) and isColor(682, 385, 0xf3eddd, 80) and isColor(678, 389, 0xf3eddd, 80) and isColor(678, 392, 0xf3eddd, 80) and isColor(678, 399, 0xf3eddd, 80) and isColor(675, 399, 0xf3eddd, 80)) then
+        res4 = true -- 冒险手册
+    else
+        res8 = baseUtils.TomatoOCRText(tomatoOCR, 457, 607, 502, 631, "准备") -- 秘境准备
+        res9 = baseUtils.TomatoOCRText(tomatoOCR, 453, 650, 505, 684, "准备") -- 恶龙准备
+        res10 = baseUtils.TomatoOCRText(tomatoOCR, 627, 381, 710, 403, "新手试炼")
+    end
     --x, y = findMultiColorInRegionFuzzy(0xffffff,
     --    "2|1|0xffffff,2|2|0xffffff,2|4|0xffffff,1|5|0x87b58b,-1|4|0x9fbea2,-5|5|0xffffff,-7|5|0x93bb8c,-7|13|0xffffff,-9|17|0xfefffe,-10|17|0xfefffe,-11|18|0xeaefea,17|18|0xffffff,21|22|0xc4c0b6,21|21|0xffffff,22|8|0xfdfefd",
     --    90, 308, 0, 718, 128, { orient = 2 })
@@ -46,9 +52,6 @@ function startUp.startApp()
     res5 = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
     res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
     res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
-
-    res8 = baseUtils.TomatoOCRText(tomatoOCR, 457, 607, 502, 631, "准备") -- 秘境准备
-    res9 = baseUtils.TomatoOCRText(tomatoOCR, 453, 650, 505, 684, "准备") -- 恶龙准备
 
     if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false then -- 在登录页面
         baseUtils.mSleep3(5000)
@@ -93,7 +96,9 @@ function startUp.logIn()
         return startUp.startApp()
     end
 
-    res = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
+    if (isColor(659, 367, 0xe2e1d1, 80) and isColor(662, 368, 0xe2dfd1, 80) and isColor(668, 368, 0xa1a099, 80) and isColor(664, 370, 0xe2dfd1, 80) and isColor(653, 370, 0xe2dece, 80) and isColor(656, 372, 0xe4e1d4, 80) and isColor(662, 372, 0xe2dfd1, 80) and isColor(674, 372, 0xe2ded1, 80) and isColor(678, 372, 0xe2ded1, 80) and isColor(679, 367, 0x7d8084, 80) and isColor(681, 373, 0xe1dfcf, 80) and isColor(679, 376, 0x797c81, 80) and isColor(676, 378, 0xe2e0d2, 80) and isColor(672, 386, 0xf3eddd, 80) and isColor(675, 386, 0xf3eddd, 80) and isColor(682, 385, 0xf3eddd, 80) and isColor(678, 389, 0xf3eddd, 80) and isColor(678, 392, 0xf3eddd, 80) and isColor(678, 399, 0xf3eddd, 80) and isColor(675, 399, 0xf3eddd, 80)) then
+        res = true
+    end
     if res == false then
         return startUp.startApp()
     end
@@ -216,6 +221,25 @@ function startUp.switchAccount()
             end
         end
     end
+end
+
+--异地登录
+function startUp.anotherLogin()
+    res = baseUtils.TomatoOCRText(tomatoOCR, 319, 598, 397, 627, "异地登录") -- 异地登录
+    if res then
+        -- 退出游戏
+        closeApp("com.xd.cfbmf")
+
+        local needAnotherhMinute = tonumber(功能开关["顶号等待"]) -- 分钟
+        if needAnotherhMinute == nil then
+            needAnotherhMinute = 0
+        end
+
+        toast("异地登录，休息" .. needAnotherhMinute .. "分钟")
+        mSleep(needAnotherhMinute * 60 * 1000)
+        return true
+    end
+    return false
 end
 
 -- 升级成功/战斗胜利页确认

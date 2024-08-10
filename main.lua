@@ -61,11 +61,11 @@ function main(...)
 
     local totalWait = needRunMinute * 60
     local totalSwitchMinute = needSwitchMinute * 60
-    start_time = os.time()
-
     --多账号处理
     startUp.multiAccount()
 
+    ::begin_label::
+    start_time = os.time()
     while true do
         -- 启动app
         startUp.startApp()
@@ -73,23 +73,65 @@ function main(...)
         -- 营地活动（优先领取）
         yingdiTask.yingdiTask()
 
+        -- 异地登录
+        loginRes = startUp.anotherLogin()
+        if loginRes then
+            goto begin_label
+        end
+
         -- 日常（优先领取）
         dailyTask.dailyTask()
+
+        -- 异地登录
+        loginRes = startUp.anotherLogin()
+        if loginRes then
+            goto begin_label
+        end
 
         -- 旅人相关
         lvrenTask.lvrenTask()
 
+        -- 异地登录
+        loginRes = startUp.anotherLogin()
+        if loginRes then
+            goto begin_label
+        end
+
         -- 试炼
         shilianTask.shilian()
+
+        -- 异地登录
+        loginRes = startUp.anotherLogin()
+        if loginRes then
+            goto begin_label
+        end
 
         -- 旅团相关
         lvtuanTask.lvtuanTask()
 
+        -- 异地登录
+        loginRes = startUp.anotherLogin()
+        if loginRes then
+            goto begin_label
+        end
+
         -- 营地活动（最后领取）
         yingdiTask.yingdiTaskEnd()
 
+        -- 异地登录
+        loginRes = startUp.anotherLogin()
+        if loginRes then
+            goto begin_label
+        end
+
         -- 日常（最后领取）
         dailyTask.dailyTaskEnd()
+
+        -- 异地登录
+        loginRes = startUp.anotherLogin()
+        if loginRes then
+            goto begin_label
+        end
 
         -- 定时休息
         current_time = os.time()
@@ -101,6 +143,7 @@ function main(...)
             start_time = os.time()
         end
 
+        -- 定时切换账号
         if totalSwitchMinute ~= 0 and current_time - start_time >= totalSwitchMinute then
             toast("运行" .. totalSwitchMinute .. "分钟，准备切换账号")
             startUp.switchAccount()
