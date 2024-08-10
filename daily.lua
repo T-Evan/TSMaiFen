@@ -9,7 +9,7 @@ function dailyTask.homePage()
     res1 = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 627, 381, 710, 403, "新手试炼")
     if res1 or res2 then
-        logUtils.log("已返回首页")
+        --logUtils.log("已返回首页")
         return
     end
 
@@ -395,8 +395,8 @@ function dailyTask.XianShiTeHui()
         end
     end
 
-    baseUtils.tapSleep(595, 150)      -- 点击特惠宝箱
-    baseUtils.tapSleep(350,1125)     -- 点击空白处
+    baseUtils.tapSleep(595, 150)  -- 点击特惠宝箱
+    baseUtils.tapSleep(350, 1125) -- 点击空白处
 end
 
 -- BBQ派对
@@ -483,7 +483,7 @@ function dailyTask.maoXianShouCe()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 626, 379, 711, 405, "冒险手册", 30, -20)
     if res == false then
-        baseUtils.log("识别冒险手册失败")
+        baseUtils.toast("识别冒险手册失败")
         return
     end
 
@@ -593,12 +593,31 @@ function dailyTask.newMap()
                 end
 
                 if x ~= -1 then
-                    baseUtils.tapSleep(x + 0, y + 145)       -- 切换下一地图
+                    --当前地图（不在下方第1个，就是右边紧挨着；只需判断两次）
                     if x > 400 then
                         baseUtils.tapSleep(x - 250, y + 220) -- 下行第1个
                     else
                         baseUtils.tapSleep(x + 230, y + 0)   -- 右侧第1个
+                        res = baseUtils.TomatoOCRText(tomatoOCR, 321, 1022, 394, 1044, "前往地图")
                     end
+
+                    --切换地图
+                    res = baseUtils.TomatoOCRText(tomatoOCR, 321, 1022, 394, 1044, "前往地图")
+                    if res == false then
+                        baseUtils.tapSleep(x + 0, y + 165)      -- 切换下一地图
+                        if x < 280 then
+                            baseUtils.tapSleep(x + 50, y + 250) -- 最后一关在第一个位置，换地图后下方第1图）
+                        end
+
+                        if x > 280 and x < 400 then
+                            baseUtils.tapSleep(x - 100, y + 250) -- 下行第1个（最后一关在第二个位置，换地图后下方第1图）
+                        end
+
+                        if x > 400 then
+                            baseUtils.tapSleep(x - 250, y + 220) -- 最后一关在第三个位置，换地图后下行第1个
+                        end
+                    end
+
                     res = baseUtils.TomatoOCRTap(tomatoOCR, 321, 1022, 394, 1044, "前往地图")
                     res = baseUtils.TomatoOCRTap(tomatoOCR, 330, 1027, 389, 1058, "前往")
 
@@ -609,11 +628,11 @@ function dailyTask.newMap()
                         else
                             res = baseUtils.TomatoOCRTap(tomatoOCR, 435, 727, 529, 759, "留在队伍")
                         end
+                        break
                     end
-                    break
                 else
-                    moveTo(500, 700, 500, 200, 80)
-                    baseUtils.mSleep3(3500);
+                    moveTo(500, 800, 500, 200, 120)
+                    baseUtils.mSleep3(4000);
                 end
                 count = count + 1
             end
@@ -625,8 +644,10 @@ function dailyTask.newMap()
         dailyTask.homePage()
         res = baseUtils.TomatoOCRTap(tomatoOCR, 646, 451, 689, 474, "结伴", 10, -10)
         if res then
-            res = baseUtils.TomatoOCRText(tomatoOCR, 517, 283, 554, 304, "佣兵")
-            if res == false then
+            x, y = findMultiColorInRegionFuzzy(0x0dccf6,
+                "6|0|0x00c7ff,18|0|0xd3e5d1,25|0|0xc0dabd,37|0|0x79bb70,45|0|0x4eae3b,53|0|0xcee2cc,62|0|0x4eae3b,72|0|0xedf4ec,72|7|0xc8dec5,60|7|0xa3cc9f,52|7|0xbad7b7,45|7|0x4eae3b,7|8|0xecd649,1|6|0xead669,-7|4|0x78a644,4|6|0xdcde6c,13|5|0x4eae3b",
+                80, 0, 0, 720, 1280, { orient = 2 }) -- 组队增益图标高亮 - 已在队伍中
+            if x ~= -1 then
                 baseUtils.toast("日常 - 寻找结伴 - 已有结伴")
             else
                 res = baseUtils.TomatoOCRTap(tomatoOCR, 408, 1037, 509, 1068, "寻找队伍")

@@ -148,16 +148,12 @@ end
 
 -- 调查队
 function lvtuanTask.lvTuanDiaoCha()
-    if 功能开关["旅团调查队"] ~= nil then
-        if 功能开关["旅团调查队"] == 0 then
-            baseUtils.toast("旅团 - 调查队 - 未开启")
-            return
-        end
-        if 任务记录["旅团-调查队-完成"] == 1 then
-            baseUtils.toast("旅团 - 调查队 - 已完成")
-            return
-        end
-    else
+    if 功能开关["旅团调查队"] ~= nil and 功能开关["旅团调查队"] == 0 then
+        return
+    end
+
+    if 任务记录["旅团-调查队-完成"] == 1 then
+        baseUtils.toast("旅团 - 调查队 - 已完成")
         return
     end
 
@@ -171,23 +167,31 @@ function lvtuanTask.lvTuanDiaoCha()
 
     while loopCount < needCount do
         loopCount = loopCount + 1
+        baseUtils.toast("旅团 - 调查队重复挑战第" .. loopCount + 1 .. "/" .. needCount .. "次")
 
-        local loopCount = 0
-        while loopCount < 3 do
-            loopCount = loopCount + 1
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 632, 916, 702, 947, "调查队")
-            if res == false then
-                res = baseUtils.TomatoOCRTap(tomatoOCR, 647, 592, 689, 614, "旅团")
+        res1 = baseUtils.TomatoOCRText(tomatoOCR, 636, 97, 670, 119, "秘钥") -- 识别调查队组队中 - 右上角 - 每日补给调查秘钥
+        res2 = baseUtils.TomatoOCRText(tomatoOCR, 501, 191, 581, 218, "离开队伍") -- 识别调查队组队中 - 右上角 - 离开队伍
+        if res1 == true and res2 == true then
+            -- 组队中，对出队伍重新开启调查；保证重新匹配队友
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 501, 191, 581, 218, "离开队伍") -- 离开队伍
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 331, 727, 387, 758, "确定") -- 离开队伍 - 确定
+        else
+            -- 重新进入调查队，重新选择队友；避免队友不足
+            for i = 1, 3 do
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 632, 916, 702, 947, "调查队")
                 if res == false then
-                    -- 返回首页
-                    dailyTask.homePage()
-                    -- 退出组队
-                    dailyTask.quitTeam()
+                    res = baseUtils.TomatoOCRTap(tomatoOCR, 647, 592, 689, 614, "旅团")
+                    if res == false then
+                        -- 返回首页
+                        dailyTask.homePage()
+                        -- 退出组队
+                        dailyTask.quitTeam()
+                    else
+                        res = baseUtils.TomatoOCRTap(tomatoOCR, 632, 916, 702, 947, "调查队")
+                    end
                 else
-                    res = baseUtils.TomatoOCRTap(tomatoOCR, 632, 916, 702, 947, "调查队")
+                    break
                 end
-            else
-                break
             end
         end
 
@@ -280,7 +284,8 @@ end
 
 -- 旅团浇水
 function lvtuanTask.lvTuanWater()
-    if 功能开关["旅团浇树"] == 0 or 任务记录["旅团-浇树-完成"] == 1 then
+    --if 功能开关["旅团浇树"] == 0 or 任务记录["旅团-浇树-完成"] == 1 then
+    if 功能开关["旅团浇树"] == 0 then
         return
     end
 
@@ -330,9 +335,11 @@ function lvtuanTask.fighting()
     local maxAttempts = 30 -- 设置最大尝试次数
 
     while attempts < maxAttempts do
-        res = baseUtils.TomatoOCRText(tomatoOCR, 642, 461, 702, 483, "麦克风")
-        if res then
-            logUtils.log("战斗中")
+        res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
+        res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
+        res1 = baseUtils.TomatoOCRText(tomatoOCR, 642, 461, 702, 483, "麦克风")
+        if res1 or (teamName1 ~= "" or teamName2 ~= "") then
+            baseUtils.toast("战斗中")
         else
             break -- 识别失败，退出循环
         end
@@ -349,6 +356,7 @@ function lvtuanTask.openTreasure()
     local attempts = 0    -- 初始化尝试次数
     local maxAttempts = 2 -- 设置最大尝试次数
 
+    baseUtils.toast("战斗结束 - 开启宝箱")
     while attempts < maxAttempts do
         attempts = attempts + 1
         -- 调查队宝箱
@@ -365,11 +373,19 @@ function lvtuanTask.openTreasure()
         end
 
         -- 钥匙不足退出
-        res = baseUtils.TomatoOCRText(tomatoOCR, 329, 726, 391, 761, "0")
-        if res then
-            logUtils.log("钥匙不足")
-            res = baseUtils.TomatoOCRText(tomatoOCR, 68, 1201, 130, 1232, "返回")
-            res = baseUtils.TomatoOCRText(tomatoOCR, 329, 723, 391, 762, "确定")
+        res1 = baseUtils.TomatoOCRText(tomatoOCR, 329, 726, 391, 761, "0")
+        res2 = baseUtils.TomatoOCRText(tomatoOCR, 301, 1023, 417, 1048, "调查秘钥不足")
+        res3 = baseUtils.TomatoOCRText(tomatoOCR, 303, 755, 414, 778, "调查秘钥不足")
+        if res1 or res2 or res3 then
+            baseUtils.toast("钥匙不足")
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 68, 1201, 130, 1232, "返回")
+            if res then
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 329, 723, 391, 762, "确定")
+            else
+                -- 提前退出
+                baseUtils.tapSleep(60, 1150) -- 点击空白处
+                res = baseUtils.TomatoOCRTap(tomatoOCR, 329, 727, 388, 759, "确定")
+            end
         end
     end
 end

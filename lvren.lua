@@ -128,16 +128,12 @@ end
 
 -- 猫猫包
 function lvrenTask.maomaobao()
-    if 功能开关["猫猫包果木"] ~= nil then
-        if 功能开关["猫猫包果木"] == 0 then
-            baseUtils.toast("旅人 - 猫猫包 - 未开启")
-            return
-        end
-        if 任务记录["旅人-猫猫果木-完成"] == 1 then
-            baseUtils.toast("旅人 - 猫猫包 - 已完成")
-            return
-        end
-    else
+    if 功能开关["猫猫包果木"] ~= nil and 功能开关["猫猫包果木"] == 0 then
+        return
+    end
+
+    if 任务记录["旅人-猫猫果木-完成"] == 1 then
+        baseUtils.toast("旅人 - 猫猫包 - 已完成")
         return
     end
 

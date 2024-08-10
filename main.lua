@@ -40,7 +40,8 @@ function main(...)
     -- local kill_tid = thread.create(killdialog,error_callback)
     -- thread.waitAllThreadExit()
     -- debug
-    -- lua_exit()
+    --shilianTask.fighting()
+    --lua_exit()
     --runThread("__thread__child1") -- 没有用？
 
     -- 处理休息时间

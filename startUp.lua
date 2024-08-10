@@ -178,18 +178,18 @@ function startUp.loadAccount(accountName)
     closeApp("com.xd.cfbmf") -- 重启应用让配置生效
 
     oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
-    --ts.hlfs.removeDir(oldPath1)           -- 删除文件夹
-    --creatflag = ts.hlfs.makeDir(oldPath1) --新建文件夹
-    newPath1 = userPath() .. "/log/"  .. accountName .. "_shared_prefs/"
-    --flag = ts.hlfs.copyDir(newPath1, oldPath1)
-    os.execute("cp -rf " .. newPath1 .. " " .. oldPath1);
+    ts.hlfs.removeDir(oldPath1)           -- 删除文件夹
+    creatflag = ts.hlfs.makeDir(oldPath1) --新建文件夹
+    newPath1 = userPath() .. "/log/" .. accountName .. "_shared_prefs/"
+    flag = ts.hlfs.copyDir(newPath1, oldPath1)
+    --os.execute("cp -rf " .. newPath1 .. " " .. oldPath1);
 
-    oldPath2 = "/data/data/com.xd.cfbmf/app_webview/"
+    --oldPath2 = "/data/data/com.xd.cfbmf/app_webview/"
     --ts.hlfs.removeDir(oldPath2)           -- 删除文件夹
     --creatflag = ts.hlfs.makeDir(oldPath2) --新建文件夹
-    newPath2 = userPath() .. "/log/"  .. accountName .. "_app_webview/"
+    --newPath2 = userPath() .. "/log/"  .. accountName .. "_app_webview/"
     --flag = ts.hlfs.copyDir(newPath2, oldPath2)
-    os.execute("cp -rf " .. newPath2 .. " " .. oldPath2);
+    --os.execute("cp -rf " .. newPath2 .. " " .. oldPath2);
 
 
     switchApp("com.xd.cfbmf")
