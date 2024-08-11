@@ -247,7 +247,7 @@ end
 
 -- 切换地图
 function shilianTask.changeMap(selectMap, selectStage)
-    baseUtils.toast("秘境任务 - 切换地图")
+    --baseUtils.toast("秘境任务 - 切换地图")
 
     baseUtils.tapSleep(74, 160) -- 点击地图列表
 
@@ -320,7 +320,7 @@ function shilianTask.startFight()
             res1 = baseUtils.TomatoOCRText(tomatoOCR, 242, 598, 314, 616, "体力不足")
             if res1 then
                 if 功能开关["秘境-体力不足继续挑战"] then
-                    baseUtils.toast("秘境任务 - 体力不足继续挑战")
+                    --baseUtils.toast("秘境任务 - 体力不足继续挑战")
                     res = baseUtils.TomatoOCRTap(tomatoOCR, 334, 743, 385, 771, "确定")
                 else
                     baseUtils.toast("秘境任务 - 体力不足")
@@ -337,7 +337,7 @@ function shilianTask.startFight()
             res1 = baseUtils.TomatoOCRText(tomatoOCR, 242, 598, 314, 616, "体力不足")
             if res1 then
                 if 功能开关["秘境-体力不足继续挑战"] then
-                    baseUtils.toast("秘境任务 - 体力不足继续挑战")
+                    --baseUtils.toast("秘境任务 - 体力不足继续挑战")
                     res = baseUtils.TomatoOCRTap(tomatoOCR, 334, 743, 385, 771, "确定")
                 else
                     baseUtils.toast("秘境任务 - 体力不足")
@@ -363,7 +363,7 @@ function shilianTask.startFight()
             res1 = baseUtils.TomatoOCRText(tomatoOCR, 242, 598, 314, 616, "体力不足")
             if res1 then
                 if 功能开关["秘境-体力不足继续挑战"] then
-                    baseUtils.toast("秘境任务 - 体力不足继续挑战")
+                    --baseUtils.toast("秘境任务 - 体力不足继续挑战")
                     res = baseUtils.TomatoOCRTap(tomatoOCR, 334, 743, 385, 771, "确定")
                 else
                     baseUtils.toast("秘境任务 - 体力不足")
@@ -418,7 +418,7 @@ function shilianTask.startFight()
                     res1 = baseUtils.TomatoOCRText(tomatoOCR, 242, 598, 314, 616, "体力不足")
                     if res1 then
                         if 功能开关["秘境-体力不足继续挑战"] then
-                            baseUtils.toast("秘境任务 - 体力不足继续挑战")
+                            --baseUtils.toast("秘境任务 - 体力不足继续挑战")
                             res = baseUtils.TomatoOCRTap(tomatoOCR, 334, 743, 385, 771, "确定")
                         else
                             baseUtils.toast("秘境任务 - 体力不足")
@@ -442,9 +442,11 @@ function shilianTask.startFight()
 
                         res = baseUtils.TomatoOCRTap(tomatoOCR, 333, 974, 383, 1006, "开始")
                         res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
+                        local nameS1 = string.find(teamName1, "等级")
                         res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
+                        local nameS2 = string.find(teamName2, "等级")
 
-                        if (teamName1 ~= "" or teamName2 ~= "") then
+                        if (nameS1 or nameS2) then
                             baseUtils.toast("秘境任务 - 匹配成功 - 进入战斗")
                             shilianTask.fighting()
                             aleadyFightCt = aleadyFightCt + 1
@@ -481,7 +483,7 @@ function shilianTask.startFight()
     res1 = baseUtils.TomatoOCRText(tomatoOCR, 242, 598, 314, 616, "体力不足")
     if res1 then
         if 功能开关["秘境-体力不足继续挑战"] then
-            baseUtils.toast("秘境任务 - 体力不足继续挑战")
+            --baseUtils.toast("秘境任务 - 体力不足继续挑战")
             res = baseUtils.TomatoOCRTap(tomatoOCR, 334, 743, 385, 771, "确定")
         else
             baseUtils.toast("秘境任务 - 体力不足")
@@ -583,10 +585,14 @@ function shilianTask.WaitFight()
                 baseUtils.toast("进入战斗失败 - 队友未准备")
                 return false
             end
-            res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
-            res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
 
-            if (teamName1 ~= "" or teamName2 ~= "") then
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 333, 974, 383, 1006, "开始")
+            res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
+            local nameS1 = string.find(teamName1, "等级")
+            res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
+            local nameS2 = string.find(teamName2, "等级")
+
+            if (nameS1 or nameS2) then
                 baseUtils.toast("进入战斗成功 - 开始战斗")
                 shilianTask.fighting()
                 return true
@@ -633,7 +639,7 @@ function shilianTask.tili()
         attempt = attempt + 1
     end
 
-    baseUtils.toast("体力购买 - 结束")
+    --baseUtils.toast("体力购买 - 结束")
     baseUtils.tapSleep(61, 1187) -- 返回
 
     return
@@ -654,9 +660,11 @@ function shilianTask.fighting()
 
         -- 识别战斗中状态
         res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
+        local nameS1 = string.find(teamName1, "等级")
         res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
+        local nameS2 = string.find(teamName2, "等级")
 
-        if (teamName1 ~= "" or teamName2 ~= "") then
+        if (nameS1 or nameS2) then
             if teamShoutDone == 0 then
                 teamShoutDone = shilianTask.teamShout()
             end
@@ -726,8 +734,10 @@ function shilianTask.fighting()
 
         -- 判断是否战斗失败（战斗4分钟后）
         res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
+        local nameS1 = string.find(teamName1, "等级")
         res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
-        if elapsed > 240 * 1000 or (teamName1 == "" and teamName2 == "") then
+        local nameS2 = string.find(teamName2, "等级")
+        if elapsed > 240 * 1000 or (nameS1 == false and nameS2 == false) then
             failStatus = shilianTask.fightFail()
             if failStatus then
                 break

@@ -44,6 +44,12 @@ function dailyTask.homePage()
     -- 点击首页-冒险
     res = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
 
+    -- 异地登录
+    loginRes = startUp.anotherLogin()
+    if loginRes then
+        return
+    end
+
     -- 判断是否已在首页
     return dailyTask.homePage()
 end
