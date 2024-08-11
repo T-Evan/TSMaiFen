@@ -71,6 +71,12 @@ function startUp.logIn()
     -- 开始冒险
     res = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 关闭公告
     res1 = baseUtils.TomatoOCRTap(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
+
+    res = baseUtils.TomatoOCRText(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
+    if res then
+        startUp.switchRole(2, 任务记录['当前任务角色'])
+    end
+
     res2 = baseUtils.TomatoOCRTap(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
 
     -- 跳过启动动画
@@ -198,6 +204,73 @@ function startUp.loadAccount(accountName)
 
 
     switchApp("com.xd.cfbmf")
+end
+
+-- 重新登录切换角色
+function startUp.switchRole(ifRestart, selectRole)
+    --toast("开始切换角色", 1)
+    ifRestart = ifRestart or 1
+    if ifRestart == 1 then
+        closeApp("com.xd.cfbmf") -- 重启应用让配置生效
+        switchApp("com.xd.cfbmf")
+    end
+
+    下一角色 = (任务记录['当前任务角色'] + 1)
+    if selectRole ~= nil then
+        selectRole = tonumber(selectRole)
+        下一角色 = selectRole
+        if selectRole == 0 then
+            return
+        end
+    end
+
+    if 下一角色 > 5 then
+        下一角色 = 1
+    end
+
+    if 功能开关['角色' .. 下一角色 .. '开关'] == 0 then
+        任务记录['当前任务角色'] = 下一角色
+        return startUp.switchRole(2)
+    end
+
+    res = baseUtils.TomatoOCRText(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
+    if res == false then
+        res5 = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
+        res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
+        res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
+    end
+
+    res3 = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
+    --dialog(下一角色)
+    if 下一角色 <= 3 then
+        moveTo(190, 1090, 555, 1090, 50) -- 翻到最左
+        baseUtils.mSleep3(3000);
+        x = 190 + (下一角色 - 1) * 165 -- 从第一个角色 190，依次往右加 165 至下一角色
+        y = 1090
+        baseUtils.tapSleep(x, y);
+        res = baseUtils.TomatoOCRText(tomatoOCR, 300, 1197, 420, 1232, "选择职业")
+        if res then
+            -- 无该角色，退出
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 70, 1198, 125, 1232, "返回")
+            任务记录['当前任务角色'] = 0
+            return startUp.switchRole(2)
+        end
+    end
+    if 下一角色 > 3 then
+        moveTo(555, 1090, 190, 1090, 50) -- 翻到最右
+        baseUtils.mSleep3(3000);
+        x = 540 - (5 - 下一角色) * 165 -- 从第五个角色 540，依次往左减 165 至下一角色
+        y = 1090
+        baseUtils.tapSleep(x, y);
+        res = baseUtils.TomatoOCRText(tomatoOCR, 300, 1197, 420, 1232, "选择职业")
+        if res then
+            -- 无该角色，退出
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 70, 1198, 125, 1232, "返回")
+            任务记录['当前任务角色'] = 0
+            return startUp.switchRole(2)
+        end
+    end
+    任务记录['当前任务角色'] = 下一角色
 end
 
 -- 复制用户信息数据切换账号

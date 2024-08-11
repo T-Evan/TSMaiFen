@@ -13,6 +13,7 @@ startUp = require("startUp")
 
 任务记录 = {
     ["当前任务账号"] = 功能开关["选择启动账号"],
+    ["当前任务角色"] = 功能开关["选择启动角色"],
 
     ["仓鼠百货-完成"] = 0,
     ["旅团-浇树-完成"] = 0,
@@ -40,7 +41,7 @@ function main(...)
     -- local kill_tid = thread.create(killdialog,error_callback)
     -- thread.waitAllThreadExit()
     -- debug
-    --shilianTask.fighting()
+    --startUp.switchRole(2)
     --lua_exit()
     --runThread("__thread__child1") -- 没有用？
 
@@ -59,8 +60,15 @@ function main(...)
         needSwitchMinute = 0
     end
 
+    local needSwitchRoleMinute = tonumber(功能开关["定时切角色"]) -- 分钟
+    if needSwitchRoleMinute == nil then
+        needSwitchRoleMinute = 0
+    end
+
     local totalWait = needRunMinute * 60
     local totalSwitchMinute = needSwitchMinute * 60
+    local totalSwitchRoleMinute = needSwitchRoleMinute * 60
+
     --多账号处理
     startUp.multiAccount()
 
@@ -140,6 +148,13 @@ function main(...)
             closeApp("com.xd.cfbmf")
             toast("休息" .. needWaitMinute .. "分钟")
             mSleep(needWaitMinute * 60 * 1000)
+            start_time = os.time()
+        end
+
+        -- 定时切换角色
+        if totalSwitchRoleMinute ~= 0 and current_time - start_time >= totalSwitchRoleMinute then
+            toast("运行" .. totalSwitchRoleMinute .. "分钟，准备切换角色")
+            startUp.switchRole()
             start_time = os.time()
         end
 
