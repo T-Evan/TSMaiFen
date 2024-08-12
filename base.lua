@@ -245,9 +245,9 @@ function baseUtils.mSleep3(t1, t2)
 end
 
 function baseUtils.toast(content, tim)
-    tim = tim or 1
+    tim = tim or 0.7
     toast(content, tim)
-    baseUtils.mSleep3(tim * 1000 + 1500) -- 多等待1s，等弹窗消失
+    baseUtils.mSleep3(tim * 1000 + 1000) -- 多等待1s，等弹窗消失
 end
 
 --查找文件
