@@ -582,6 +582,7 @@ function dailyTask.newMap()
         res1 = baseUtils.TomatoOCRText(tomatoOCR, 589, 215, 680, 230, "新关卡已解锁")
         res2 = baseUtils.TomatoOCRText(tomatoOCR, 589, 215, 680, 230, "新地图已解锁")
         if res1 or res2 then
+            --if true then
             -- 地图入口切换
 
             -- 结伴入口切换
@@ -641,7 +642,7 @@ function dailyTask.newMap()
                         break
                     end
                 else
-                    moveTo(500, 800, 500, 200, 120)
+                    moveTo(500, 800, 500, 300, 30, 50, 1, 1)
                     baseUtils.mSleep3(4000);
                 end
                 count = count + 1

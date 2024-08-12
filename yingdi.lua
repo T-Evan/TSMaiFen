@@ -160,6 +160,7 @@ function yingdiTask.zhiFeiJi()
         80, 0, 0, 720, 1280, { orient = 2 }) -- 纸飞机
 
     for i = 1, 6 do
+        startUp.noticeCancel() -- 偶现异常处理
         if x == -1 then
             -- 下翻第二屏，继续识别
             moveTo(680, 804, 680, 451, 120)
@@ -206,6 +207,7 @@ function yingdiTask.luYingDaKa()
         80, 0, 0, 720, 1280, { orient = 2 }) -- 露营打卡点
 
     for i = 1, 6 do
+        startUp.noticeCancel() -- 偶现异常处理
         if x == -1 then
             -- 下翻第二屏，继续识别
             moveTo(680, 804, 680, 451, 120)
@@ -254,6 +256,7 @@ function yingdiTask.yueqiandao()
         "-2|15|0xefc5a5,-29|15|0xecbf9b,-28|36|0xeae6de,4|36|0xf1e6dc,33|35|0xe8b58b,57|35|0x823e23,57|73|0xb8b8b8,26|70|0x823a1e,-1|60|0xedcdbd,-15|75|0x888883,-8|100|0xbcb0aa,5|96|0x474038,39|96|0x2a251f,68|96|0x9c9b97",
         80, 0, 0, 720, 1280, { orient = 2 })
     for i = 1, 6 do
+        startUp.noticeCancel() -- 偶现异常处理
         if x == -1 then
             -- 下翻第二屏，继续识别
             moveTo(680, 804, 680, 451, 120)
@@ -557,8 +560,11 @@ function yingdiTask.yingDiShop()
     if 功能开关["商店-黑烬突破石(五折)"] == 1 then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 243, 764, 343, 789, "黑烬突破石") -- 黑烬突破石（五折）
         if res then
-            baseUtils.tapSleep(360, 820) -- 购买
-            baseUtils.tapSleep(360, 1100, 1) -- 点击空白处关闭
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 294, 639, 422, 670, "黑烬突破石") -- 黑烬突破石（五折） -- 再次识别
+            if res then
+                baseUtils.tapSleep(360, 820) -- 购买
+                baseUtils.tapSleep(360, 1100, 1) -- 点击空白处关闭
+            end
         end
     end
 
