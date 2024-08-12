@@ -800,7 +800,7 @@ function shilianTask.teamShout()
             --确认关闭聊天框
             x, y = findMultiColorInRegionFuzzy(0xb5bdcb,
                 "0|4|0xf5f0de,4|4|0xf1ebdd,-10|5|0xd5dbda,-10|7|0xf3efe1,-8|9|0xf2f2dd,-6|12|0xf2ebdd,-2|15|0xf4efdf,3|15|0xf4eede,6|12|0xf4eddf,9|9|0xf4ece0,14|10|0x6785bc,9|17|0x6484b9,2|22|0x6584b9,-11|18|0x6483b8,2|0|0xede8da,-13|1|0x6484b9,-3|-2|0x6685ba",
-                90, 101, 330, 101, 330, { orient = 2 })
+                80, 101, 330, 101, 330, { orient = 2 })
             if x ~= -1 then
                 baseUtils.tapSleep(x, y)
             end
@@ -810,7 +810,7 @@ function shilianTask.teamShout()
     --确认关闭聊天框
     x, y = findMultiColorInRegionFuzzy(0xb5bdcb,
         "0|4|0xf5f0de,4|4|0xf1ebdd,-10|5|0xd5dbda,-10|7|0xf3efe1,-8|9|0xf2f2dd,-6|12|0xf2ebdd,-2|15|0xf4efdf,3|15|0xf4eede,6|12|0xf4eddf,9|9|0xf4ece0,14|10|0x6785bc,9|17|0x6484b9,2|22|0x6584b9,-11|18|0x6483b8,2|0|0xede8da,-13|1|0x6484b9,-3|-2|0x6685ba",
-        90, 101, 330, 101, 330, { orient = 2 })
+        80, 101, 330, 101, 330, { orient = 2 })
     if x ~= -1 then
         baseUtils.tapSleep(x, y)
     end
