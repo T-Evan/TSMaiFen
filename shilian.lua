@@ -564,8 +564,9 @@ end
 
 -- 等待匹配
 function shilianTask.WaitFight()
-    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 457, 607, 502, 631, "准备") -- 秘境准备
-    res2 = baseUtils.TomatoOCRTap(tomatoOCR, 453, 650, 505, 684, "准备") -- 恶龙准备
+    local res1 = baseUtils.TomatoOCRTap(tomatoOCR, 457, 607, 502, 631, "准备") -- 秘境准备
+    local res2 = baseUtils.TomatoOCRTap(tomatoOCR, 453, 650, 505, 684, "准备") -- 恶龙准备
+    local res3 = false
 
     -- 队伍满员，开始挑战
     res = baseUtils.TomatoOCRText(tomatoOCR, 396, 622, 468, 650, "开启挑战") -- 队伍已满员，准备开启挑战
