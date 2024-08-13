@@ -94,7 +94,7 @@ function baseUtils.TomatoOCRText(tomatoOCR, x1, y1, x2, y2, keyWord, returnType)
 
     current_time = os.date("%Y-%m-%d", os.time()) --以时间戳命名进行截图
     local pic_name = userPath() .. current_time .. ".baseOCR.jpg"
-    snapshot(pic_name, x1, y1, x2, y2)
+    snapshot(pic_name, x1, y1, x2, y2, 0.7)
 
     local ocrRes = tomatoOCR.ocrFile(pic_name, 3)
     if returnType == "text" and ocrRes ~= nil and ocrRes ~= "" then
@@ -247,7 +247,7 @@ end
 function baseUtils.toast(content, tim)
     tim = tim or 0.7
     toast(content, tim)
-    baseUtils.mSleep3(tim * 1000 + 1000) -- 多等待1s，等弹窗消失
+    baseUtils.mSleep3(tim * 1000 + 1500) -- 多等待1s，等弹窗消失
 end
 
 --查找文件

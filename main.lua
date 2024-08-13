@@ -28,7 +28,6 @@ startUp = require("startUp")
     ["露营打卡点"] = 0,
 }
 
-local socket = require("socket")
 -- 创建多个进程
 local function create_processes(num_processes)
     for i = 1, num_processes do

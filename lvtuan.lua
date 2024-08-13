@@ -41,6 +41,9 @@ function lvtuanTask.lvTuanShop()
 
     baseUtils.mSleep3(4000) -- 等待跳转动画
 
+    -- 翻页（先返回上面）
+    moveTo(360, 750, 360, 850, 80)
+    baseUtils.mSleep3(2500);
     local count = 0
     while count < 5 do
         if 功能开关["旅团商店-唤兽琴弦"] == 1 then

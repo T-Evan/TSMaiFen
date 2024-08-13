@@ -35,9 +35,8 @@ function startUp.startApp()
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
 
     res3 = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
-    if (isColor(659, 367, 0xe2e1d1, 80) and isColor(662, 368, 0xe2dfd1, 80) and isColor(668, 368, 0xa1a099, 80) and isColor(664, 370, 0xe2dfd1, 80) and isColor(653, 370, 0xe2dece, 80) and isColor(656, 372, 0xe4e1d4, 80) and isColor(662, 372, 0xe2dfd1, 80) and isColor(674, 372, 0xe2ded1, 80) and isColor(678, 372, 0xe2ded1, 80) and isColor(679, 367, 0x7d8084, 80) and isColor(681, 373, 0xe1dfcf, 80) and isColor(679, 376, 0x797c81, 80) and isColor(676, 378, 0xe2e0d2, 80) and isColor(672, 386, 0xf3eddd, 80) and isColor(675, 386, 0xf3eddd, 80) and isColor(682, 385, 0xf3eddd, 80) and isColor(678, 389, 0xf3eddd, 80) and isColor(678, 392, 0xf3eddd, 80) and isColor(678, 399, 0xf3eddd, 80) and isColor(675, 399, 0xf3eddd, 80)) then
-        res4 = true -- 冒险手册
-    else
+    res4 = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
+    if res4 == false then
         res8 = baseUtils.TomatoOCRText(tomatoOCR, 457, 607, 502, 631, "准备") -- 秘境准备
         res9 = baseUtils.TomatoOCRText(tomatoOCR, 453, 650, 505, 684, "准备") -- 恶龙准备
         res10 = baseUtils.TomatoOCRText(tomatoOCR, 627, 381, 710, 403, "新手试炼")
@@ -50,19 +49,21 @@ function startUp.startApp()
     --end
 
     res5 = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
-    res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
-    res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
+    if res5 == false then
+        res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
+        if res6 == false then
+            res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
+        end
+    end
 
     if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false then -- 在登录页面
         baseUtils.mSleep3(5000)
         return startUp.startApp()
     elseif res3 or res4 or res8 or res9 or res10 then -- 已在游戏中
         toast("已进入游戏，返回首页", 1)
-        baseUtils.mSleep3(1000)
         return dailyTask.homePage()
     else
         toast("准备进入游戏", 1)
-        baseUtils.mSleep3(1000)
         return startUp.logIn()
     end
 end

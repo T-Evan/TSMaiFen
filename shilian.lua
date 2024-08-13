@@ -98,11 +98,15 @@ function shilianTask.elong()
     res = baseUtils.TomatoOCRTap(tomatoOCR, 650, 522, 688, 544, "试炼")
     if res then
         --res = baseUtils.TomatoOCRTap(tomatoOCR, 380, 112, 558, 154, "秘境之间") -- 低等级4图，区域错误；改为图色识别
-        x, y = findMultiColorInRegionFuzzy(0xb13a35,
-            "-1|6|0xc9634d,-1|18|0xfde482,-1|33|0xffec75,-1|58|0xfffe82,-22|55|0x7c2f2d,-43|49|0xe7795b,-76|17|0xae3036,-84|5|0xfed47a,54|9|0xac3333",
-            85, 0, 0, 720, 1280, { orient = 2 }) -- 恶龙大通缉
-        if x ~= -1 then
-            baseUtils.tapSleep(x, y)
+        if (isColor(246, 554, 0xb13b35, 80) and isColor(254, 570, 0xfffcc4, 80) and isColor(260, 559, 0xaa3535, 80) and isColor(231, 566, 0x591715, 80) and isColor(229, 580, 0x8d2e2f, 80) and isColor(226, 575, 0xad3535, 80) and isColor(222, 570, 0xab3636, 80) and isColor(220, 560, 0x4e1216, 80) and isColor(312, 550, 0xfece7a, 80) and isColor(321, 543, 0xffd27b, 80)) then
+            baseUtils.tapSleep(245, 555, 0.8)
+        else
+            x, y = findMultiColorInRegionFuzzy(0xb13a35,
+                "-1|6|0xc9634d,-1|18|0xfde482,-1|33|0xffec75,-1|58|0xfffe82,-22|55|0x7c2f2d,-43|49|0xe7795b,-76|17|0xae3036,-84|5|0xfed47a,54|9|0xac3333",
+                85, 0, 0, 720, 1280, { orient = 2 }) -- 恶龙大通缉
+            if x ~= -1 then
+                baseUtils.tapSleep(x, y)
+            end
         end
     else
         --baseUtils.toast("恶龙任务 - 未找到试炼入口 - 重试", 2)
@@ -165,7 +169,17 @@ function shilianTask.elong()
             baseUtils.toast("恶龙任务 - 匹配超时")
             x, y = findMultiColorInRegionFuzzy(0xfffefd,
                 "7|0|0xf9dcc7,15|0|0xf6c69d,40|0|0xf5bd89,52|-1|0xfffefd,53|7|0xffffff,47|7|0xfadfcc,39|7|0xf3a84d,32|7|0xfcf0e7,27|7|0xffffff,23|7|0xfefcfa,5|7|0xfffefe,6|14|0xffffff,23|14|0xfef9f6,38|14|0xffffff",
-                80, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+                75, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+            if x == -1 then
+                x, y = findMultiColorInRegionFuzzy(0xf3a84b,
+                    "14|0|0xf3aa55,47|-1|0xfffdfc,67|-1|0xfae1cf,85|-1|0xf3a84b,98|-1|0xf3a84b,105|-1|0xf3a84b,92|13|0xf3a84b,86|13|0xf3a84b,77|13|0xf3a84b,56|10|0xffffff,17|10|0xffffff,17|21|0xf3a84b,-3|19|0xf3a84b,-8|11|0xf3a94d",
+                    75, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+                if x == -1 then
+                    x, y = findMultiColorInRegionFuzzy(0xf3a84b,
+                        "13|0|0xf3a84b,24|0|0xffffff,36|0|0xf3a84b,53|0|0xf3a84b,64|0|0xfffffe,67|0|0xfef7f2,78|0|0xfef9f6,95|0|0xf3a84b,112|0|0xf3a84b,110|10|0xf9c078,101|10|0xf3a84b,90|10|0xf3a84b,68|10|0xf3a84b,57|10|0xfdf3ec,39|10|0xf6c295",
+                        80, 0, 0, 720, 1280, { orient = 2 })
+                end
+            end
             if x ~= -1 then
                 -- 超时取消匹配
                 baseUtils.tapSleep(x, y)
@@ -173,7 +187,7 @@ function shilianTask.elong()
             end
             break
         end
-        baseUtils.toast("恶龙任务 - 匹配中")
+        --baseUtils.toast("恶龙任务 - 匹配中")
 
         -- 判断无合适队伍，重新开始匹配
         res = baseUtils.TomatoOCRText(tomatoOCR, 303, 607, 418, 632, "暂无合适队伍")
@@ -185,20 +199,43 @@ function shilianTask.elong()
             end
         end
 
-        x, y = findMultiColorInRegionFuzzy(0xfffefd,
-            "7|0|0xf9dcc7,15|0|0xf6c69d,40|0|0xf5bd89,52|-1|0xfffefd,53|7|0xffffff,47|7|0xfadfcc,39|7|0xf3a84d,32|7|0xfcf0e7,27|7|0xffffff,23|7|0xfefcfa,5|7|0xfffefe,6|14|0xffffff,23|14|0xfef9f6,38|14|0xffffff",
-            77, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
-        x2, y2 = findMultiColorInRegionFuzzy(0xf3a84b,
-            "14|0|0xf3aa55,47|-1|0xfffdfc,67|-1|0xfae1cf,85|-1|0xf3a84b,98|-1|0xf3a84b,105|-1|0xf3a84b,92|13|0xf3a84b,86|13|0xf3a84b,77|13|0xf3a84b,56|10|0xffffff,17|10|0xffffff,17|21|0xf3a84b,-3|19|0xf3a84b,-8|11|0xf3a94d",
-            77, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
-        x3, y3 = findMultiColorInRegionFuzzy(0xf3a84b,
-            "13|0|0xf3a84b,24|0|0xffffff,36|0|0xf3a84b,53|0|0xf3a84b,64|0|0xfffffe,67|0|0xfef7f2,78|0|0xfef9f6,95|0|0xf3a84b,112|0|0xf3a84b,110|10|0xf9c078,101|10|0xf3a84b,90|10|0xf3a84b,68|10|0xf3a84b,57|10|0xfdf3ec,39|10|0xf6c295",
-            77, 0, 0, 720, 1280, { orient = 2 })
+        res2 = false
+        if (isColor(313, 1086, 0xf3a84b, 90) and isColor(321, 1086, 0xf3a84b, 90) and isColor(321, 1090, 0xf3a84b, 90) and isColor(314, 1090, 0xf3a84b, 90) and isColor(314, 1095, 0xf3a84b, 90) and isColor(321, 1094, 0xf3a84b, 90) and isColor(321, 1101, 0xf3a84b, 90) and isColor(313, 1101, 0xf3a84b, 90) and isColor(313, 1106, 0xf3a84b, 90) and isColor(322, 1106, 0xf3a84b, 90)) then
+            res2 = true -- 第三图匹配中
+        end
+        if res2 == false then
+            res3 = false
+            if (isColor(311, 887, 0xf3a84b, 90) and isColor(315, 887, 0xf3a84b, 90) and isColor(315, 892, 0xf3a84b, 90) and isColor(308, 892, 0xf3a84b, 90) and isColor(308, 897, 0xf3a84b, 90) and isColor(312, 897, 0xf3a84b, 90) and isColor(317, 903, 0xf3a84b, 90) and isColor(317, 910, 0xf3a84b, 90) and isColor(309, 910, 0xf3a84b, 90) and isColor(303, 910, 0xf3a84b, 90)) then
+                res3 = true -- 第二图匹配中
+            end
+            if res3 == false then
+                res4 = false
+                if (isColor(310, 782, 0xf3a84b, 90) and isColor(316, 781, 0xf3a84b, 90) and isColor(319, 781, 0xf3a84b, 90) and isColor(318, 792, 0xf3a84b, 90) and isColor(311, 792, 0xf3a84b, 90) and isColor(311, 793, 0xf3a84b, 90) and isColor(311, 804, 0xf3a84b, 90) and isColor(315, 802, 0xf3a84b, 90) and isColor(324, 802, 0xf3a84b, 90) and isColor(324, 805, 0xf3a84b, 90) and isColor(320, 806, 0xf3a84b, 90) and isColor(315, 806, 0xf3a84b, 90) and isColor(304, 806, 0xf3a84b, 90)) then
+                    res4 = true -- 第一图匹配中
+                end
+                if res4 == false then
+                    x, y = findMultiColorInRegionFuzzy(0xfffefd,
+                        "7|0|0xf9dcc7,15|0|0xf6c69d,40|0|0xf5bd89,52|-1|0xfffefd,53|7|0xffffff,47|7|0xfadfcc,39|7|0xf3a84d,32|7|0xfcf0e7,27|7|0xffffff,23|7|0xfefcfa,5|7|0xfffefe,6|14|0xffffff,23|14|0xfef9f6,38|14|0xffffff",
+                        75, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+                    if x == -1 then
+                        x2, y2 = findMultiColorInRegionFuzzy(0xf3a84b,
+                            "14|0|0xf3aa55,47|-1|0xfffdfc,67|-1|0xfae1cf,85|-1|0xf3a84b,98|-1|0xf3a84b,105|-1|0xf3a84b,92|13|0xf3a84b,86|13|0xf3a84b,77|13|0xf3a84b,56|10|0xffffff,17|10|0xffffff,17|21|0xf3a84b,-3|19|0xf3a84b,-8|11|0xf3a94d",
+                            75, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+                        if x2 == -1 then
+                            x3, y3 = findMultiColorInRegionFuzzy(0xf3a84b,
+                                "13|0|0xf3a84b,24|0|0xffffff,36|0|0xf3a84b,53|0|0xf3a84b,64|0|0xfffffe,67|0|0xfef7f2,78|0|0xfef9f6,95|0|0xf3a84b,112|0|0xf3a84b,110|10|0xf9c078,101|10|0xf3a84b,90|10|0xf3a84b,68|10|0xf3a84b,57|10|0xfdf3ec,39|10|0xf6c295",
+                                80, 0, 0, 720, 1280, { orient = 2 })
+                        end
+                    end
+                end
+            end
+        end
+
         res1 = shilianTask.WaitFight()
         if res1 == true then
             任务记录["试炼-恶龙-完成次数"] = 任务记录["试炼-恶龙-完成次数"] + 1
         end
-        if res1 == true or (x == -1 and x2 == -1 and x3 == -1) then -- 成功准备战斗 或 未匹配到
+        if res1 == true or (x == -1 and x2 == -1 and x3 == -1 and res2 == false and res3 == false and res4 == false and res5 == false) then -- 成功准备战斗 或 未匹配到
             break
         end
 
@@ -222,8 +259,8 @@ function shilianTask.mijiing()
     res = baseUtils.TomatoOCRTap(tomatoOCR, 650, 522, 688, 544, "试炼")
     if res then
         --res = baseUtils.TomatoOCRTap(tomatoOCR, 380, 112, 558, 154, "秘境之间") -- 低等级只有4张试炼图，区域识别错误；改为全局图色识别
-        if (isColor(218, 142, 0xf6e1ce, 90) and isColor(210, 187, 0x9a3640, 90) and isColor(224, 221, 0x772c39, 90) and isColor(171, 221, 0x643529, 90) and isColor(141, 221, 0x594855, 90) and isColor(156, 145, 0x373737, 90) and isColor(144, 160, 0xa4b983, 90) and isColor(127, 242, 0x141022, 90) and isColor(146, 257, 0x090404, 90) and isColor(280, 191, 0x505a85, 90)) then
-            baseUtils.tapSleep(218, 142, 1)
+        if (isColor(174, 111, 0xede3d1, 90) and isColor(181, 111, 0xf3eddd, 90) and isColor(188, 111, 0x887e74, 90) and isColor(205, 113, 0x797277, 90) and isColor(205, 125, 0xac8d7e, 90) and isColor(205, 137, 0xc98078, 90) and isColor(204, 154, 0x73424b, 90) and isColor(179, 176, 0xd4cfc5, 90) and isColor(179, 192, 0x1e1a2c, 90) and isColor(193, 193, 0x14111f, 90) and isColor(214, 193, 0x5d2330, 90) and isColor(227, 193, 0xb7424d, 90) and isColor(223, 203, 0x49323b, 90) and isColor(219, 207, 0x8c3540, 90)) then
+            baseUtils.tapSleep(220, 170, 0.8) -- 5图秘境之间
         else
             x, y = findMultiColorInRegionFuzzy(0xe9faff,
                 "0|20|0xbdefff,0|30|0xa1e9ff,11|29|0xa3e9fe,23|29|0xa4eaff,41|29|0x3b455a,53|29|0xa5eaff,53|20|0xbdefff,53|10|0xc1dfea,60|10|0xccebf6,69|10|0xccebf6,69|24|0x638090,68|31|0x9fe9ff,62|-5|0xf1fdff",
@@ -253,7 +290,7 @@ end
 function shilianTask.changeMap(selectMap, selectStage)
     --baseUtils.toast("秘境任务 - 切换地图")
 
-    baseUtils.tapSleep(74, 160, 1) -- 点击地图列表
+    baseUtils.tapSleep(74, 160, 2.5) -- 点击地图列表
 
     local mapPoi = mapPoi[selectMap]
     local mapNum = tonumber(功能开关["秘境地图"])
@@ -261,8 +298,14 @@ function shilianTask.changeMap(selectMap, selectStage)
         moveTo(150, 700, 150, 300, 100)
         baseUtils.mSleep3(2000);
     else
-        moveTo(150, 300, 150, 700, 100)
-        baseUtils.mSleep3(2000);
+        -- 判断是否已在第一屏
+        res = baseUtils.TomatoOCRText(tomatoOCR, 110, 235, 175, 267, "原野")
+        if res then
+        else
+            -- 向上滚动第一屏
+            moveTo(150, 300, 150, 700, 100)
+            baseUtils.mSleep3(2000);
+        end
     end
     res = baseUtils.TomatoOCRTap(tomatoOCR, mapPoi[1], mapPoi[2], mapPoi[3], mapPoi[4], selectMap, 3, 3)
     local stagePoi = stagePoi[selectStage]
@@ -541,7 +584,7 @@ function shilianTask.startFight()
             end
             break
         end
-        baseUtils.toast("秘境任务 - 匹配中")
+        --baseUtils.toast("秘境任务 - 匹配中")
         startUp.noticeCancel()
 
         -- 判断无合适队伍，重新开始匹配
@@ -641,15 +684,15 @@ function shilianTask.tili()
     attempt = 0
     while attempt < 3 do
         res, count = baseUtils.TomatoOCRText(tomatoOCR, 500, 817, 515, 834, "0")
-        local bugCount = tonumber(count)
-        if bugCount == nil then
-            bugCount = 0
+        local buyCount = tonumber(count)
+        if buyCount == nil then
+            buyCount = 0
         end
         local needCount = tonumber(功能开关["补充体力次数"])
         if needCount == nil then
             needCount = 0
         end
-        if bugCount < needCount then
+        if buyCount < needCount then
             res = baseUtils.TomatoOCRTap(tomatoOCR, 456, 873, 499, 898, "购买")
             baseUtils.toast("体力购买 - 成功")
         else
