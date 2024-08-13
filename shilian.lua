@@ -21,10 +21,10 @@ local mapPoi = {
     ["海湾"] = { "113", "535", "171", "567" },
     ["深林"] = { "110", "634", "176", "666" },
     ["冰原"] = { "113", "733", "172", "767" },
-    ["火山"] = { "111", "832", "170", "865" },
-    ["高原"] = { "111", "932", "174", "960" },
-    ["绿洲"] = { "113", "1032", "169", "1062" },
-    ["火原"] = { "113", "671", "172", "701" }
+    ["火山"] = { "114", "271", "172", "304" },
+    ["高原"] = { "112", "371", "172", "403" },
+    ["绿洲"] = { "113", "470", "171", "503" },
+    ["火原"] = { "112", "569", "173", "603" }
 }
 
 local stage = {
@@ -77,12 +77,12 @@ function shilianTask.shilian()
     end
 
     if 功能开关["恶龙大通缉开关"] == 1 then
-        while 1 do
-            shilianTask.elong()
-            if 任务记录["试炼-恶龙-完成次数"] >= 1 then
-                break
-            end
-        end
+        --while 1 do
+        shilianTask.elong()
+        --if 任务记录["试炼-恶龙-完成次数"] >= 1 then
+        --    break
+        --end
+        --end
     end
 end
 
@@ -187,13 +187,13 @@ function shilianTask.elong()
 
         x, y = findMultiColorInRegionFuzzy(0xfffefd,
             "7|0|0xf9dcc7,15|0|0xf6c69d,40|0|0xf5bd89,52|-1|0xfffefd,53|7|0xffffff,47|7|0xfadfcc,39|7|0xf3a84d,32|7|0xfcf0e7,27|7|0xffffff,23|7|0xfefcfa,5|7|0xfffefe,6|14|0xffffff,23|14|0xfef9f6,38|14|0xffffff",
-            75, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+            77, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
         x2, y2 = findMultiColorInRegionFuzzy(0xf3a84b,
             "14|0|0xf3aa55,47|-1|0xfffdfc,67|-1|0xfae1cf,85|-1|0xf3a84b,98|-1|0xf3a84b,105|-1|0xf3a84b,92|13|0xf3a84b,86|13|0xf3a84b,77|13|0xf3a84b,56|10|0xffffff,17|10|0xffffff,17|21|0xf3a84b,-3|19|0xf3a84b,-8|11|0xf3a94d",
-            75, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
+            77, 0, 0, 720, 1280, { orient = 2 }) -- 匹配中
         x3, y3 = findMultiColorInRegionFuzzy(0xf3a84b,
             "13|0|0xf3a84b,24|0|0xffffff,36|0|0xf3a84b,53|0|0xf3a84b,64|0|0xfffffe,67|0|0xfef7f2,78|0|0xfef9f6,95|0|0xf3a84b,112|0|0xf3a84b,110|10|0xf9c078,101|10|0xf3a84b,90|10|0xf3a84b,68|10|0xf3a84b,57|10|0xfdf3ec,39|10|0xf6c295",
-            75, 0, 0, 720, 1280, { orient = 2 })
+            77, 0, 0, 720, 1280, { orient = 2 })
         res1 = shilianTask.WaitFight()
         if res1 == true then
             任务记录["试炼-恶龙-完成次数"] = 任务记录["试炼-恶龙-完成次数"] + 1
@@ -257,12 +257,12 @@ function shilianTask.changeMap(selectMap, selectStage)
 
     local mapPoi = mapPoi[selectMap]
     local mapNum = tonumber(功能开关["秘境地图"])
-    if mapNum > 8 then -- 火原之后的地图，需翻页
-        moveTo(150, 700, 150, 300, 30)
-        baseUtils.mSleep3(1500);
+    if mapNum > 5 then -- 火山之后的地图，需翻页
+        moveTo(150, 700, 150, 300, 100)
+        baseUtils.mSleep3(2000);
     else
-        moveTo(150, 300, 150, 700, 30)
-        baseUtils.mSleep3(1500);
+        moveTo(150, 300, 150, 700, 100)
+        baseUtils.mSleep3(2000);
     end
     res = baseUtils.TomatoOCRTap(tomatoOCR, mapPoi[1], mapPoi[2], mapPoi[3], mapPoi[4], selectMap, 3, 3)
     local stagePoi = stagePoi[selectStage]
