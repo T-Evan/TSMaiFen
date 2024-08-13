@@ -28,6 +28,17 @@ startUp = require("startUp")
     ["露营打卡点"] = 0,
 }
 
+local socket = require("socket")
+-- 创建多个进程
+local function create_processes(num_processes)
+    for i = 1, num_processes do
+        local command = string.format("lua __thread__child1.lua --process %d", i)
+        dialog(command)
+
+        os.execute(command)
+    end
+end
+
 function main(...)
     init(0) -- 设置屏幕方向，虚拟按键在屏幕下方
 
@@ -37,6 +48,7 @@ function main(...)
     -- aiOCRToken = baseUtils.initAiOCR()
 
     -- 子协程处理弹窗
+    -- create_processes(2) -- 假设我们要创建2个进程
     -- local thread = require('thread')
     -- local kill_tid = thread.create(killdialog,error_callback)
     -- thread.waitAllThreadExit()
@@ -105,15 +117,6 @@ function main(...)
             goto begin_label
         end
 
-        -- 试炼
-        shilianTask.shilian()
-
-        -- 异地登录
-        loginRes = startUp.anotherLogin()
-        if loginRes then
-            goto begin_label
-        end
-
         -- 旅团相关
         lvtuanTask.lvtuanTask()
 
@@ -125,6 +128,15 @@ function main(...)
 
         -- 营地活动（最后领取）
         yingdiTask.yingdiTaskEnd()
+
+        -- 异地登录
+        loginRes = startUp.anotherLogin()
+        if loginRes then
+            goto begin_label
+        end
+
+        -- 试炼
+        shilianTask.shilian()
 
         -- 异地登录
         loginRes = startUp.anotherLogin()

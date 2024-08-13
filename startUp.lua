@@ -321,6 +321,7 @@ function startUp.noticeCancel()
     local res2 = false
     local res3 = false
     local res4 = false
+    local res5 = false
     res1 = baseUtils.TomatoOCRText(tomatoOCR, 213, 521, 272, 584, "战") -- 战斗胜利
     if res1 == false then
         res2 = baseUtils.TomatoOCRText(tomatoOCR, 448, 500, 503, 560, "利") -- 战斗胜利
@@ -328,10 +329,14 @@ function startUp.noticeCancel()
             res3 = baseUtils.TomatoOCRText(tomatoOCR, 229, 436, 286, 497, "升") --升级成功
             if res3 == false then
                 res4 = baseUtils.TomatoOCRTap(tomatoOCR, 301, 1202, 419, 1229, "点击空白处关闭") --战斗失败
+                if res4 == false then
+                    res5 = baseUtils.TomatoOCRTap(tomatoOCR, 265, 986, 455, 1018, "点击空白处可领取奖励") --恶龙胜利
+                end
             end
         end
     end
-    if res1 or res2 or res3 or res4 then
+
+    if res1 or res2 or res3 or res4 or res5 then
         baseUtils.tapSleep(55, 1242, 0.2)  -- 点击空白处
         baseUtils.tapSleep(685, 1240, 0.2) -- 点击空白处
         --baseUtils.toast("发现弹窗 - 弹窗确认")

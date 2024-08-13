@@ -126,7 +126,7 @@ function shilianTask.elong()
         baseUtils.toast("恶龙任务 - 添加佣兵")
         x, y = findMultiColorInRegionFuzzy(0xc0a67b,
             "-3|-1|0x9f7b55,-8|0|0xa7875f,-18|0|0x9f7b55,-20|0|0xead5a3,-23|-1|0xa88860,-25|-1|0xd2bb8d,-38|-1|0xbca176,-51|-1|0xd5bd8f,-60|-1|0xbda277,-60|6|0xb2946b,-42|6|0xb99d73,-31|6|0xc2a77c,-26|6|0xaa8b62,-5|5|0xdcc696",
-            90, 0, 0, 720, 1280, { orient = 2 }) -- 创建队伍
+            85, 0, 0, 720, 1280, { orient = 2 }) -- 创建队伍
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
             baseUtils.tapSleep(370, 818) -- 点击 创建队伍 - 添加佣兵
@@ -316,7 +316,7 @@ function shilianTask.startFight()
         baseUtils.toast("秘境任务 - 添加佣兵")
         x, y = findMultiColorInRegionFuzzy(0x9f7c55,
             "0|4|0xb1936a,-1|9|0xc0a57a,9|13|0x9f7c56,10|7|0xbea378,10|2|0xbea378,18|2|0xd0b88a,23|2|0xa07e57,27|1|0xaa8b62,27|7|0xae8f67,26|11|0xe9d4a2,35|7|0xebd6a4,39|6|0xefdba8,43|5|0xdcc595,45|4|0xf4e0ac,49|4|0xe9d4a2,53|4|0xd1ba8c,55|4|0xeedaa7,61|3|0xf4e0ac,63|5|0xc5ab80",
-            90, 0, 0, 720, 1280, { orient = 2 }) -- 创建队伍
+            85, 0, 0, 720, 1280, { orient = 2 }) -- 创建队伍
         if x ~= -1 then
             baseUtils.tapSleep(x, y)
 
