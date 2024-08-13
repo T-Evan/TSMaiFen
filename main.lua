@@ -55,7 +55,9 @@ function main(...)
     -- debug
     --dailyTask.newMap()
     --lua_exit()
-    --runThread("__thread__child1") -- 没有用？
+    --runThread("threada") -- 没有用？
+    --mSleep(3000)
+    --lua_exit()
 
     -- 处理休息时间
     local needRunMinute = tonumber(功能开关["定时运行"]) -- 分钟

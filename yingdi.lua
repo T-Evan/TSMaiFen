@@ -432,7 +432,7 @@ function yingdiTask.yingDiMiBao()
         if needCount == nil then
             needCount = 0
         end
-        while 1 do
+        for i = 1, 3 do
             res, buyCount = baseUtils.TomatoOCRText(tomatoOCR, 497, 817, 510, 834, "已购买次数") -- 1/9
             buyCount = tonumber(buyCount)
             if buyCount == nil or buyCount >= needCount then
