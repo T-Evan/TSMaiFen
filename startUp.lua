@@ -31,7 +31,7 @@ function startUp.startApp()
     -- end
 
     -- 识别是否进入首页
-    res1 = baseUtils.TomatoOCRText(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 公告
+    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 公告
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
 
     res3 = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
@@ -48,18 +48,26 @@ function startUp.startApp()
     --    res4 = true -- 匹配到右上角钻石按钮，说明已进入游戏
     --end
 
-    res5 = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
-    if res5 == false then
-        res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
-        if res6 == false then
-            res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
+    x, y = findMultiColorInRegionFuzzy(0x6584b9,
+        "2|0|0x6584b9,8|0|0x6584b9,15|0|0x6584b9,17|0|0x6584b9,20|0|0x6584b9,23|0|0x6584b9,27|0|0x6584b9,31|0|0x6584b9,46|0|0x6584b9,59|0|0x6584b9,65|-1|0x6584b9,72|1|0x6584b9,78|1|0x6584b9,78|8|0x6584b9,66|6|0x6584b9,56|6|0x6584b9,45|4|0x6584b9,36|5|0x6584b9,9|5|0x6584b9,-7|4|0x6483b8",
+        70, 16, 1136, 174, 1267, { orient = 7 }) -- 返回按钮
+    if x == -1 then
+        res5 = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
+        if res5 == false then
+            res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
+            if res6 == false then
+                res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
+            end
         end
+    else
+        res11 = true
     end
 
-    if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false then -- 在登录页面
+
+    if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false and res11 == false then -- 在登录页面
         baseUtils.mSleep3(5000)
         return startUp.startApp()
-    elseif res3 or res4 or res8 or res9 or res10 then -- 已在游戏中
+    elseif res3 or res4 or res8 or res9 or res10 or res11 then -- 已在游戏中
         toast("已进入游戏，返回首页", 1)
         return dailyTask.homePage()
     else

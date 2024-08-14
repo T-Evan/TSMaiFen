@@ -27,7 +27,7 @@ function dailyTask.homePage()
         for i = 1, 3 do
             x, y = findMultiColorInRegionFuzzy(0x6584b9,
                 "2|0|0x6584b9,8|0|0x6584b9,15|0|0x6584b9,17|0|0x6584b9,20|0|0x6584b9,23|0|0x6584b9,27|0|0x6584b9,31|0|0x6584b9,46|0|0x6584b9,59|0|0x6584b9,65|-1|0x6584b9,72|1|0x6584b9,78|1|0x6584b9,78|8|0x6584b9,66|6|0x6584b9,56|6|0x6584b9,45|4|0x6584b9,36|5|0x6584b9,9|5|0x6584b9,-7|4|0x6483b8",
-                70, 76, 1198, 76, 1199, { orient = 7 })
+                70, 16, 1136, 174, 1267, { orient = 7 }) -- 返回按钮
             if x ~= -1 then
                 baseUtils.tapSleep(x, y, 1.5)
             else
@@ -764,15 +764,19 @@ function dailyTask.quitTeam()
     local res1 = false
     local res2 = false
     local res3 = false
+    local res4 = false
     res1 = baseUtils.TomatoOCRTap(tomatoOCR, 635, 628, 705, 653, "正在组队")
     if res1 == false then
         res2 = baseUtils.TomatoOCRTap(tomatoOCR, 631, 558, 699, 581, "正在组队")
         if res2 == false then
             res3 = baseUtils.TomatoOCRTap(tomatoOCR, 632, 570, 684, 598, "匹配中")
+            if res3 == false then
+                res4 = baseUtils.TomatoOCRTap(tomatoOCR, 311, 1156, 407, 1182, "匹配中") -- 大暴走匹配中
+            end
         end
     end
 
-    if res1 or res2 or res3 then
+    if res1 or res2 or res3 or res4 then
         -- 超时取消匹配
         x, y = findMultiColorInRegionFuzzy(0xfffefd,
             "7|0|0xf9dcc7,15|0|0xf6c69d,40|0|0xf5bd89,52|-1|0xfffefd,53|7|0xffffff,47|7|0xfadfcc,39|7|0xf3a84d,32|7|0xfcf0e7,27|7|0xffffff,23|7|0xfefcfa,5|7|0xfffefe,6|14|0xffffff,23|14|0xfef9f6,38|14|0xffffff",
@@ -801,6 +805,11 @@ function dailyTask.quitTeam()
                 baseUtils.toast("取消匹配")
                 return true
             end
+        end
+        res4 = baseUtils.TomatoOCRTap(tomatoOCR, 311, 1156, 407, 1182, "匹配中") -- 大暴走匹配中
+        if res4 then
+            baseUtils.toast("取消匹配")
+            return true
         end
 
         --res = baseUtils.TomatoOCRTap(tomatoOCR, 501, 191, 581, 217, "离开队伍")

@@ -52,7 +52,6 @@ function main(...)
     -- local kill_tid = thread.create(killdialog,error_callback)
     -- thread.waitAllThreadExit()
     -- debug
-    --dailyTask.newMap()
     --lua_exit()
     --runThread("threada") -- 没有用？
     --mSleep(3000)

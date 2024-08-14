@@ -979,6 +979,41 @@ MyTable = {
             },
             {
                 ["type"] = "Label",
+                ["text"] = "暴走史莱姆：",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["color"] = "0,150,255",
+                ["width"] = -1,
+                ["nowrap"] = 1 --下个控件不换行
+            },
+            {
+                ["type"] = "Switch",
+                ["id"] = "暴走史莱姆开关",
+                ["size"] = "s",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["state"] = "off",
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "Label",
+                ["text"] = "(！建议关闭队友特效/伤害/血条后使用)",
+                ["align"] = "left",
+                ["valign"] = "top",
+                ["color"] = "0,150,255",
+                ["width"] = -1,
+            },
+            {
+                ["type"] = "ComboBox", -- 必填，控件类型，下拉框
+                ["id"] = "史莱姆地图",
+                -- 选填，无，控件ID 以 table 格式返回返回值时必填，否则无法获取返回值
+                ["list"] = "暴走雷电大王", -- 必填，无，下拉框内容
+                ["select"] = "0", -- 选填，0，默认选中项 ID
+                ["width"] = 300,
+                ["prompt"] = true
+            },
+            {
+                ["type"] = "Label",
                 ["text"] = "职能相关：",
                 ["align"] = "left",
                 ["valign"] = "top",
@@ -1310,6 +1345,9 @@ UIret, values = showUI(MyJsonString)
     ["恶龙-添加佣兵"] = 0,
     ["恶龙-重复挑战"] = 0,
 
+    ["暴走史莱姆开关"] = 0,
+    ["暴走-暴走雷电大王"] = 0,
+
     ["职能-优先输出"] = 0,
     ["职能-优先坦克"] = 0,
     ["职能-优先治疗"] = 0,
@@ -1585,6 +1623,17 @@ if UIret == 1 then
         end
         if 恶龙大通缉相关[i] == "1" then
             功能开关["恶龙-重复挑战"] = 1
+        end
+    end
+
+    if values.暴走史莱姆开关 == "on" then
+        功能开关["暴走史莱姆开关"] = 1
+    end
+    local 史莱姆地图 = values.史莱姆地图
+    史莱姆地图 = 史莱姆地图:split("@")
+    for i = 1, #史莱姆地图, 1 do
+        if 史莱姆地图[i] == "0" then
+            功能开关["暴走-暴走雷电大王"] = 1
         end
     end
 
