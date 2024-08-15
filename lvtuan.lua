@@ -15,7 +15,7 @@ function lvtuanTask.lvtuanTask()
     -- 旅团任务
     lvtuanTask.lvTuanRenWu()
 
-    -- 旅团任务
+    -- 旅团商店
     lvtuanTask.lvTuanShop()
 
     -- 旅团调查队
@@ -25,6 +25,10 @@ end
 -- 旅团商店（服务区）
 function lvtuanTask.lvTuanShop()
     if 功能开关["旅团商店兑换开关"] ~= nil and 功能开关["旅团商店兑换开关"] == 0 then
+        return
+    end
+
+    if 任务记录["旅团-商店-完成"] == 1 then
         return
     end
 
@@ -131,6 +135,8 @@ function lvtuanTask.lvTuanShop()
         baseUtils.mSleep3(3500);
         count = count + 1
     end
+
+    任务记录["旅团-商店-完成"] = 1
 end
 
 function lvtuanTask.shopBuy()
@@ -221,6 +227,10 @@ function lvtuanTask.lvTuanRenWu()
         return
     end
 
+    if 任务记录["旅团-任务-完成"] == 1 then
+        return
+    end
+
     baseUtils.toast("旅团 - 旅团任务领取 - 开始")
 
     dailyTask.homePage()
@@ -250,11 +260,17 @@ function lvtuanTask.lvTuanRenWu()
             break
         end
     end
+
+    任务记录["旅团-任务-完成"] = 1
 end
 
 -- 旅团许愿墙
 function lvtuanTask.lvTuanXuYuan()
     if 功能开关["旅团许愿墙"] == 0 or 任务记录["旅团-许愿墙-完成"] == 1 then
+        return
+    end
+
+    if 任务记录["旅团-许愿墙-完成"] == 1 then
         return
     end
 
@@ -283,12 +299,17 @@ function lvtuanTask.lvTuanXuYuan()
             break
         end
     end
+    任务记录["旅团-许愿墙-完成"] = 1
 end
 
 -- 旅团浇水
 function lvtuanTask.lvTuanWater()
     --if 功能开关["旅团浇树"] == 0 or 任务记录["旅团-浇树-完成"] == 1 then
     if 功能开关["旅团浇树"] == 0 then
+        return
+    end
+
+    if 任务记录["旅团-浇树-完成"] == 1 then
         return
     end
 

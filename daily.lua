@@ -166,6 +166,10 @@ function dailyTask.youJian()
         return
     end
 
+    if 任务记录["邮件领取-完成"] == 1 then
+        return
+    end
+
     baseUtils.toast("日常 - 邮件领取 - 开始", 0.5)
 
     dailyTask.homePage()
@@ -182,6 +186,8 @@ function dailyTask.youJian()
     if res == false then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 85, 1186, 141, 1222, "返回")
         return
+    else
+        任务记录["邮件领取-完成"] = 1
     end
     baseUtils.mSleep3(2000)
     baseUtils.tapSleep(120, 1030) -- 点击空白处

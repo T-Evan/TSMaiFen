@@ -30,6 +30,18 @@ function startUp.startApp()
     --     lua_exit() --退出脚本
     -- end
 
+    --识别是否战斗中
+    res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
+    res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
+    if teamName1 ~= "" and teamName2 ~= "" then -- 战斗中
+        -- 大暴走战斗中
+        if 功能开关["暴走-进入房间后启动"] == 1 then
+            baseUtils.toast("进入战斗成功 - 开始战斗", 0.5)
+            shilianTask.fightingBaoZou()
+            return
+        end
+    end
+
     -- 识别是否进入首页
     res1 = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 公告
     res2 = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
@@ -63,11 +75,12 @@ function startUp.startApp()
         res11 = true
     end
 
+    res12 = baseUtils.TomatoOCRText(tomatoOCR, 626, 97, 691, 118, "适龄提示")
 
     if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false and res11 == false then -- 在登录页面
         baseUtils.mSleep3(5000)
         return startUp.startApp()
-    elseif res3 or res4 or res8 or res9 or res10 or res11 then -- 已在游戏中
+    elseif res12 == false and (res3 or res4 or res8 or res9 or res10 or res11) then -- 已在游戏中
         toast("已进入游戏，返回首页", 1)
         return dailyTask.homePage()
     else

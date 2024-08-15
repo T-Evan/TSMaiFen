@@ -11,22 +11,35 @@ lvtuanTask = require("lvtuan")
 yingdiTask = require("yingdi")
 startUp = require("startUp")
 
-任务记录 = {
-    ["当前任务账号"] = 功能开关["选择启动账号"],
-    ["当前任务角色"] = 功能开关["选择启动角色"],
+任务记录 = {}
+任务记录["当前任务账号"] = 功能开关["选择启动账号"]
+任务记录["当前任务角色"] = 功能开关["选择启动角色"]
+function 初始化任务记录()
+    -- 日常
+    任务记录["仓鼠百货-完成"] = 0
+    任务记录["邮件领取-完成"] = 0
 
-    ["仓鼠百货-完成"] = 0,
-    ["旅团-浇树-完成"] = 0,
-    ["旅团-调查队-完成"] = 0,
-    ["旅人-猫猫果木-完成"] = 0,
-    ["日常-招式创造-完成"] = 0,
-    ["日常-骑兽乐园-完成"] = 0,
-    ["试炼-恶龙-完成次数"] = 0,
-    ["月签到"] = 0,
-    ["月卡"] = 0,
-    ["日礼包"] = 0,
-    ["露营打卡点"] = 0,
-}
+    -- 旅团
+    任务记录["旅团-浇树-完成"] = 0
+    任务记录["旅团-调查队-完成"] = 0
+    任务记录["旅团-许愿墙-完成"] = 0
+    任务记录["旅团-任务-完成"] = 0
+    任务记录["旅团-商店-完成"] = 0
+
+    任务记录["旅人-猫猫果木-完成"] = 0
+    任务记录["日常-招式创造-完成"] = 0
+    任务记录["日常-骑兽乐园-完成"] = 0
+    任务记录["试炼-秘境-体力消耗完成"] = 0
+    任务记录["试炼-恶龙-完成次数"] = 0
+
+    -- 营地
+    任务记录["月签到-完成"] = 0
+    任务记录["月卡-完成"] = 0
+    任务记录["日礼包-完成"] = 0
+    任务记录["露营打卡点-完成"] = 0
+end
+
+初始化任务记录()
 
 -- 创建多个进程
 local function create_processes(num_processes)
@@ -158,6 +171,7 @@ function main(...)
 
         if totalWait ~= 0 and current_time - start_time >= totalWait then
             closeApp("com.xd.cfbmf")
+            初始化任务记录()
             toast("休息" .. needWaitMinute .. "分钟")
             mSleep(needWaitMinute * 60 * 1000)
             start_time = os.time()
@@ -165,14 +179,14 @@ function main(...)
 
         -- 定时切换角色
         if totalSwitchRoleMinute ~= 0 and current_time - start_time >= totalSwitchRoleMinute then
-            toast("运行" .. totalSwitchRoleMinute .. "分钟，准备切换角色")
+            toast("运行" .. needSwitchRoleMinute .. "分钟，准备切换角色")
             startUp.switchRole()
             start_time = os.time()
         end
 
         -- 定时切换账号
         if totalSwitchMinute ~= 0 and current_time - start_time >= totalSwitchMinute then
-            toast("运行" .. totalSwitchMinute .. "分钟，准备切换账号")
+            toast("运行" .. needSwitchMinute .. "分钟，准备切换账号")
             startUp.switchAccount()
             start_time = os.time()
         end
