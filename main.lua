@@ -174,6 +174,7 @@ function main(...)
             初始化任务记录()
             toast("休息" .. needWaitMinute .. "分钟")
             mSleep(needWaitMinute * 60 * 1000)
+            startFlag = switchApp("com.xd.cfbmf")
             start_time = os.time()
         end
 
