@@ -108,7 +108,7 @@ function dailyTask.dengLuHaoLi()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动", 40, -20)
     if res == false then
         return
     end
@@ -143,13 +143,19 @@ function dailyTask.youJian()
 
     baseUtils.toast("日常 - 邮件领取 - 开始", 0.5)
 
-    dailyTask.homePage()
-
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
     res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     if res == false then
-        return
+        -- 返回首页
+        dailyTask.homePage()
+
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
+        --判断是否在营地页面
+        local hd1 = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+        local hd2 = baseUtils.TomatoOCRText(tomatoOCR, 11, 1111, 92, 1134, "旅行活动")
+        if hd1 == false and hd2 == false then
+            return
+        end
     end
 
     baseUtils.tapSleep(300, 740, 4) -- 邮件
@@ -180,23 +186,26 @@ function dailyTask.qiShouLeYuan()
 
     baseUtils.toast("日常 - 骑兽乐园 - 开始", 0.5)
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    if res == false then
+    res1 = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    res2 = baseUtils.TomatoOCRTap(tomatoOCR, 512, 1136, 611, 1162, "骑兽乐园")
+    if res == false and res2 == false then
+        -- 返回首页
         dailyTask.homePage()
 
         res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
         --判断是否在营地页面
-        res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-        if res == false then
+        local hd1 = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+        local hd2 = baseUtils.TomatoOCRText(tomatoOCR, 11, 1111, 92, 1134, "旅行活动")
+        if hd1 == false and hd2 == false then
             return
         end
+
+        baseUtils.tapSleep(200, 545, 4) -- 芙芙小铺
+        res2 = baseUtils.TomatoOCRTap(tomatoOCR, 512, 1136, 611, 1162, "骑兽乐园")
     end
 
-    baseUtils.tapSleep(200, 545, 4) -- 芙芙小铺
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 512, 1136, 611, 1162, "骑兽乐园")
-    if res then
+    if res2 then
         baseUtils.tapSleep(188, 321, 4) -- 点击门票（固定位置）
         baseUtils.tapSleep(550, 1080)   -- 点击空白处关闭
 
@@ -256,16 +265,17 @@ function dailyTask.zhaoShiChuangZao()
 
     baseUtils.toast("日常 - 招式创造 - 开始", 0.5)
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
     res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     if res == false then
+        -- 返回首页
         dailyTask.homePage()
 
         res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
         --判断是否在营地页面
-        res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-        if res == false then
+        local hd1 = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+        local hd2 = baseUtils.TomatoOCRText(tomatoOCR, 11, 1111, 92, 1134, "旅行活动")
+        if hd1 == false and hd2 == false then
             return
         end
     end
@@ -323,11 +333,11 @@ function dailyTask.zhaoShiChuangZao()
         end
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 69, 1198, 124, 1234, "返回") -- 返回营地
-    res = baseUtils.TomatoOCRText(tomatoOCR, 468, 625, 504, 645, "收取") -- 返回营地时，一键收取提示
-    if res then
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 454, 728, 509, 758, "确定") -- 返回营地时，一键收取提示
-    end
+    --res = baseUtils.TomatoOCRTap(tomatoOCR, 69, 1198, 124, 1234, "返回") -- 返回营地
+    --res = baseUtils.TomatoOCRText(tomatoOCR, 468, 625, 504, 645, "收取") -- 返回营地时，一键收取提示
+    --if res then
+    --    res = baseUtils.TomatoOCRTap(tomatoOCR, 454, 728, 509, 758, "确定") -- 返回营地时，一键收取提示
+    --end
 end
 
 -- 宝藏湖

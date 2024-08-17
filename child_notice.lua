@@ -56,7 +56,16 @@ function noticeCancel()
         "0|0|0xa6a1ad,2|0|0x938f99,3|1|0xa5a0ac,7|1|0xa5a0ac,5|4|0xa39eaa,0|4|0xa6a1ad,-3|4|0xa39eab,-1|9|0xa29da9,3|9|0xa29da9,5|7|0x98939f,14|5|0x94909b,18|5|0xa6a1ad,20|5|0x96929d,24|5|0x94909b,24|8|0x9a96a1,24|12|0xa6a1ad,20|12|0x95919c,17|13|0xa5a0ac,19|9|0xa6a1ad,30|6|0xa39eab,32|4|0x848089,32|7|0x938f9a,35|7|0x8b8792,42|7|0x8f8b96,36|10|0xa6a1ad,37|13|0xa6a1ad,41|13|0xa5a0ac,61|5|0xa49fab,61|8|0xa49fab,61|12|0xa09ca8,53|7|0xa39fab",
         90, 102, 753, 617, 1275, { orient = 7 }) -- 匹配”点击空白“ 图色
     if x ~= -1 then
-        tapSleepNotice(x, y, 1.5)
+        tapSleepNotice(40, 1255, 1.5)            -- 点击空白处
+        toast("弹窗确认")
+    end
+
+    x, y = findMultiColorInRegionFuzzy(0xa6a1ad,
+        "0|0|0xa6a1ad,2|0|0x938f99,3|1|0xa5a0ac,7|1|0xa5a0ac,5|4|0xa39eaa,0|4|0xa6a1ad,-3|4|0xa39eab,-1|9|0xa29da9,3|9|0xa29da9,5|7|0x98939f,14|5|0x94909b,18|5|0xa6a1ad,20|5|0x96929d,24|5|0x94909b,24|8|0x9a96a1,24|12|0xa6a1ad,20|12|0x95919c,17|13|0xa5a0ac,19|9|0xa6a1ad,30|6|0xa39eab,32|4|0x848089,32|7|0x938f9a,35|7|0x8b8792,42|7|0x8f8b96,36|10|0xa6a1ad,37|13|0xa6a1ad,41|13|0xa5a0ac,61|5|0xa49fab,61|8|0xa49fab,61|12|0xa09ca8,53|7|0xa39fab",
+        90, 102, 753, 617, 1275, { orient = 7 }) -- 匹配”点击空白“ 图色
+    if x ~= -1 then
+        tapSleepNotice(40, 1255, 1.5)            -- 点击空白处
+        toast("弹窗确认")
     end
 
     --local res1 = false
