@@ -209,6 +209,8 @@ end
 
 -- 重新登录切换角色
 function startUp.switchRole(ifRestart, selectRole)
+    commonVar["fighting"] = 0
+    commonVar["needHome"] = 0
     --toast("开始切换角色", 1)
     ifRestart = ifRestart or 1
     if ifRestart == 1 then
@@ -276,6 +278,8 @@ end
 
 -- 复制用户信息数据切换账号
 function startUp.switchAccount()
+    commonVar["fighting"] = 0
+    commonVar["needHome"] = 0
     if 任务记录["当前任务账号"] ~= "0" then
         tmpAccount = tonumber(任务记录["当前任务账号"]) + 1 -- 从下一账号开始判断
         for i = tmpAccount, 5 do

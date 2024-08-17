@@ -201,6 +201,8 @@ function main(...)
         current_time = os.time()
 
         if totalWait ~= 0 and current_time - start_time >= totalWait then
+            commonVar["fighting"] = 0
+            commonVar["needHome"] = 0
             closeApp("com.xd.cfbmf")
             初始化任务记录()
             toast("休息" .. needWaitMinute .. "分钟")
