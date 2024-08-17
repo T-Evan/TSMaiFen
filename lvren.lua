@@ -162,7 +162,7 @@ function lvrenTask.maomaobao()
         end
 
         -- 快捷兑换
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 557, 188, 639, 214, "快速兑换")
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 557, 188, 639, 214, "快速兑换", 30, -30)
         local needCount = tonumber(功能开关["钻石兑换果木次数"])
         if needCount == nil then
             needCount = 0

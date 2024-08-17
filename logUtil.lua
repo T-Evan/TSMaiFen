@@ -4,7 +4,7 @@ local logUtils = {}
 glSettings({ switch = "0101", x1 = 200, y1 = 50, x2 = 300, y2 = 200, tsp_switch = true })
 function logUtils.log(content)
     --log(content)
-    if 功能开关["调试开关"] ~= nil and 功能开关["调试开关"] == 1 then
+    if 功能开关 ~= nil and 功能开关["调试开关"] ~= nil and 功能开关["调试开关"] == 1 then
         mLog(content)
     end
     --nLog("[" .. os.date("%H:%M:%S") .. string.sub(ts.ms(), 11) .. "]  " .. text)

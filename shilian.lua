@@ -129,10 +129,13 @@ function shilianTask.elong()
     end
 
     -- 判断是否重复挑战（已开启过宝箱）
-    x, y = findMultiColorInRegionFuzzy(0x5f4319,
+    x1, y1 = findMultiColorInRegionFuzzy(0x5f4319,
         "4|0|0x5f4319,16|0|0x5e4318,13|-10|0xc38533,-5|-7|0xdfa33e,-5|8|0x5f4319,-5|20|0xbf7e2a,-5|28|0xf3d082,12|28|0xe4c17f,19|27|0xffe7a5,19|18|0xe19a39,6|25|0x50caff,6|21|0xaaddff,5|17|0xa390aa",
         90, 0, 0, 720, 1280, { orient = 2 }) -- 识别开启状态宝箱
-    if x ~= -1 then
+    x2, y2 = findMultiColorInRegionFuzzy(0x5f3019,
+        "4|0|0x5f3019,8|0|0x5f3019,10|0|0x5f3019,13|0|0x5f3019,17|0|0x5f3019,20|0|0x5f3019,20|4|0x5f3019,20|10|0xe1b07d,19|20|0xe08a44,16|21|0xebbf8d,11|22|0xad856a,5|22|0xa24023,1|22|0xd58445,-4|21|0xca5b33,-4|13|0xd9653a,9|21|0x6f9cb9,9|18|0x57adec,12|20|0x3b69cd,10|13|0xc6a390",
+        90, 157, 885, 157, 885, { orient = 7 })
+    if x ~= -1 or x2 ~= -1 then
         if 功能开关["恶龙-重复挑战"] == 0 then
             baseUtils.toast("恶龙任务 - 已领取宝箱 - 退出挑战")
             return
@@ -204,9 +207,9 @@ function shilianTask.elong()
         --baseUtils.toast("恶龙任务 - 匹配中")
 
         -- 判断无合适队伍，重新开始匹配
-        res = baseUtils.TomatoOCRText(tomatoOCR, 303, 607, 418, 632, "暂无合适队伍")
+        res = baseUtils.TomatoOCRText(tomatoOCR, 229, 621, 305, 646, "匹配超时")
         if res then
-            res = baseUtils.TomatoOCRText(tomatoOCR, 210, 727, 262, 758, "取消")
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 454, 727, 508, 758, "确定")
             if res then
                 baseUtils.toast("恶龙任务 - 匹配超时 - 无队伍")
                 elapsed = 0
@@ -261,6 +264,7 @@ end
 -- 暴走史莱姆
 function shilianTask.daBaoZou()
     baseUtils.toast("暴走史莱姆任务 - 开始", 0.3)
+
     if 功能开关["暴走-进入房间后启动"] == 1 then
         local totalWait = 150 * 1000
         local elapsed = 0
@@ -271,7 +275,7 @@ function shilianTask.daBaoZou()
                 return false
             end
 
-            baseUtils.toast("等待进入战斗")
+            baseUtils.toast("请操作进入战斗")
             res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 8, 148, 51, 163, "队友名称")
             local nameS1 = string.find(teamName1, "等级")
             res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 8, 146, 52, 166, "队友名称")
@@ -308,6 +312,12 @@ function shilianTask.daBaoZou()
         baseUtils.tapSleep(125, 1050) -- 领取后，点击空白
         baseUtils.tapSleep(125, 1050) -- 领取后，点击空白
     end
+
+    hdPage = baseUtils.TomatoOCRText(tomatoOCR, 383, 573, 436, 605, "大王")
+    if hdPage == false then
+        return
+    end
+
     res = shilianTask.startFightBaoZou()
 end
 
@@ -340,7 +350,7 @@ function shilianTask.daBaoZouLeiDian()
         for i = 1, 3 do
             x, y = findMultiColorInRegionFuzzy(0xe2755e,
                 "0|-4|0xe17d61,0|-18|0xdaac86,0|-15|0xe2ac85,3|-15|0xe2aa84,8|-20|0xe2b692,9|-14|0xe1a07f,16|-14|0xe1a581,17|-10|0xe29774,19|-8|0xe28d6e,19|-4|0xe17f60,17|3|0x47414b,17|1|0xdf6d52,16|1|0xbe6250,9|-2|0x323c4a,4|-2|0x323c4a,7|-3|0x323c4a,10|-6|0x323c4a,34|-4|0xe2645d,34|-12|0xd56755,-15|-15|0x744c4b,-16|-11|0xe26c58",
-                65, 17, 632, 200, 758, { orient = 7 })
+                75, 17, 632, 200, 758, { orient = 7 })
             if x ~= -1 then
                 baseUtils.tapSleep(x, y, 0)
                 走位状态 = "火√"
@@ -362,50 +372,11 @@ function shilianTask.daBaoZouLeiDian()
         end
     end
 
-    -- 识别boss状态
-    local boss状态 = ""
-
-    --优先识别boss状态
     for i = 1, 5 do
-        x, y = findMultiColorInRegionFuzzy(0xb0e274,
-            "8|0|0xb2e281,15|0|0xb8e480,21|0|0xbde579,23|2|0xbae47b,23|14|0xa5df7e,5|36|0xd7ef67,-15|42|0xfefed4,-15|35|0xfefea3,-5|32|0xfefefa,-4|19|0xfefefd,-15|19|0xe7f475,13|19|0xfefefd,13|2|0xcdecae,2|10|0xfefefd,-5|5|0xbde67c,-18|5|0xfefeec,-20|17|0xfefeda,-25|18|0xfefeb3",
-            75, 223, 213, 522, 418, { orient = 2 })
-        if x ~= -1 then
-            boss状态 = "草"
-        end
-
-        x, y = findMultiColorInRegionFuzzy(0xfe9f66,
-            "4|-7|0xfea75c,12|-10|0xfeb164,20|-7|0xfeab70,28|-6|0xfea960,28|-3|0xfea96c,31|7|0xfee1d1,36|13|0xfea770,36|21|0xfeb06a,24|21|0xfefcfb,13|21|0xfeae7d,18|12|0xfec5aa,4|18|0xfefdfc",
-            75, 223, 213, 522, 418, { orient = 2 })
-        if x ~= -1 then
-            boss状态 = "火"
-        end
-
-        x, y = findMultiColorInRegionFuzzy(0xb3e8f0,
-            "4|0|0xb5e8ef,13|0|0xc8eced,13|10|0xfefefe,-14|10|0xb6e9ef,-11|12|0xfdfefd,8|12|0xfafcfd,22|12|0xafe6ed,29|16|0xfefed2,36|21|0xf7e078,18|21|0xfcfdfd,1|24|0x97e3f1,-7|24|0x96e2f0,-15|24|0xcef1ed,-21|24|0xf4fbf1,-25|36|0xfef991,9|36|0xd0f1ed,25|36|0xfefeb2,-4|26|0x93e1f1,-10|23|0xa5e6f1",
-            80, 223, 213, 522, 418, { orient = 2 })
-        if x ~= -1 then
-            boss状态 = "水"
-        end
-
-        if boss状态 ~= "" then
-            break
-        end
-    end
-
-    -- 未识别boss状态，无需识别玩家状态；提前返回准备下一轮识别
-    if boss状态 == "" then
-        return
-    end
-
-    local user状态 = ""
-    for i = 1, 5 do
+        local boss状态 = commonVar["bossStatus"]
+        local user状态 = commonVar["userStatus"]
         -- 识别开花
-        x, y = findMultiColorInRegionFuzzy(0xa0efe4,
-            "3|1|0xb8f4f1,12|0|0xc9f7f9,12|4|0xdff7f8,15|4|0xe1f6f7,15|9|0x7adcae,13|16|0xe3efef,9|16|0xddeeef,3|16|0x81d7ad,-3|16|0x5ec089,-5|11|0xcce9e3,-5|6|0xe8f6f7,-10|-1|0x5cbca1",
-            78, 201, 752, 525, 895, { orient = 2 })
-        if x ~= -1 then
-            user状态 = "开花"
+        if user状态 == "开花" then
             if boss状态 == "草" then
                 水走位()
             elseif boss状态 == "水" then
@@ -415,11 +386,7 @@ function shilianTask.daBaoZouLeiDian()
         end
 
         -- 识别篝火
-        x, y = findMultiColorInRegionFuzzy(0x85c897,
-            "1|-2|0x94b091,6|-2|0xfbf7f3,16|-2|0xfaf6f2,24|-2|0x8dabb0,24|4|0x73be8a,20|9|0xf3ddc5,11|9|0xb6c87e,4|9|0xf6e3ce,-2|9|0xc7ae7a,-4|17|0x6d9b59,5|19|0xf1bc98,6|23|0xf0a582,11|26|0x868650,16|26|0xcd7c4a,21|22|0xb57337,21|13|0x9da059",
-            71, 201, 752, 525, 895, { orient = 7 })
-        if x ~= -1 then
-            user状态 = "篝火"
+        if user状态 == "篝火" then
             if boss状态 == "火" then
                 草走位()
             end
@@ -430,11 +397,7 @@ function shilianTask.daBaoZouLeiDian()
         end
 
         -- 识别蒸汽
-        x, y = findMultiColorInRegionFuzzy(0xce3d5d,
-            "10|0|0xbb5793,6|-3|0xc3425b,22|-3|0xd94f90,24|9|0xc9ebf6,31|9|0xc4587b,30|15|0xbc5b88,21|15|0xb385d5,11|15|0xc4e0f1,4|21|0xae5b99,-3|21|0xba516e,8|18|0x9e6bb8,8|23|0xa666a5,3|24|0xbe5ea0,3|25|0xc175b2,3|30|0xc2e2ec,10|30|0xc4e5ee,18|30|0xc273ad,23|30|0xc6e7ee",
-            73, 201, 752, 525, 895, { orient = 7 })
-        if x ~= -1 then
-            user状态 = "蒸汽"
+        if user状态 == "蒸汽" then
             if boss状态 == "火" then
                 水走位()
             end
@@ -447,7 +410,9 @@ function shilianTask.daBaoZouLeiDian()
             break
         end
     end
-    baseUtils.toast(boss状态 .. " + " .. user状态 .. " = " .. 走位状态, 0.8)
+    if commonVar["bossStatus"] ~= "" and commonVar["userStatus"] ~= "" then
+        baseUtils.toast(commonVar["bossStatus"] .. " + " .. commonVar["userStatus"] .. " = " .. 走位状态, 0.8)
+    end
 end
 
 -- 秘境之间
@@ -548,15 +513,12 @@ function shilianTask.fightingBaoZou()
 
     local teamShoutDone = 0
     while 1 do
-        if elapsed >= totalWait then
-            baseUtils.toast("战斗结束 - 超时退出组队")
-            shilianTask.quitTeam() -- 退出队伍
-            break
-        end
-
         -- 识别战斗中状态
         res, teamName1 = baseUtils.TomatoOCRText(tomatoOCR, 10, 148, 50, 162, "队友名称") -- 队友2
+        local teamNameStatus1 = string.find(teamName1, "等级") ~= nil
         res, teamName2 = baseUtils.TomatoOCRText(tomatoOCR, 10, 198, 51, 213, "队友名称") -- 队友3
+        local teamNameStatus2 = string.find(teamName1, "等级") ~= nil
+        fightStatus1 = baseUtils.TomatoOCRText(tomatoOCR, 645, 779, 688, 808, "喊话") -- 喊话
 
         --if (teamName1 ~= "" or teamName2 ~= "") then
         --if teamShoutDone == 0 then
@@ -564,35 +526,42 @@ function shilianTask.fightingBaoZou()
         --end
 
         -- 大暴走可跟队友影子继续战斗，无需判断队友是否在队伍中
-        toast("战斗中", 0.3)
+        if teamNameStatus1 and teamNameStatus2 and fightStatus1 then
+            toast("战斗中", 0.3)
+            commonVar["fighting"] = 1
+        else
+            commonVar["fighting"] = 0
+        end
         -- 战斗逻辑
         --循环10次，优先处理战斗中走位
-        for i = 1, 10 do
-            if 功能开关["暴走-暴走雷电大王"] == 1 then
-                shilianTask.daBaoZouLeiDian()
-            end
-            -- 战斗结束
-            res2 = baseUtils.TomatoOCRTap(tomatoOCR, 334, 1090, 385, 1117, "开启") -- 领取宝箱
-            res3 = baseUtils.TomatoOCRTap(tomatoOCR, 332, 1067, 387, 1096, "开启") -- 领取宝箱
-            if res2 or res3 then
-                baseUtils.toast("战斗结束 - 战斗胜利")
-                baseUtils.tapSleep(125, 1050) -- 领取后，点击空白
-                baseUtils.tapSleep(125, 1050) -- 领取后，点击空白
-                break
+        if teamNameStatus1 and teamNameStatus2 and fightStatus1 then
+            for i = 1, 10 do
+                if 功能开关["暴走-暴走雷电大王"] == 1 then
+                    shilianTask.daBaoZouLeiDian()
+                end
+                -- 战斗结束
+                res2 = baseUtils.TomatoOCRTap(tomatoOCR, 334, 1090, 385, 1117, "开启") -- 领取宝箱
+                res3 = baseUtils.TomatoOCRTap(tomatoOCR, 332, 1067, 387, 1096, "开启") -- 领取宝箱
+                if res2 or res3 then
+                    baseUtils.toast("战斗结束 - 战斗胜利")
+                    baseUtils.tapSleep(55, 1140) -- 领取后，点击空白
+                    baseUtils.tapSleep(55, 1140) -- 领取后，点击空白
+                    break
+                end
             end
         end
-        --end
 
         -- 判断是否战斗失败（战斗5分钟后）
-        if elapsed > 300 * 1000 or (teamName1 == "" and teamName2 == "") then
+        if teamNameStatus1 == false and teamNameStatus2 == false and fightStatus1 == false then
+            commonVar["fighting"] = 0
             -- 战斗结束
             res1 = baseUtils.TomatoOCRTap(tomatoOCR, 333, 716, 384, 744, "开启") -- 领取宝箱
             res2 = baseUtils.TomatoOCRTap(tomatoOCR, 334, 1090, 385, 1117, "开启") -- 领取宝箱
             res3 = baseUtils.TomatoOCRTap(tomatoOCR, 332, 1067, 387, 1096, "开启") -- 领取宝箱
             if res1 or res2 or res3 then
                 baseUtils.toast("战斗结束 - 战斗胜利")
-                baseUtils.tapSleep(125, 1050) -- 领取后，点击空白
-                baseUtils.tapSleep(125, 1050) -- 领取后，点击空白
+                baseUtils.mSleep3(2000)
+                baseUtils.tapSleep(55, 1140) -- 领取后，点击空白
                 break
             end
             res3 = baseUtils.TomatoOCRText(tomatoOCR, 499, 191, 581, 215, "离开队伍") -- 已返回队伍
@@ -600,10 +569,14 @@ function shilianTask.fightingBaoZou()
                 baseUtils.toast("战斗结束")
                 break
             end
+            quitStatus = dailyTask.quitTeam()
+            if quitStatus then
+                break
+            end
+            commonVar["fighting"] = 0
         end
-        baseUtils.mSleep3(3 * 1000)
-        elapsed = elapsed + 3 * 1000
     end
+    commonVar["fighting"] = 0
 end
 
 -- 大暴走开始匹配
@@ -657,13 +630,12 @@ function shilianTask.startFightBaoZou()
             break
         end
         --baseUtils.toast("秘境任务 - 匹配中")
-        startUp.noticeCancel()
 
         -- 判断无合适队伍，重新开始匹配
-        res = baseUtils.TomatoOCRText(tomatoOCR, 303, 607, 418, 632, "暂无合适队伍")
+        res = baseUtils.TomatoOCRText(tomatoOCR, 231, 624, 305, 645, "匹配超时")
         if res then
-            baseUtils.toast("大暴走 - 匹配超时 - 无合适队伍")
-            res = baseUtils.TomatoOCRText(tomatoOCR, 210, 727, 262, 758, "取消")
+            baseUtils.toast("大暴走 - 匹配超时 - 无合适队伍 - 重新匹配")
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 451, 727, 510, 757, "确定")
             if res then
                 elapsed = 0
             end
@@ -796,7 +768,6 @@ function shilianTask.startFight()
             end
             while 1 do
                 shilianTask.openTreasure()
-                startUp.noticeCancel()
                 --返回房间
                 res1 = baseUtils.TomatoOCRTap(tomatoOCR, 635, 628, 705, 653, "正在组队")
                 if res1 == false then
@@ -950,13 +921,12 @@ function shilianTask.startFight()
             break
         end
         --baseUtils.toast("秘境任务 - 匹配中")
-        startUp.noticeCancel()
 
         -- 判断无合适队伍，重新开始匹配
         res = baseUtils.TomatoOCRText(tomatoOCR, 303, 607, 418, 632, "暂无合适队伍")
         if res then
             baseUtils.toast("秘境任务 - 匹配超时 - 无合适队伍")
-            res = baseUtils.TomatoOCRText(tomatoOCR, 210, 727, 262, 758, "取消")
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 210, 727, 262, 758, "取消")
             if res then
                 elapsed = 0
             end
@@ -1274,11 +1244,14 @@ function shilianTask.openTreasure()
                     if res5 == false then
                         res6 = baseUtils.TomatoOCRText(tomatoOCR, 309, 551, 406, 588, "通关奖励") -- 战斗结束页。宝箱提示
                         if res6 == false then
-                            x, y = findMultiColorInRegionFuzzy(0xfbd4f9,
-                                "-19|7|0xc5c3ea,-9|7|0x7976c2,14|7|0xb9b7e1,7|7|0x8585cf,7|15|0xe2dbf6,-14|20|0xa09bd3,5|22|0x9996ce,18|22|0xcacaea,20|27|0x4b4b95,6|27|0xf5f8fe,-9|27|0xb6b4e0,-17|29|0x4b4b6e,-9|34|0x6a6a9d,15|34|0xe9dfed",
-                                90, 0, 0, 720, 1280, { orient = 2 }) -- 匹配友情币
-                            if x ~= -1 then
-                                res7 = true
+                            res7 = baseUtils.TomatoOCRText(tomatoOCR, 264, 453, 356, 482, "开启宝箱") -- 战斗结束页。宝箱提示
+                            if res7 == false then
+                                x, y = findMultiColorInRegionFuzzy(0xfbd4f9,
+                                    "-19|7|0xc5c3ea,-9|7|0x7976c2,14|7|0xb9b7e1,7|7|0x8585cf,7|15|0xe2dbf6,-14|20|0xa09bd3,5|22|0x9996ce,18|22|0xcacaea,20|27|0x4b4b95,6|27|0xf5f8fe,-9|27|0xb6b4e0,-17|29|0x4b4b6e,-9|34|0x6a6a9d,15|34|0xe9dfed",
+                                    90, 0, 0, 720, 1280, { orient = 2 }) -- 匹配友情币
+                                if x ~= -1 then
+                                    res8 = true
+                                end
                             end
                         end
                     end
@@ -1287,7 +1260,7 @@ function shilianTask.openTreasure()
         end
     end
 
-    if res1 or res2 or res3 or res4 or res5 or res6 or res7 then
+    if res1 or res2 or res3 or res4 or res5 or res6 or res7 or res8 then
         isTreasue = 1
     end
 
@@ -1377,6 +1350,13 @@ function shilianTask.openTreasure()
                 baseUtils.tapSleep(340, 930)
                 openStatus = 1
             end
+            res = baseUtils.TomatoOCRTap(tomatoOCR, 335, 755, 380, 777, "开启")
+            if res then
+                baseUtils.mSleep3(3500);
+                baseUtils.tapSleep(340, 930)
+                openStatus = 1
+            end
+
 
             -- 领取宝箱1
             res = baseUtils.TomatoOCRTap(tomatoOCR, 214, 748, 257, 767, "开启")

@@ -2,8 +2,7 @@ local dailyTask = {}
 
 -- 返回首页
 function dailyTask.homePage()
-    for i = 1, 10 do
-        startUp.noticeCancel()
+    while 1 do
         res6 = shilianTask.WaitFight()
 
         -- 判断是否已在首页
@@ -18,50 +17,13 @@ function dailyTask.homePage()
         --end
         if res2 or res3 then
             --logUtils.log("已返回首页")
+            commonVar["needHome"] = 0
+            commonVar["fighting"] = 0
             return
         end
 
-        -- 判断返回按钮
-        shilianTask.openTreasure()
-
-        for i = 1, 3 do
-            x, y = findMultiColorInRegionFuzzy(0x6584b9,
-                "2|0|0x6584b9,8|0|0x6584b9,15|0|0x6584b9,17|0|0x6584b9,20|0|0x6584b9,23|0|0x6584b9,27|0|0x6584b9,31|0|0x6584b9,46|0|0x6584b9,59|0|0x6584b9,65|-1|0x6584b9,72|1|0x6584b9,78|1|0x6584b9,78|8|0x6584b9,66|6|0x6584b9,56|6|0x6584b9,45|4|0x6584b9,36|5|0x6584b9,9|5|0x6584b9,-7|4|0x6483b8",
-                70, 16, 1136, 174, 1267, { orient = 7 }) -- 返回按钮
-            if x ~= -1 then
-                baseUtils.tapSleep(x, y, 1.5)
-            else
-                res1 = baseUtils.TomatoOCRTap(tomatoOCR, 67, 1187, 120, 1218, "返回")
-                res2 = baseUtils.TomatoOCRTap(tomatoOCR, 70, 1200, 123, 1231, "返回")
-                res6 = baseUtils.TomatoOCRTap(tomatoOCR, 87, 1187, 138, 1219, "返回") -- 邮件页返回按钮
-                res3 = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
-                res4 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
-                res5 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
-            end
-            if x == -1 and res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false then
-                --判断是否在首页
-                resShou = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
-                if resShou then
-                    return
-                end
-            end
-        end
-
-        --res6 = baseUtils.TomatoOCRTap(tomatoOCR, 213, 604, 266, 635, "拒绝") -- 避免错误时机匹配成功（存在多次拒绝导致的匹配惩罚）
-        if x == -1 and res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false then
-            res1 = baseUtils.TomatoOCRTap(tomatoOCR, 289, 1067, 430, 1094, "点击空白处关闭")
-            res2 = baseUtils.TomatoOCRTap(tomatoOCR, 279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 20)
-            res3 = baseUtils.TomatoOCRTap(tomatoOCR, 266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
-            --res4 = baseUtils.TomatoOCRTap(tomatoOCR, 292, 1203, 425, 1239, "点击空白处关闭")
-            res5 = baseUtils.TomatoOCRTap(tomatoOCR, 268, 869, 359, 888, "点击空白处", 30, 100)
-            if res1 == false and res2 == false and res3 == false and res5 == false then
-                res7 = dailyTask.quitTeam()
-                if res7 == false then
-                    -- 判断战败页
-                    shilianTask.fightFail()
-                end
-            end
-        end
+        -- 开始异步处理返回首页
+        commonVar["needHome"] = 1
 
         -- 点击首页-冒险
         res = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
@@ -72,7 +34,16 @@ function dailyTask.homePage()
         --    return
         --end
 
+        res7 = dailyTask.quitTeam()
+        if res7 == false then
+            --判断战败页
+            shilianTask.fightFail()
+        end
+        -- 判断宝箱开启
+        shilianTask.openTreasure()
+
         -- 判断是否已在首页
+        baseUtils.mSleep3(500)
     end
 end
 
@@ -818,10 +789,14 @@ function dailyTask.quitTeam()
             return true
         end
 
-        --res = baseUtils.TomatoOCRTap(tomatoOCR, 501, 191, 581, 217, "离开队伍")
-        baseUtils.tapSleep(540, 200, 0.8)
-        --res = baseUtils.TomatoOCRTap(tomatoOCR, 329, 726, 391, 761, "确定")
-        baseUtils.tapSleep(360, 740, 0.8)
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 501, 191, 581, 217, "离开队伍")
+        if res == false then
+            baseUtils.tapSleep(540, 200, 0.8)
+        end
+        res = baseUtils.TomatoOCRTap(tomatoOCR, 329, 726, 391, 761, "确定")
+        if res == false then
+            baseUtils.tapSleep(360, 740, 0.8)
+        end
         if res then
             baseUtils.toast("退出组队", 0.5)
             return true

@@ -88,12 +88,38 @@ function baseUtils.initTomatoOCR()
     return tomatoOCR
 end
 
+function baseUtils.TomatoOCRTextV2(keyName, tomatoOCR, x1, y1, x2, y2, keyWord, returnType)
+    returnType = returnType or "text"
+    tomatoOCR.setReturnType(returnType)
+
+    current_time = os.date("%Y-%m-%d", os.time()) --以时间戳命名进行截图
+    local pic_name = userPath() .. "/res/" .. current_time .. ".baseOCR_" .. keyName .. ".jpg"
+    snapshot(pic_name, x1, y1, x2, y2, 0.7)
+
+    local ocrRes = tomatoOCR.ocrFile(pic_name, 3)
+
+    if returnType == "text" and ocrRes ~= nil and ocrRes ~= "" then
+        if keyWord == ocrRes then
+            logUtils.log("o识别成功-" .. keyWord .. "|" .. ocrRes)
+            return true, ocrRes
+        else
+            logUtils.log("o识别失败-不匹配-" .. keyWord .. "|" .. ocrRes)
+            return false, ocrRes
+        end
+    elseif returnType == "json" then
+        return true, ocrRes
+    else
+        logUtils.log("o识别失败-异常-" .. keyWord)
+        return false, ocrRes
+    end
+end
+
 function baseUtils.TomatoOCRText(tomatoOCR, x1, y1, x2, y2, keyWord, returnType)
     returnType = returnType or "text"
     tomatoOCR.setReturnType(returnType)
 
     current_time = os.date("%Y-%m-%d", os.time()) --以时间戳命名进行截图
-    local pic_name = userPath() .. current_time .. ".baseOCR.jpg"
+    local pic_name = userPath() .. "/res/" .. current_time .. ".baseOCR.jpg"
     snapshot(pic_name, x1, y1, x2, y2, 0.7)
 
     local ocrRes = tomatoOCR.ocrFile(pic_name, 3)
@@ -114,14 +140,14 @@ function baseUtils.TomatoOCRText(tomatoOCR, x1, y1, x2, y2, keyWord, returnType)
 end
 
 -- 点击位置偏移 offsetX、offsetY
-function baseUtils.TomatoOCRTap(tomatoOCR, x1, y1, x2, y2, keyWord, offsetX, offsetY, thresholdScore)
+function baseUtils.TomatoOCRTapV2(keyName, tomatoOCR, x1, y1, x2, y2, keyWord, offsetX, offsetY, thresholdScore)
     thresholdScore = thresholdScore or 0.8 -- 如果 thresholdScore 未传入，则使用默认值 0.8
     offsetX = offsetX or 0
     offsetY = offsetY or 0
     tomatoOCR.setReturnType("json")
 
     current_time = os.date("%Y-%m-%d", os.time()) --以时间戳命名进行截图
-    local pic_name = userPath() .. current_time .. ".baseOCRTap.jpg"
+    local pic_name = userPath() .. "/res/" .. current_time .. ".baseOCRTap_" .. keyName .. ".jpg"
     snapshot(pic_name, x1, y1, x2, y2)
 
     local text = tomatoOCR.ocrFile(pic_name, 3)
@@ -135,7 +161,8 @@ function baseUtils.TomatoOCRTap(tomatoOCR, x1, y1, x2, y2, keyWord, offsetX, off
         -- JSON 解析失败，处理错误
         logUtils.log("o点击失败-JSON解析错误-" .. keyWord .. "|" .. decodedText)
         return false
-    else
+    end
+    if type(decodedText) == 'table' then
         -- JSON 解析成功，继续后续操作
         ocrRes = decodedText[1]
         if ocrRes.score > thresholdScore and keyWord == ocrRes.words then
@@ -146,6 +173,51 @@ function baseUtils.TomatoOCRTap(tomatoOCR, x1, y1, x2, y2, keyWord, offsetX, off
             logUtils.log("o点击失败-不匹配-" .. keyWord .. "|" .. ocrRes.words)
             return false
         end
+    else
+        -- JSON 解析失败，处理错误
+        logUtils.log("o点击失败-解析结果非数组-" .. keyWord .. "|" .. decodedText)
+        return false
+    end
+end
+
+-- 点击位置偏移 offsetX、offsetY
+function baseUtils.TomatoOCRTap(tomatoOCR, x1, y1, x2, y2, keyWord, offsetX, offsetY, thresholdScore)
+    thresholdScore = thresholdScore or 0.8 -- 如果 thresholdScore 未传入，则使用默认值 0.8
+    offsetX = offsetX or 0
+    offsetY = offsetY or 0
+    tomatoOCR.setReturnType("json")
+
+    current_time = os.date("%Y-%m-%d", os.time()) --以时间戳命名进行截图
+    local pic_name = userPath() .. "/res/" .. current_time .. ".baseOCRTap.jpg"
+    snapshot(pic_name, x1, y1, x2, y2)
+
+    local text = tomatoOCR.ocrFile(pic_name, 3)
+    local ocrRes = ""
+    if text == "" then
+        logUtils.log("o点击失败-异常-" .. keyWord .. "|空")
+        return false
+    end
+    local success, decodedText = pcall(function() return json.decode(text) end)
+    if not success then
+        -- JSON 解析失败，处理错误
+        logUtils.log("o点击失败-JSON解析错误-" .. keyWord .. "|" .. decodedText)
+        return false
+    end
+    if type(decodedText) == 'table' then
+        -- JSON 解析成功，继续后续操作
+        ocrRes = decodedText[1]
+        if ocrRes.score > thresholdScore and keyWord == ocrRes.words then
+            baseUtils.tapSleep(x1 + offsetX, y1 + offsetY, 1)
+            logUtils.log("o点击成功-" .. keyWord .. "|" .. ocrRes.words)
+            return true
+        else
+            logUtils.log("o点击失败-不匹配-" .. keyWord .. "|" .. ocrRes.words)
+            return false
+        end
+    else
+        -- JSON 解析失败，处理错误
+        logUtils.log("o点击失败-解析结果非数组-" .. keyWord .. "|" .. decodedText)
+        return false
     end
 end
 

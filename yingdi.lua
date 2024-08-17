@@ -54,8 +54,9 @@ function yingdiTask.yueKa()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    if res == false then
+    local hd1 = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动", 40, -20)
+    local hd2 = baseUtils.TomatoOCRTap(tomatoOCR, 11, 1111, 92, 1134, "旅行活动", 40, -20)
+    if hd1 == false and hd2 == false then
         return
     end
 
@@ -89,8 +90,9 @@ function yingdiTask.riLiBao()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    if res == false then
+    local hd1 = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动", 40, -20)
+    local hd2 = baseUtils.TomatoOCRTap(tomatoOCR, 11, 1111, 92, 1134, "旅行活动", 40, -20)
+    if hd1 == false and hd2 == false then
         return
     end
 
@@ -120,12 +122,12 @@ function yingdiTask.xingChenTongXing()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    if res == false then
+    local hd1 = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动", 40, -20)
+    local hd2 = baseUtils.TomatoOCRTap(tomatoOCR, 11, 1111, 92, 1134, "旅行活动", 40, -20)
+    if hd1 == false and hd2 == false then
         return
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     res = baseUtils.TomatoOCRTap(tomatoOCR, 500, 1201, 545, 1228, "同行")
     if res == true then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 549, 313, 589, 336, "任务")
@@ -158,8 +160,9 @@ function yingdiTask.zhiFeiJi()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    if res == false then
+    local hd1 = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动", 40, -20)
+    local hd2 = baseUtils.TomatoOCRTap(tomatoOCR, 11, 1111, 92, 1134, "旅行活动", 40, -20)
+    if hd1 == false and hd2 == false then
         return
     end
 
@@ -167,8 +170,17 @@ function yingdiTask.zhiFeiJi()
         "-5|12|0xfbf39d,3|14|0xfbf29b,15|15|0xfbf29a,63|9|0xb39767,63|27|0xfbee8a,16|62|0xefcbb7,34|62|0xe9b594,58|62|0xeab797,80|69|0xe39858,86|75|0xe39858,98|71|0xecc1a6,111|61|0xe3985a,119|61|0xe3985a,128|62|0xe39858",
         80, 0, 0, 720, 1280, { orient = 2 }) -- 纸飞机
 
+    if x == -1 then
+        -- 返回活动第一屏
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+    end
+
     for i = 1, 6 do
-        startUp.noticeCancel() -- 偶现异常处理
         if x == -1 then
             -- 下翻第二屏，继续识别
             moveTo(680, 804, 680, 451, 120)
@@ -208,18 +220,27 @@ function yingdiTask.luYingDaKa()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    if res == false then
+    local hd1 = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动", 40, -20)
+    local hd2 = baseUtils.TomatoOCRTap(tomatoOCR, 11, 1111, 92, 1134, "旅行活动", 40, -20)
+    if hd1 == false and hd2 == false then
         return
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     x, y = findMultiColorInRegionFuzzy(0x0a0c25,
         "0|-26|0x201b15,0|-55|0x080920,0|-79|0x443b2d,-2|-97|0x1a2c68,22|-97|0x69422f,33|-83|0x1c2a5b,24|-70|0x1e2b5d,24|-16|0x4f5999,27|2|0x151111,-7|6|0x314a86,-27|-22|0x5a6b5b,-20|19|0x120f0c,13|16|0x7c8482",
         80, 0, 0, 720, 1280, { orient = 2 }) -- 露营打卡点
 
+    if x == -1 then
+        -- 返回活动第一屏
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+    end
+
     for i = 1, 6 do
-        startUp.noticeCancel() -- 偶现异常处理
         if x == -1 then
             -- 下翻第二屏，继续识别
             moveTo(680, 804, 680, 451, 120)
@@ -262,17 +283,27 @@ function yingdiTask.yueqiandao()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    if res == false then
+    local hd1 = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动", 40, -20)
+    local hd2 = baseUtils.TomatoOCRTap(tomatoOCR, 11, 1111, 92, 1134, "旅行活动", 40, -20)
+    if hd1 == false and hd2 == false then
         return
     end
 
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
     x, y = findMultiColorInRegionFuzzy(0xedc5a4,
         "-2|15|0xefc5a5,-29|15|0xecbf9b,-28|36|0xeae6de,4|36|0xf1e6dc,33|35|0xe8b58b,57|35|0x823e23,57|73|0xb8b8b8,26|70|0x823a1e,-1|60|0xedcdbd,-15|75|0x888883,-8|100|0xbcb0aa,5|96|0x474038,39|96|0x2a251f,68|96|0x9c9b97",
         80, 0, 0, 720, 1280, { orient = 2 })
+
+    if x == -1 then
+        -- 返回活动第一屏
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+        moveTo(680, 451, 680, 804, 120)
+        baseUtils.mSleep3(2000)
+    end
+
     for i = 1, 6 do
-        startUp.noticeCancel() -- 偶现异常处理
         if x == -1 then
             -- 下翻第二屏，继续识别
             moveTo(680, 804, 680, 451, 120)
@@ -394,8 +425,9 @@ function yingdiTask.yingDiMiBao()
 
     res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
     --判断是否在营地页面
-    res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-    if res == false then
+    local hd1 = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+    local hd2 = baseUtils.TomatoOCRText(tomatoOCR, 11, 1111, 92, 1134, "旅行活动")
+    if hd1 == false and hd2 == false then
         return
     end
 
@@ -522,8 +554,9 @@ function yingdiTask.yingDiShop()
     if res == false then
         res = baseUtils.TomatoOCRTap(tomatoOCR, 125, 1202, 187, 1234, "营地")
         --判断是否在营地页面
-        res = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
-        if res == false then
+        local hd1 = baseUtils.TomatoOCRText(tomatoOCR, 12, 1110, 91, 1135, "旅行活动")
+        local hd2 = baseUtils.TomatoOCRText(tomatoOCR, 11, 1111, 92, 1134, "旅行活动")
+        if hd1 == false and hd2 == false then
             return
         end
         baseUtils.tapSleep(475, 285, 3) -- 商店

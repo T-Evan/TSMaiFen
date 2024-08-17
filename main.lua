@@ -1,5 +1,6 @@
 require "TSLib"
 require("ts")
+
 json = require "json"
 ui = require("ui")
 logUtils = require("logUtil")
@@ -51,6 +52,26 @@ local function create_processes(num_processes)
     end
 end
 
+createGobalTable("commonVar")
+commonVar["breakChild"] = 0
+commonVar["tomatoOCR"] = tomatoOCR
+commonVar["baseUtils"] = baseUtils
+commonVar["shilianTask"] = shilianTask
+commonVar["dailyTask"] = dailyTask
+
+
+commonVar["needHome"] = 0
+commonVar["功能开关"] = 功能开关
+-- 战斗状态
+commonVar["fighting"] = 0
+commonVar.needDaDuan = 0
+commonVar.needHuDun = 0
+-- 大暴走状态
+commonVar["暴走史莱姆开关"] = 功能开关["暴走史莱姆开关"]
+commonVar["暴走雷电大王"] = 功能开关["暴走-暴走雷电大王"]
+commonVar["bossStatus"] = ""
+commonVar["userStatus"] = ""
+
 function main(...)
     init(0) -- 设置屏幕方向，虚拟按键在屏幕下方
 
@@ -58,6 +79,16 @@ function main(...)
 
     tomatoOCR = baseUtils.initTomatoOCR()
     -- aiOCRToken = baseUtils.initAiOCR()
+
+    -- 启动子线程
+    runThread("child_baozou")
+    mSleep(1000)
+    runThread("child_baozou_user")
+    mSleep(1000)
+    runThread("child_returnHome")
+    mSleep(1000)
+    runThread("child_notice")
+    mSleep(1000)
 
     -- 子协程处理弹窗
     -- create_processes(2) -- 假设我们要创建2个进程
@@ -208,5 +239,7 @@ end
 
 -- 释放
 function beforeUserExit() -- 停止脚本，将会触发 beforeUserExit 函数
+    commonVar["breakChild"] = 1
+    mSleep(2000)
     tomatoOCR.release()
 end

@@ -16,8 +16,8 @@ function startUp.startApp()
             dialog("请先打开 出发吧麦芬 游戏主界面，再运行该脚本！", 3)
             lua_exit()
         end
-        toast("启动游戏，等待15s", 2)
-        baseUtils.mSleep3(15 * 1000)
+        toast("启动游戏，等待10s", 2)
+        baseUtils.mSleep3(10 * 1000)
         logUtils.log("启动app成功")
     else
         logUtils.log("app运行中")
@@ -43,9 +43,13 @@ function startUp.startApp()
     end
 
     -- 识别是否进入首页
-    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 公告
-    res2 = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
+    res2, txt = baseUtils.TomatoOCRText(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
+    if res2 then
+        toast("准备进入游戏", 1)
+        return startUp.logIn()
+    end
 
+    commonVar["needHome"] = 1
     res3 = baseUtils.TomatoOCRTap(tomatoOCR, 327, 1205, 389, 1233, "冒险")
     res4 = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
     if res4 == false then
@@ -60,74 +64,52 @@ function startUp.startApp()
     --    res4 = true -- 匹配到右上角钻石按钮，说明已进入游戏
     --end
 
-    x, y = findMultiColorInRegionFuzzy(0x6584b9,
-        "2|0|0x6584b9,8|0|0x6584b9,15|0|0x6584b9,17|0|0x6584b9,20|0|0x6584b9,23|0|0x6584b9,27|0|0x6584b9,31|0|0x6584b9,46|0|0x6584b9,59|0|0x6584b9,65|-1|0x6584b9,72|1|0x6584b9,78|1|0x6584b9,78|8|0x6584b9,66|6|0x6584b9,56|6|0x6584b9,45|4|0x6584b9,36|5|0x6584b9,9|5|0x6584b9,-7|4|0x6483b8",
-        70, 16, 1136, 174, 1267, { orient = 7 }) -- 返回按钮
-    if x == -1 then
-        res5 = baseUtils.TomatoOCRTap(tomatoOCR, 171, 1189, 200, 1216, "回")
-        if res5 == false then
-            res6 = baseUtils.TomatoOCRTap(tomatoOCR, 98, 1202, 128, 1231, "回")
-            if res6 == false then
-                res7 = baseUtils.TomatoOCRTap(tomatoOCR, 93, 1186, 127, 1217, "回")
-            end
-        end
-    else
-        res11 = true
-    end
-
-    res12 = baseUtils.TomatoOCRText(tomatoOCR, 626, 97, 691, 118, "适龄提示")
-
-    if res1 == false and res2 == false and res3 == false and res4 == false and res5 == false and res6 == false and res7 == false and res11 == false then -- 在登录页面
-        baseUtils.mSleep3(5000)
+    if res3 == false and res4 == false and res10 == false then -- 在登录页面
+        baseUtils.mSleep3(3000)
         return startUp.startApp()
-    elseif res12 == false and (res3 or res4 or res8 or res9 or res10 or res11) then -- 已在游戏中
-        toast("已进入游戏，返回首页", 1)
+    elseif (res3 or res4 or res8 or res9 or res10) then -- 已在游戏中
         return dailyTask.homePage()
     else
-        toast("准备进入游戏", 1)
-        return startUp.logIn()
+        return startUp.startApp()
     end
 end
 
 function startUp.logIn()
+    commonVar["needHome"] = 0
     -- 开始冒险
-    res = baseUtils.TomatoOCRTap(tomatoOCR, 84, 1192, 139, 1225, "返回") -- 关闭公告
-    res1 = baseUtils.TomatoOCRTap(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
-
-    res = baseUtils.TomatoOCRText(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
-    if res then
+    local login1 = baseUtils.TomatoOCRTap(tomatoOCR, 282, 1017, 437, 1051, "开始冒险之旅")
+    if login1 == false then
+        return startUp.startApp()
+    end
+    local login2 = baseUtils.TomatoOCRText(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
+    if login2 then
         startUp.switchRole(2, 任务记录['当前任务角色'])
     end
 
-    res2 = baseUtils.TomatoOCRTap(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
+    local login2Point = baseUtils.TomatoOCRTap(tomatoOCR, 302, 1199, 414, 1231, "开始冒险")
 
     -- 跳过启动动画
-    if res1 or res2 then
+    if login2Point then
         baseUtils.tapSleep(340, 930, 1)
         baseUtils.tapSleep(340, 930, 1)
         baseUtils.tapSleep(340, 930)
         baseUtils.mSleep3(5 * 1000)
-
-        local loopCount = 0
-        while loopCount < 3 do -- 循环2次
-            loopCount = loopCount + 1
-            -- 领取离线奖励
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 268, 869, 359, 888, "点击空白处", 30, 100)
-            -- 领取离线奖励 - 确认
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 100)
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 100)
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 329, 726, 391, 761, "返回") -- 关闭公告
-            res = baseUtils.TomatoOCRTap(tomatoOCR, 215, 1068, 274, 1102, "确定") -- 战斗胜利页
-            baseUtils.mSleep3(3000)
-        end
     else
         return startUp.startApp()
     end
 
-    if (isColor(659, 367, 0xe2e1d1, 80) and isColor(662, 368, 0xe2dfd1, 80) and isColor(668, 368, 0xa1a099, 80) and isColor(664, 370, 0xe2dfd1, 80) and isColor(653, 370, 0xe2dece, 80) and isColor(656, 372, 0xe4e1d4, 80) and isColor(662, 372, 0xe2dfd1, 80) and isColor(674, 372, 0xe2ded1, 80) and isColor(678, 372, 0xe2ded1, 80) and isColor(679, 367, 0x7d8084, 80) and isColor(681, 373, 0xe1dfcf, 80) and isColor(679, 376, 0x797c81, 80) and isColor(676, 378, 0xe2e0d2, 80) and isColor(672, 386, 0xf3eddd, 80) and isColor(675, 386, 0xf3eddd, 80) and isColor(682, 385, 0xf3eddd, 80) and isColor(678, 389, 0xf3eddd, 80) and isColor(678, 392, 0xf3eddd, 80) and isColor(678, 399, 0xf3eddd, 80) and isColor(675, 399, 0xf3eddd, 80)) then
-        res = true
+    local shouye = false
+    for loopCount = 1, 3 do -- 循环2次
+        local shouye1 = baseUtils.TomatoOCRText(tomatoOCR, 626, 379, 711, 405, "冒险手册")
+        local shouye2 = baseUtils.TomatoOCRText(tomatoOCR, 627, 381, 710, 403, "新手试炼")
+        if shouye1 or shouye2 then
+            shouye = true
+            break
+        end
+        baseUtils.mSleep3(3000)
     end
-    if res == false then
+
+    if shouye == false then
         return startUp.startApp()
     end
 end
@@ -223,9 +205,6 @@ function startUp.loadAccount(accountName)
     --newPath2 = userPath() .. "/log/"  .. accountName .. "_app_webview/"
     --flag = ts.hlfs.copyDir(newPath2, oldPath2)
     --os.execute("cp -rf " .. newPath2 .. " " .. oldPath2);
-
-
-    switchApp("com.xd.cfbmf")
 end
 
 -- 重新登录切换角色
