@@ -699,9 +699,10 @@ function dailyTask.huoDongMoYu()
     while count < totalCount do
         count = count + 1
         dailyTask.homePage()
-
-        res = baseUtils.TomatoOCRTap(tomatoOCR, 566, 379, 609, 404, "摸鱼")
-        if res == false then
+        res1 = baseUtils.TomatoOCRTap(tomatoOCR, 566, 379, 609, 404, "摸鱼", 10, -10)
+        res2 = baseUtils.TomatoOCRTap(tomatoOCR, 551, 462, 622, 488, "摸鱼", 10, -10)
+        res3 = baseUtils.TomatoOCRTap(tomatoOCR, 553, 546, 620, 570, "摸鱼", 10, -10)
+        if res1 == false and res2 == false and res3 == false then
             return
         end
         res = baseUtils.TomatoOCRTap(tomatoOCR, 325, 1095, 427, 1128, "开始匹配")

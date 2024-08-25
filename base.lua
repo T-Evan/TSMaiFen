@@ -1,5 +1,144 @@
 local baseUtils = {}
 
+function readFileBase64(path)
+    f = io.open(path, "rb")
+    if f == null then
+        return null;
+    end
+    bytes = f:read("*all");
+    f:close();
+    return bytes:base64_encode();
+end
+
+function ydocr(userID, userKey, imagePath)
+    imageData                 = readFileBase64(imagePath)
+    bodyMD5                   = imageData:md5()
+    signature                 = (bodyMD5 .. userID .. userKey):md5():md5()
+
+    params                    = {}
+    params["userID"]          = userID
+    params["bodyMD5"]         = bodyMD5
+    params["signature"]       = signature
+    params["signatureMethod"] = "md5"
+    params["bodyType"]        = "base64"
+
+    params["version"]         = "v2"
+    params["action"]          = "line" --识别模式,可选值:line/page;line只能识别单行的图片
+    params["language"]        = "ch"   --识别语言,可选值:ch/en/ko/ja
+    params["rotate"]          = 0      --逆时针旋转后再识别, 可选值: 0/90/180/270
+    params["demand"]          = ""     --需要识别的文字, 如只识别数字, 可设置为: 0123456789
+
+    --杭州 http://cn-hangzhou.api.ydocr.com/ocr
+    --香港 http://cn-hongkong.api.ydocr.com/ocr
+    url                       = "http://cn-hangzhou.api.ydocr.com/ocr"
+    url                       = url .. "?" .. httpBuildQuery(params)
+    body_resp                 = httpPost(url, imageData, { tstab = 1 })
+    --nLog(body_resp)
+
+    return body_resp
+end
+
+function getBalance(userID, userKey)
+    signature               = (userID .. userKey):md5():md5()
+
+    data                    = {}
+    data["userID"]          = userID
+    data["signatureMethod"] = "md5"
+    data["signature"]       = signature
+
+    body_resp               = httpPost("http://cn-hangzhou.ydocr.com/getBalance", httpBuildQuery(data), { tstab = 1 })
+    --nLog(body_resp)
+    return json.decode(body_resp)
+end
+
+function baseUtils.YDOCRTap(keyName, x1, y1, x2, y2, keyWord, offsetX, offsetY)
+    offsetX = offsetX or 0
+    offsetY = offsetY or 0
+    --在 http://www.ydocr.com 注册后可获取 userID, userKey
+    userID = "w54ompaw4bx346p7sxpqga7w"
+    userKey = "ugribkxik5pfgp67xqdil26n"
+
+    current_time = os.date("%Y-%m-%d", os.time()) --以时间戳命名进行截图
+    local pic_name = userPath() .. "/res/" .. current_time .. ".ydOCR_" .. keyName .. ".jpg"
+    snapshot(pic_name, x1, y1, x2, y2, 0.7)
+
+    local body_resp = ydocr(userID, userKey, pic_name)
+    local success, decodedText = pcall(function() return json.decode(body_resp) end)
+    if not success then
+        -- JSON 解析失败，处理错误
+        logUtils.log("o点击失败-YD-JSON解析错误-")
+        return false, ""
+    end
+
+    ocrRes = ""
+    if decodedText["success"] and decodedText["data"] and decodedText["data"][1] then
+        --for i = 1, #res["data"] do
+        ocrRes = decodedText["data"][1]["text"] -- 单行识别
+        --end
+    else
+        if decodedText["message"] then
+            toast(decodedText["message"])
+        end
+    end
+
+    if ocrRes ~= nil and ocrRes ~= "" then
+        if keyWord == ocrRes then
+            baseUtils.tapSleep(x1 + offsetX, y1 + offsetY, 1)
+            logUtils.log("o点击成功-" .. keyWord .. "|" .. ocrRes)
+            return true, ocrRes
+        else
+            logUtils.log("o点击成功-不匹配-" .. keyWord .. "|" .. ocrRes)
+            return false, ocrRes
+        end
+    else
+        logUtils.log("o点击失败-不匹配-" .. keyWord .. "|" .. ocrRes)
+        return false, ocrRes
+    end
+end
+
+function baseUtils.YDOCRText(keyName, x1, y1, x2, y2, keyWord)
+    keyName = keyName or "init"
+    --在 http://www.ydocr.com 注册后可获取 userID, userKey
+    userID = "w54ompaw4bx346p7sxpqga7w"
+    userKey = "ugribkxik5pfgp67xqdil26n"
+
+    current_time = os.date("%Y-%m-%d", os.time()) --以时间戳命名进行截图
+    local pic_name = userPath() .. "/res/" .. current_time .. ".ydOCR_" .. keyName .. ".jpg"
+    snapshot(pic_name, x1, y1, x2, y2, 0.7)
+
+    local body_resp = ydocr(userID, userKey, pic_name)
+    local success, decodedText = pcall(function() return json.decode(body_resp) end)
+    if not success then
+        -- JSON 解析失败，处理错误
+        logUtils.log("o点击失败-YD-JSON解析错误-")
+        return false, ""
+    end
+
+    ocrRes = ""
+    if decodedText["success"] and decodedText["data"] and decodedText["data"][1] then
+        --for i = 1, #res["data"] do
+        ocrRes = decodedText["data"][1]["text"] -- 单行识别
+        --end
+    else
+        if decodedText["message"] then
+            toast(decodedText["message"])
+        end
+    end
+
+    if ocrRes ~= nil and ocrRes ~= "" then
+        if keyWord == ocrRes then
+            logUtils.log("o识别成功-" .. keyWord .. "|" .. ocrRes)
+            return true, ocrRes
+        else
+            logUtils.log("o识别失败-不匹配-" .. keyWord .. "|" .. ocrRes)
+            return false, ocrRes
+        end
+    else
+        logUtils.log("o识别失败-异常-" .. keyWord)
+        return false, ocrRes
+    end
+end
+
 -- ai识别OCR
 function baseUtils.initAiOCR()
     local json = ts.json

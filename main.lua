@@ -42,16 +42,6 @@ end
 
 初始化任务记录()
 
--- 创建多个进程
-local function create_processes(num_processes)
-    for i = 1, num_processes do
-        local command = string.format("lua __thread__child1.lua --process %d", i)
-        dialog(command)
-
-        os.execute(command)
-    end
-end
-
 createGobalTable("commonVar")
 commonVar["breakChild"] = 0
 commonVar["tomatoOCR"] = tomatoOCR
@@ -80,7 +70,13 @@ function main(...)
     tomatoOCR = baseUtils.initTomatoOCR()
     -- aiOCRToken = baseUtils.initAiOCR()
 
-    -- 启动子线程
+    --res = baseUtils.YDOCR(15, 164, 115, 208, "网络IP")
+    --dialog("识别结果")
+    --dialog(res)
+    --lua_exit()
+    --lua_exit()
+
+    -- 子协程处理弹窗
     runThread("child_baozou")
     mSleep(1000)
     runThread("child_baozou_user")
@@ -89,17 +85,6 @@ function main(...)
     mSleep(1000)
     runThread("child_notice")
     mSleep(1000)
-
-    -- 子协程处理弹窗
-    -- create_processes(2) -- 假设我们要创建2个进程
-    -- local thread = require('thread')
-    -- local kill_tid = thread.create(killdialog,error_callback)
-    -- thread.waitAllThreadExit()
-    -- debug
-    --lua_exit()
-    --runThread("threada") -- 没有用？
-    --mSleep(3000)
-    --lua_exit()
 
     -- 处理休息时间
     local needRunMinute = tonumber(功能开关["定时运行"]) -- 分钟
